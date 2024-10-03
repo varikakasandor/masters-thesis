@@ -1,24 +1,7 @@
-import numpy as np
-import networkx as nx
-from collections import Counter
 from itertools import product
+import networkx as nx
 
-
-
-def analyse_spectrum(adjacency_matrix):
-    # Calculate the eigenvalues
-    eigenvalues, _ = np.linalg.eigh(adjacency_matrix)
-
-    # Round the eigenvalues to a reasonable precision to avoid floating point issues
-    rounded_eigenvalues = np.round(eigenvalues, decimals=6)
-
-    # Count the multiplicities of each eigenvalue
-    eigenvalue_multiplicities = Counter(rounded_eigenvalues)
-
-    # Print out the eigenvalues and their multiplicities
-    print("Eigenvalue : Multiplicity")
-    for eigenvalue, multiplicity in eigenvalue_multiplicities.items():
-        print(f"{eigenvalue} : {multiplicity}")
+from tools import *
 
 
 def create_partitioned_graph(n, r, d, bipartite_creator):
@@ -142,4 +125,6 @@ def generate_arora_chlamtac_graph(d):
 if __name__ == "__main__":
     # analyse_spectrum(create_partitioned_graph(1000, 4, 99, random_bipartite_d_regular))
     # analyse_spectrum(create_3_coloured_d_regular_graph(1000, 100))
-    analyse_spectrum(generate_arora_chlamtac_graph(6))
+    arora_graph = generate_arora_chlamtac_graph(8)
+    analyse_spectrum(arora_graph)
+    analyse_spectrum(plant_3_colouring(arora_graph))

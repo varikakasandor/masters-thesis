@@ -2,8 +2,9 @@ from collections import Counter
 import numpy as np
 import networkx as nx
 
-def analyse_spectrum(adjacency_matrix):
-    print(f"Number of vertices: {adjacency_matrix.shape[0]}, Max degree: {np.max(np.sum(adjacency_matrix, axis=0))}")
+def analyse_spectrum(adjacency_matrix, print_info=True):
+    if print_info:
+        print(f"Number of vertices: {adjacency_matrix.shape[0]}, Max degree: {np.max(np.sum(adjacency_matrix, axis=0))}")
 
     # Calculate the eigenvalues
     eigenvalues, eigenvectors = np.linalg.eigh(adjacency_matrix)
@@ -15,19 +16,21 @@ def analyse_spectrum(adjacency_matrix):
     eigenvalue_multiplicities = Counter(rounded_eigenvalues)
 
     # Print out the eigenvalues and their multiplicities
-    print("Eigenvalue : Multiplicity")
-    for eigenvalue, multiplicity in eigenvalue_multiplicities.items():
-         print(f"{eigenvalue} : {multiplicity}")
+    if print_info:
+        print("Eigenvalue : Multiplicity")
+        for eigenvalue, multiplicity in eigenvalue_multiplicities.items():
+             print(f"{eigenvalue} : {multiplicity}")
 
     smallest_eigenvalue_index = np.argmin(eigenvalues)
     corresponding_eigenvector = eigenvectors[:, smallest_eigenvalue_index]
     # print(f"Smallest Eigenvector: {corresponding_eigenvector}")
     return eigenvalues
 
+"""
 def create_random_bipartite_d_regular(n, d):
-    """
-    Creates a random bipartite d-regular graph with n vertices in each partition.
-    """
+    
+    # Creates a random bipartite d-regular graph with n vertices in each partition.
+    
     if d > n:
         raise ValueError("d cannot be greater than n for a bipartite d-regular graph.")
 
@@ -43,6 +46,8 @@ def create_random_bipartite_d_regular(n, d):
             A[v, u - n] = 1
 
     return A
+    
+"""
 
 
 def find_first_jump(eigenvalues, threshold=1):

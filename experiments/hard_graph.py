@@ -1,94 +1,99 @@
+import random
 from tools import *
 from scipy.sparse import block_diag
 from itertools import product
 
 
-def create_complete_bipartite(d):
-    """Create the adjacency matrix of a complete bipartite graph K(d/2, d/2)."""
-    half_d = d // 2
-    F = np.zeros((d, d))
-    F[:half_d, half_d:] = 1
-    F[half_d:, :half_d] = 1
-    return F
+def create_random_regular_bipartite_graph(k, d):
+    """Creates a random d-regular bipartite graph with k vertices on each side."""
+    left_vertices = np.arange(k)
+    right_vertices = np.arange(k, 2 * k)  # Adjust right set vertices to be distinct
+    adjacency_matrix = np.zeros((2 * k, 2 * k), dtype=int)  # Matrix for k left and k right vertices
 
-
-def create_block_diagonal_F(n, d):
-    """Create the adjacency matrix for H consisting of n/(2d) disjoint copies of F."""
-    num_blocks = n // (2 * d)  # Number of disjoint copies of F
-    F = create_complete_bipartite(d)
-    blocks = [F] * num_blocks
-    H = block_diag(blocks).toarray()
-    return H
-
-
-def create_random_bipartite_regular(n_half, d):
-    """Create a random d/2-regular bipartite graph adjacency matrix between two halves of size n_half."""
-    half_d = d // 2
-    left_vertices = np.arange(n_half)
-    right_vertices = np.arange(n_half)
-
-    adjacency_matrix = np.zeros((n_half, n_half), dtype=int)
-
-    for i in range(n_half):
-        neighbors = np.random.choice(right_vertices, size=half_d, replace=False)
-        adjacency_matrix[i, neighbors] = 1
+    for i in range(k):
+        neighbors = np.random.choice(right_vertices - k, size=d, replace=False)  # Neighbors from the right set
+        adjacency_matrix[i, neighbors + k] = adjacency_matrix[neighbors + k, i] = 1  # +k to adjust indices to the right side
 
     return adjacency_matrix
 
 
-def create_high_expansion_high_threshold_rank_graph(n, d):
-    """Create the adjacency matrix for the graph G."""
-    # Step 1: Create two disjoint copies of H
-    H = create_block_diagonal_F(n, d)
+def create_high_expansion_high_threshold_rank_graph(n, k, d, d_inter):
+    """
+    Creates a d-regular graph G of n vertices consisting of two copies of H,
+    between which is a random d_inter-regular bipartite graph. Each H consists of
+    n/(2k) disjoint copies of a random (d - d_inter)-regular bipartite graph F.
 
-    # Step 2: Create a random bipartite d/2-regular graph between two copies of H
+    Parameters:
+        n (int): Total number of vertices in G.
+        k (int): Number of vertices on each side of bipartite graph F.
+        d (int): Degree of the regular graph G.
+        d_inter (int): Degree of the inter-regular bipartite graph between H copies.
+
+    Returns:
+        adjacency_matrix (np.ndarray): The adjacency matrix of the graph G.
+    """
+    assert n % (4 * k) == 0, "n must be divisible by 2k"
+
     n_half = n // 2
-    bipartite_matrix = create_random_bipartite_regular(n_half, d)
+    # Number of copies of F in each H
+    num_copies_of_F = (n_half) // (2 * k)
 
-    # Construct full adjacency matrix
-    adjacency_matrix = np.zeros((n, n))
+    # Create H1 and H2 (each of size n/2) consisting of disjoint copies of F
+    H1 = np.zeros((n_half, n_half))
+    H2 = np.zeros((n_half, n_half))
 
-    # Place H in the top-left and bottom-right blocks
-    adjacency_matrix[:n_half, :n_half] = H
-    adjacency_matrix[n_half:, n_half:] = H
+    for i in range(num_copies_of_F):
+        # Generate a random (d - d_inter)-regular bipartite graph F
+        F = create_random_regular_bipartite_graph(k, d - d_inter)
+        # Place F in the corresponding block of H1 and H2
+        H1[i * (2 * k):(i + 1) * (2 * k), i * (2 * k):(i + 1) * (2 * k)] = F
+        H2[i * (2 * k):(i + 1) * (2 * k), i * (2 * k):(i + 1) * (2 * k)] = F
 
-    # Place the bipartite connections
-    adjacency_matrix[:n_half, n_half:] = bipartite_matrix
-    adjacency_matrix[n_half:, :n_half] = bipartite_matrix.T  # Symmetric adjacency matrix
+    # Create the random d_inter-regular bipartite graph between H1 and H2
+    inter_bipartite_graph = create_random_regular_bipartite_graph(n_half, d_inter)
+
+    # Combine H1, H2, and the inter-bipartite graph into the full adjacency matrix
+    adjacency_matrix = inter_bipartite_graph
+    # Fill in H1 in the top-left block
+    adjacency_matrix[:n_half, :n_half] = H1
+    # Fill in H2 in the bottom-right block
+    adjacency_matrix[n_half:, n_half:] = H2
 
     return adjacency_matrix
+
+
+def iterate_and_analyse(max_samples=100):
+    n = 2048  # Fixed number of vertices
+    samples = []
+
+    for k in [64]: # range(1, n // 16 + 1):
+        if n % (4 * k) != 0:
+            continue  # Skip if 2048 is not divisible by 4k
+
+        for d in [64]: #range(1, k):
+            for d_inter in range(1, d):
+                if d - d_inter >= k:
+                    continue  # Skip if d - d_inter is not less than k
+
+                # Append valid combinations to sample from
+                samples.append((k, d, d_inter))
+
+    # Randomly sample up to max_samples combinations
+    chosen_samples = random.sample(samples, min(max_samples, len(samples)))
+
+    for k, d, d_inter in chosen_samples:
+        # Generate the graph and compute the eigenvalues
+        graph = create_high_expansion_high_threshold_rank_graph(n, k, d, d_inter)
+        eigenvalues = analyse_spectrum(graph, print_info=False)
+
+        # Sort eigenvalues to access the 2nd and penultimate
+        sorted_eigenvalues = np.sort(eigenvalues)
+
+        # Print the 2nd and penultimate eigenvalues
+        print(
+            f"k={k}, d={d}, d_inter={d_inter}, 2nd eigenvalue={sorted_eigenvalues[1]}, penultimate eigenvalue={sorted_eigenvalues[-2]}")
 
 
 if __name__ == "__main__":
-    analyse_spectrum(create_high_expansion_high_threshold_rank_graph(3000, 250))
-    # for d in [x for x in range(10, 1000) if 3000 % (4 * x) == 0]:
-    #    evals = analyse_spectrum(create_high_expansion_high_threshold_rank_graph(3000, d))
-    #    print(d, find_first_jump(evals), (float(evals[-2]), float(evals[-1])))
-
-
-"""
-def create_bipartite_bipartite_old(n, k, d):
-    # n should be divisible by 4k
-    if n % (4 * k) != 0:
-        raise ValueError("n must be divisible by 4k")
-
-    # F is a complete bipartite graph with k vertices on each side
-    F = np.block([
-        [np.zeros((k, k)), np.ones((k, k))],
-        [np.ones((k, k)), np.zeros((k, k))]
-    ])
-
-    # Number of disjoint copies of F in H (which has n/2 vertices)
-    copies_of_F = n // (4 * k)
-
-    # Create H as a block diagonal matrix of copies_of_F disjoint copies of F
-    H = np.block([[F if i == j else np.zeros_like(F) for j in range(copies_of_F)] for i in range(copies_of_F)])
-
-    # Create G by making two copies of H and connecting them with a complete bipartite graph
-    # G_upper = np.block([[H, np.ones_like(H)], [np.ones_like(H), H]])
-    bipartite_random = create_random_bipartite_d_regular(H.shape[0], d)
-    G_upper = np.block([[H, bipartite_random], [bipartite_random.T, H]])
-
-    return G_upper
-
-"""
+    # analyse_spectrum(create_high_expansion_high_threshold_rank_graph(1024, 16, 64, 56))
+    iterate_and_analyse()

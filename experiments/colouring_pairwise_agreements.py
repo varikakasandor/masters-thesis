@@ -35,10 +35,8 @@ if __name__ == "__main__":
 
     # Check if a solution exists
     if prob.status == cp.OPTIMAL or prob.status == cp.OPTIMAL_INACCURATE:
-        # Iterate through the 1st axis (the middle dimension) and print each slice
         for j in range(3):
-            print(f"\nWhen the shared coulouring has colour {j + 1}:")
-            # Print the solution for the slice corresponding to this j, truncated to 2 decimals
+            print(f"\nWhen the shared colouring has colour {j + 1}:")
             for i in range(3):
                 row = [float(round(v[k].value[i, j], 2)) for k in range(3)]
                 print(row)

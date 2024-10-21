@@ -1,6 +1,6 @@
 from collections import Counter
 import numpy as np
-import networkx as nx
+
 
 def analyse_spectrum(adjacency_matrix, print_info=True):
     if print_info:

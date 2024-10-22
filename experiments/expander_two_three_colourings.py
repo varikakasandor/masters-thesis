@@ -21,7 +21,7 @@ def objective(p):
                     if j_prime == j:
                         continue
                     numerator += n_ij[i, j] * n_ij[i_prime, j_prime] * (
-                            p[i, j] + p[i_prime, j_prime] - 2 * p[i, j] * p[i_prime, j_prime])  # * 9 / (4 * n)
+                            p[i, j] + p[i_prime, j_prime] - 2 * p[i, j] * p[i_prime, j_prime]) * 9 / (4 * n)
 
     if denominator == 0:
         return -np.inf  # Avoid division by zero
@@ -53,6 +53,6 @@ if __name__ == "__main__":
         optimized_p = result.x.reshape((3, 3))
         print("Optimized p:")
         print(optimized_p)
-        print("Best achievable objective value:", -result.fun)
+        print(f"Best achievable expansion bound: {-result.fun}")
     else:
         print("Optimization failed:", result.message)

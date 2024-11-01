@@ -1,59 +1,55 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.optimize import bisect
 
 
-def target_function(alpha, beta):
-    term1 = (1 - alpha - beta) * np.log(1 - alpha - beta)
-    term2 = -2 * (1 - beta) * np.log(1 - beta)
-    term3 = (2 / 3) * np.log(2 / 3)
-    term4 = -(2 / 3 - alpha) * np.log(2 / 3 - alpha)
-    term5 = -beta * np.log(beta)
-    return term1 + term2 + term3 + term4 + term5
+# Define the functions involved in the conditions
+def condition_1(x, f):
+    term1 = ((3 * x - 1) * (3 * x + 2 - f)) ** 2
+    term2 = (3 * x + 2) ** 2
+    lhs = 2 * term1 / term2
+    rhs = (
+            2 * np.log(2)
+            - (1 - 3 * x) * np.log(1 - 3 * x)
+            - (1 + 3 * x) * np.log(1 + 3 * x)
+    )
+    return lhs - rhs
 
 
-def find_smallest_alpha(beta):
-    # Function that returns the value of target_function at specific beta and alpha
-    def func(alpha):
-        return target_function(alpha, beta)
+def condition_2(x, f):
+    return x <= (f - 2) / 3
 
-    # Define range for alpha
-    alpha_min = 0.00000001
-    alpha_max = 0.66666666
 
-    # Using bisection method to find root where the function is negative
-    # We find the smallest alpha such that func(alpha) < 0
-    try:
-        result = bisect(lambda alpha: func(alpha), alpha_min, alpha_max, xtol=1e-5, rtol=1e-5)
-        return result
-    except ValueError:
-        return None
+def condition_3(x, f):
+    return x >= 1 / 3 - 1 / (f + 1)
+
+
+def find_smallest_f_for_x(x):
+    for f in np.arange(0.1, 2000, 0.1):
+        if condition_1(x, f) > 0 and condition_2(x, f) and condition_3(x, f):
+            return f
+    return None
 
 
 if __name__ == "__main__":
+    # Iterate over values of x in the interval (0, 1/3)
+    x_values = np.linspace(1 / 6, 0.31, 100)
+    f_values = []
 
-    # Loop through values of beta in the interval (0, 1/3)
-    step = 0.01
-    beta_values = np.arange(0.01, 1 / 3, step)
-    alpha_values = []
-
-    for beta in beta_values:
-        smallest_alpha = find_smallest_alpha(beta)
-        if smallest_alpha is not None:
-            alpha_values.append(smallest_alpha)
-            print(f"For beta = {beta:.4f}, the smallest alpha is: {smallest_alpha:.4f}")
+    for x in x_values:
+        smallest_f = find_smallest_f_for_x(x)
+        if smallest_f is not None:
+            f_values.append(smallest_f)
+            print(f"x: {x:.5f}, smallest f: {smallest_f:.5f}")
         else:
-            alpha_values.append(None)
-            print(f"No suitable alpha found for beta = {beta:.4f}")
+            f_values.append(None)
+            print(f"x: {x:.5f}, no valid f found")
 
-    # Calculate alpha/beta for plotting
-    expansion_values = [alpha / beta if alpha is not None else None for alpha, beta in zip(alpha_values, beta_values)]
-
-    # Plotting the results
+    # Plot the results
     plt.figure(figsize=(10, 6))
-    plt.plot(beta_values, expansion_values, marker='o', linestyle='-', color='b')
-    plt.xlabel('Beta values')
-    plt.ylabel('Beta-expansion')
-    plt.title('Required Small-Set Expansion')
+    plt.plot(x_values, f_values, label='Smallest f for each x', marker='o', linestyle='-', color='b')
+    plt.xlabel('x values')
+    plt.ylabel('Smallest f')
+    plt.title('Smallest f for each x in the interval (0, 1/3)')
     plt.grid(True)
+    plt.legend()
     plt.show()

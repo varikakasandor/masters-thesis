@@ -6,7 +6,10 @@ import matplotlib.pyplot as plt
 def condition_1(x, f):
     term1 = ((3 * x - 1) * (3 * x + 2 - f)) ** 2
     term2 = (3 * x + 2) ** 2
-    lhs = 2 * term1 / term2
+    lhs_old = 2 * term1 / term2
+    lhs_new = (3 * (9 * x ** 2 + 3 * (1 - f) * x + (f - 2)) ** 2) / (
+                2 * (2 + 3 * x) * (9 * x ** 2 + (12 + 6 * f) * x + (4 - 2 * f)))
+    lhs = np.maximum(lhs_old, lhs_new)
     rhs = (
             2 * np.log(2)
             - (1 - 3 * x) * np.log(1 - 3 * x)
@@ -47,9 +50,10 @@ if __name__ == "__main__":
     # Plot the results
     plt.figure(figsize=(10, 6))
     plt.plot(x_values, f_values, label='Smallest f for each x', marker='o', linestyle='-', color='b')
-    plt.xlabel('x values')
-    plt.ylabel('Smallest f')
-    plt.title('Smallest f for each x in the interval (0, 1/3)')
+    plt.xlabel('alpha')
+    plt.ylabel('required vertex expansion f')
+    plt.title('Vertex expansion on sets of bounded size vs largest intersection')
     plt.grid(True)
     plt.legend()
+    plt.savefig('vertex_expansion_vs_planted_intersection.png')
     plt.show()

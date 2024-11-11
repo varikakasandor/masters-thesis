@@ -1,6 +1,7 @@
 from collections import Counter
 import numpy as np
 import networkx as nx
+from matplotlib import pyplot as plt
 
 
 def analyse_spectrum(adjacency_matrix, print_info=True):
@@ -134,3 +135,13 @@ def find_first_jump(eigenvalues, threshold=1):
         if abs(eigenvalues[i] - eigenvalues[i - 1]) > threshold:
             return i, float(eigenvalues[i - 1]), float(eigenvalues[i])
     return None
+
+
+def plot_degree_distribution(adjacency_matrix):
+    degrees = np.sum(adjacency_matrix, axis=0)
+    plt.figure()
+    plt.hist(degrees, bins=30, edgecolor='black')
+    plt.xlabel('Degree')
+    plt.ylabel('Frequency')
+    plt.title('Degree Distribution')
+    plt.show()

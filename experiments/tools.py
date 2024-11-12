@@ -26,7 +26,8 @@ def analyse_spectrum(adjacency_matrix, print_info=True):
 
     smallest_eigenvalue_index = np.argmin(eigenvalues)
     smallest_eigenvalue = rounded_eigenvalues[smallest_eigenvalue_index]
-    print(f"Smallest Eigenvalue: {smallest_eigenvalue}")
+    if print_info:
+        print(f"Smallest Eigenvalue: {smallest_eigenvalue}")
     return eigenvalues
 
 

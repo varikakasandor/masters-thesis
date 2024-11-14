@@ -97,14 +97,15 @@ def find_optimal_d_sb(n, c, d):
 
 
 if __name__ == "__main__":
-    n = 3000
-    c = 1 / 20
-    d = 300
+    n = 5000
+    c = 1 / 5000
+    d = 500
     d_sb = find_optimal_d_sb(n, c, d)
     if d_sb is not None:
-        adjacency_matrix = generate_graph(n, c, d, d_sb)
-        print(analyse_spectrum(adjacency_matrix))
-        plot_degree_distribution(adjacency_matrix)
+        pass
+        # adjacency_matrix = generate_graph(n, c, d, d_sb)
+        # print(analyse_spectrum(adjacency_matrix))
+        # plot_degree_distribution(adjacency_matrix)
 
     # adjacency_matrix = generate_graph(n=3000, c=1/20, d=1000, d_sb=900)
     # analyse_spectrum(adjacency_matrix)

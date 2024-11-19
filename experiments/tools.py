@@ -13,7 +13,7 @@ def analyse_spectrum(adjacency_matrix, print_info=True):
     eigenvalues, eigenvectors = np.linalg.eigh(adjacency_matrix)
 
     # Round the eigenvalues to a reasonable precision to avoid floating point issues
-    rounded_eigenvalues = np.round(eigenvalues, decimals=6)
+    rounded_eigenvalues = np.round(eigenvalues, decimals=10)
 
     # Count the multiplicities of each eigenvalue
     eigenvalue_multiplicities = Counter(rounded_eigenvalues)

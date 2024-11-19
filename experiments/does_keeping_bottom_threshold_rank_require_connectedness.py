@@ -44,7 +44,7 @@ def generate_graph(n, ccs, d):
 
 
 if __name__ == "__main__":
-    adjacency_matrix = generate_graph(n=1000, ccs=1, d=42)
+    adjacency_matrix = generate_graph(n=2000, ccs=400, d=4) #n=1000, ccs=50, d=18)
     print("Spectrum after planting:")
     analyse_spectrum(adjacency_matrix)
     plot_degree_distribution(adjacency_matrix)

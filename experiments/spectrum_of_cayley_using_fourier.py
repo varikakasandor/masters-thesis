@@ -39,3 +39,8 @@ if __name__ == "__main__":
     d = 8  # Dimension
     p = 3  # Prime modulus (can be any prime)
     A = {v for v in product(range(p), repeat=d) if 1 <= sum(v) <= 2} # EXAMPLE
+
+    # Calculate spectrum for set A
+    spectrum = cayley_graph_spectrum_parallel(d, p, A)
+    formatted_spectrum = [float(e) for e in spectrum]  # Convert np.float64 to standard float for nicer output
+    print("Spectrum:", formatted_spectrum)

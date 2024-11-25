@@ -8,7 +8,6 @@ import functools
 
 # Function to calculate the Fourier coefficient for a single element y
 def fourier_coefficient(y, Zp_d, A, p):
-    # Step 2: Define the indicator function f(x) for the set A
     def f(x):
         return 1 if tuple(x) in A else 0
 
@@ -39,9 +38,4 @@ if __name__ == "__main__":
     # Example usage
     d = 8  # Dimension
     p = 3  # Prime modulus (can be any prime)
-    A = {v for v in product(range(p), repeat=d) if 1 <= sum(v) <= 2}
-
-    # Calculate spectrum for set A
-    spectrum = cayley_graph_spectrum_parallel(d, p, A)
-    formatted_spectrum = [float(e) for e in spectrum]  # Convert np.float64 to standard float for nicer output
-    print("Spectrum:", formatted_spectrum)
+    A = {v for v in product(range(p), repeat=d) if 1 <= sum(v) <= 2} # EXAMPLE

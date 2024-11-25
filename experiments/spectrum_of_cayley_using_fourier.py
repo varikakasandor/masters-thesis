@@ -43,4 +43,10 @@ if __name__ == "__main__":
     # Calculate spectrum for set A
     spectrum = cayley_graph_spectrum_parallel(d, p, A)
     formatted_spectrum = [float(e) for e in spectrum]  # Convert np.float64 to standard float for nicer output
-    print("Spectrum:", formatted_spectrum)
+    selected_evals = [formatted_spectrum[0], formatted_spectrum[1], formatted_spectrum[-3], formatted_spectrum[-2],
+                      formatted_spectrum[-1]]
+    print("Spectrum summary: [{}]".format(
+        ", ".join(
+            [str(selected_evals[0]), str(selected_evals[1]), "...", str(selected_evals[2]), str(selected_evals[3]),
+             str(selected_evals[4])])
+    ))

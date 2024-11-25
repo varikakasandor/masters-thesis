@@ -2,39 +2,51 @@ import numpy as np
 from itertools import product
 import random
 from tqdm import tqdm
+from multiprocessing import Pool, cpu_count
+import functools
 
 
-# Function to calculate the Fourier coefficients and spectrum
-def cayley_graph_spectrum(d, A):
-    # Step 1: Generate all vectors in F_2^d
-    F2_d = list(product([0, 1], repeat=d))
+# Function to calculate the Fourier coefficient for a single element y
+def fourier_coefficient(y, Zp_d, A, p):
     # Step 2: Define the indicator function f(x) for the set A
     def f(x):
         return 1 if tuple(x) in A else 0
 
-    # Step 3: Calculate Fourier coefficients (spectrum of the adjacency matrix)
-    spectrum = []
-    for y in F2_d:
-        eigenvalue = sum(
-            f(x) * (-1) ** np.dot(x, y) for x in F2_d
-        )
-        spectrum.append(eigenvalue)
+    # Calculate the Fourier coefficient for y
+    eigenvalue = sum(
+        f(x) * np.exp(-2j * np.pi * (np.dot(x, y) % p) / p) for x in Zp_d
+    ).real  # Take the real part to get the Fourier coefficient
+    return eigenvalue
+
+
+# Function to calculate the Fourier coefficients and spectrum
+# This version uses parallel processing to speed up the computation
+def cayley_graph_spectrum_parallel(d, p, A):
+    # Step 1: Generate all vectors in Z_p^d
+    Zp_d = list(product(range(p), repeat=d))
+
+    # Step 2: Use multiprocessing to calculate Fourier coefficients with tqdm progress bar
+    with Pool(cpu_count()) as pool:
+        spectrum = list(
+            tqdm(pool.imap(functools.partial(fourier_coefficient, Zp_d=Zp_d, A=A, p=p), Zp_d), total=len(Zp_d),
+                 desc="Calculating Fourier Coefficients"))
+
     spectrum.sort(reverse=True)
     return spectrum
 
 
 # Wrapper function to find the best set A based on the criteria
-def find_best_A(d, ITER):
-    F2_d = list(product([0, 1], repeat=d))
+def find_best_A_parallel(d, p, ITER):
+    Zp_d = list(product(range(p), repeat=d))
     best_A = None
     lowest_lambda_2 = float('inf')
 
     for _ in tqdm(range(ITER), desc="Searching for best set A"):
         # Step 1: Choose a random set A of size 10d
-        A = set(random.sample(F2_d, 10 * d))
+        A = set(random.sample(Zp_d, 10 * d))
 
         # Step 2: Calculate the spectrum
-        spectrum = cayley_graph_spectrum(d, A)
+        spectrum = cayley_graph_spectrum_parallel(d, p, A)
         spectrum.sort(reverse=True)  # Sort eigenvalues in descending order
 
         # Step 3: Check the conditions
@@ -49,17 +61,12 @@ def find_best_A(d, ITER):
 
 
 if __name__ == "__main__":
-    d = 9
-    # A = {(1, 0, 0, 1, 0, 0, 0, 0, 1), (1, 1, 0, 1, 0, 0, 0, 1, 0), (1, 0, 0, 0, 0, 1, 1, 1, 1), (0, 0, 0, 1, 1, 1, 1, 0, 1), (0, 0, 1, 1, 1, 1, 0, 1, 1), (0, 1, 1, 1, 0, 1, 0, 1, 0), (1, 1, 1, 1, 0, 1, 0, 0, 0), (0, 1, 1, 1, 1, 1, 0, 1, 1), (1, 1, 0, 0, 0, 0, 0, 0, 1), (0, 1, 1, 1, 1, 0, 0, 0, 1), (1, 1, 1, 1, 1, 0, 1, 1, 0), (1, 0, 1, 0, 0, 1, 1, 0, 1), (1, 0, 1, 0, 0, 0, 1, 0, 0), (1, 1, 1, 1, 1, 0, 1, 0, 1), (0, 1, 0, 0, 1, 1, 1, 1, 1), (1, 0, 0, 1, 0, 1, 1, 1, 1), (0, 1, 0, 0, 0, 1, 0, 1, 0), (1, 1, 1, 1, 0, 0, 1, 1, 1), (0, 0, 1, 0, 0, 1, 0, 0, 1), (0, 0, 0, 1, 0, 0, 1, 0, 1), (0, 1, 1, 0, 0, 1, 0, 0, 1), (0, 0, 1, 0, 1, 1, 1, 0, 0), (0, 0, 0, 0, 1, 0, 0, 1, 1), (0, 0, 0, 0, 0, 0, 0, 1, 0), (0, 1, 0, 0, 0, 0, 1, 0, 0), (0, 1, 1, 1, 0, 1, 1, 0, 1), (0, 1, 1, 0, 1, 0, 0, 1, 1), (1, 1, 0, 0, 1, 1, 0, 1, 1), (0, 0, 1, 0, 1, 0, 0, 1, 1), (0, 0, 1, 1, 0, 0, 0, 0, 0), (0, 0, 0, 1, 0, 1, 0, 1, 0), (1, 1, 1, 0, 1, 0, 1, 0, 0), (1, 0, 1, 0, 0, 0, 0, 1, 0), (0, 1, 1, 1, 1, 1, 1, 0, 0), (1, 1, 1, 1, 0, 0, 0, 1, 1), (1, 0, 1, 0, 0, 0, 0, 0, 1), (1, 0, 1, 0, 0, 0, 1, 1, 1), (1, 1, 0, 0, 1, 0, 1, 0, 0), (1, 0, 0, 1, 0, 0, 1, 0, 0), (0, 1, 1, 0, 1, 1, 0, 1, 0), (1, 0, 1, 1, 1, 0, 0, 0, 1), (1, 0, 0, 1, 0, 1, 1, 1, 0), (0, 0, 1, 1, 0, 1, 1, 0, 1), (0, 0, 1, 0, 0, 1, 0, 0, 0), (1, 0, 1, 1, 1, 1, 0, 0, 0), (1, 0, 0, 0, 0, 0, 1, 0, 0), (1, 0, 0, 0, 1, 0, 1, 1, 1), (0, 1, 1, 0, 1, 1, 1, 0, 0), (1, 0, 0, 0, 1, 1, 1, 1, 0), (1, 1, 1, 1, 1, 0, 0, 1, 0), (0, 1, 0, 1, 0, 0, 0, 0, 0), (1, 0, 1, 0, 1, 1, 1, 1, 1), (1, 1, 0, 1, 1, 0, 1, 1, 1), (0, 1, 1, 1, 1, 0, 1, 1, 1), (1, 1, 0, 0, 0, 1, 1, 0, 0), (0, 0, 0, 0, 0, 1, 0, 1, 1), (0, 0, 1, 1, 1, 0, 1, 1, 1), (0, 0, 1, 0, 1, 0, 0, 1, 0), (0, 0, 0, 1, 1, 1, 0, 1, 1), (1, 1, 1, 1, 0, 1, 0, 1, 0), (0, 0, 0, 1, 1, 1, 1, 1, 1), (1, 1, 1, 0, 1, 0, 0, 1, 1), (0, 1, 1, 0, 0, 1, 1, 0, 0), (0, 0, 0, 0, 1, 0, 1, 1, 0), (0, 1, 0, 0, 0, 0, 0, 1, 0), (1, 0, 0, 0, 0, 1, 1, 0, 0), (0, 1, 1, 0, 0, 0, 1, 0, 1), (0, 0, 1, 0, 0, 1, 1, 1, 1), (0, 1, 0, 0, 1, 1, 0, 1, 0), (0, 0, 1, 1, 0, 0, 0, 0, 1), (1, 0, 1, 1, 0, 0, 0, 1, 1), (1, 1, 1, 1, 1, 0, 1, 1, 1), (0, 0, 0, 1, 1, 0, 0, 1, 0), (0, 0, 1, 1, 0, 0, 1, 0, 1), (0, 1, 1, 0, 0, 1, 1, 1, 1), (1, 1, 0, 0, 0, 0, 0, 1, 0), (0, 1, 1, 1, 1, 0, 0, 1, 0), (1, 0, 1, 1, 0, 1, 1, 0, 0), (0, 1, 1, 0, 0, 0, 0, 0, 0), (1, 1, 1, 1, 1, 1, 1, 0, 1), (0, 1, 1, 0, 1, 0, 0, 0, 1), (0, 1, 0, 0, 0, 0, 1, 1, 0), (1, 1, 0, 0, 1, 1, 0, 0, 1), (0, 0, 0, 0, 0, 0, 0, 1, 1), (0, 1, 0, 1, 0, 1, 0, 0, 0), (1, 1, 0, 0, 0, 1, 1, 1, 1), (0, 0, 0, 0, 1, 1, 0, 0, 1), (1, 1, 1, 1, 1, 1, 0, 0, 1), (1, 0, 1, 1, 1, 1, 0, 0, 1), (1, 0, 0, 0, 0, 0, 1, 0, 1)}  # Define A as a set of tuples representing vectors
-    # spectrum = cayley_graph_spectrum(d, A)
-    # formatted_spectrum = [float(e) for e in spectrum]  # Convert np.float64 to standard float for nicer output
-    # print("Spectrum:", formatted_spectrum)
+    # Example usage
+    d = 8  # Dimension
+    p = 3  # Prime modulus (can be any prime)
+    A = {v for v in product(range(p), repeat=d) if 1 <= sum(v) <= 2}
 
-    #Use the wrapper function to find the best set A
-    ITER = 1000  # Number of iterations to try different sets A
-    best_A, lowest_lambda_2 = find_best_A(d, ITER)
-    if best_A is not None:
-        print("Best set A found with lowest lambda_2:", best_A)
-        print("Lowest lambda_2:", lowest_lambda_2)
-    else:
-        print("No set A found that meets the criteria.")
+    # Calculate spectrum for set A
+    spectrum = cayley_graph_spectrum_parallel(d, p, A)
+    formatted_spectrum = [float(e) for e in spectrum]  # Convert np.float64 to standard float for nicer output
+    print("Spectrum:", formatted_spectrum)

@@ -35,31 +35,6 @@ def cayley_graph_spectrum_parallel(d, p, A):
     return spectrum
 
 
-# Wrapper function to find the best set A based on the criteria
-def find_best_A_parallel(d, p, ITER):
-    Zp_d = list(product(range(p), repeat=d))
-    best_A = None
-    lowest_lambda_2 = float('inf')
-
-    for _ in tqdm(range(ITER), desc="Searching for best set A"):
-        # Step 1: Choose a random set A of size 10d
-        A = set(random.sample(Zp_d, 10 * d))
-
-        # Step 2: Calculate the spectrum
-        spectrum = cayley_graph_spectrum_parallel(d, p, A)
-        spectrum.sort(reverse=True)  # Sort eigenvalues in descending order
-
-        # Step 3: Check the conditions
-        lambda_2 = spectrum[1]  # Second largest eigenvalue
-        lambda_n_minus_2 = spectrum[-3]  # Second smallest eigenvalue
-
-        if lambda_n_minus_2 <= -(4 / 10) * (10 * d) and lambda_2 < lowest_lambda_2:
-            best_A = A
-            lowest_lambda_2 = lambda_2
-
-    return best_A, lowest_lambda_2
-
-
 if __name__ == "__main__":
     # Example usage
     d = 8  # Dimension

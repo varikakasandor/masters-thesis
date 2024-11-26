@@ -1,19 +1,5 @@
-from tools import *
-import numpy as np
-import networkx as nx
 import random
-import matplotlib.pyplot as plt
-
-
-def plot_degree_distribution(graph):
-    degrees = [degree for node, degree in graph.degree()]
-    plt.figure(figsize=(10, 6))
-    plt.hist(degrees, bins=range(min(degrees), max(degrees) + 1), edgecolor='black', alpha=0.7)
-    plt.xlabel('Degree')
-    plt.ylabel('Frequency')
-    plt.title('Degree Distribution')
-    plt.grid(axis='y', linestyle='--', alpha=0.7)
-    plt.show()
+from tools import *
 
 
 def create_stochastic_block_graph(n, d, density_matrix):
@@ -32,7 +18,7 @@ def create_stochastic_block_graph(n, d, density_matrix):
     for i in range(num_parts):
         for j in range(num_parts):
             if i <= j:  # Only iterate over upper triangle and diagonal
-                prob = density_matrix[i, j] * d / n
+                prob = density_matrix[i, j] * d * num_parts / n
                 for u in node_groups[i]:
                     for v in node_groups[j]:
                         if u < v:  # Avoid double counting
@@ -43,27 +29,19 @@ def create_stochastic_block_graph(n, d, density_matrix):
 
 if __name__ == "__main__":
     # Parameters
-    n = 2400  # Total number of nodes
-    d = 200  # Average degree, can be adjusted
+    n = 4000  # Total number of nodes
+    d = 500  # Average degree, can be adjusted
 
     # Matrix B
     density_matrix = np.array([
-        [3.57583434e-03, 2.42715849e+00, 9.22767189e-02, 1.41958957e+00, 9.25309287e-02, 2.53229827e-02, 4.19833773e-01,
-         2.40118690e-02],
-        [2.55422924e-02, 6.92711951e-03, 2.77372728e-02, 5.14528089e-03, 8.17989211e-03, 3.31565402e-03, 3.59439103e-02,
-         1.56034663e-03],
-        [1.87545754e-02, 7.77643161e-01, 7.04511456e-03, 4.89209063e-02, 1.50538965e-01, 1.60215636e-01, 4.56029806e-01,
-         1.44790606e-02],
-        [1.21405312e-01, 1.79934314e-01, 1.50047085e-01, 5.08182559e-03, 6.79629424e-03, 2.65660359e-02, 4.03551357e-01,
-         8.42110121e-02],
-        [5.16204346e-02, 1.17298621e-01, 9.66528544e-03, 1.46028321e-02, 1.25295506e-01, 5.72155151e-02, 2.21849838e-02,
-         9.36130761e-03],
-        [1.38689795e-02, 3.13541694e+00, 8.81019733e-02, 8.79191379e-02, 1.79590517e-01, 4.39026795e-03, 3.43621720e-01,
-         1.19935700e-01],
-        [3.83143816e-02, 1.72445772e-01, 5.50673281e-01, 6.37928211e-02, 1.23036304e-01, 2.63097219e-02, 1.21070200e-03,
-         2.01580332e-02],
-        [1.55602946e-01, 9.58000106e-01, 1.75924482e-01, 2.38610106e-01, 6.74645700e-02, 1.51635484e+00, 4.94896571e-02,
-         1.31453894e-02]
+        [0.00100, 0.28269, 0.14027, 0.18009, 0.05299, 0.32257, 0.01896, 0.00144],
+        [0.28269, 0.00100, 0.04290, 0.13618, 0.01317, 0.07256, 0.35141, 0.10009],
+        [0.14027, 0.04290, 0.00113, 0.34254, 0.28074, 0.05560, 0.13581, 0.00101],
+        [0.18009, 0.13618, 0.34254, 0.00108, 0.00722, 0.02365, 0.04859, 0.26064],
+        [0.05299, 0.01317, 0.28074, 0.00722, 0.00113, 0.27551, 0.26610, 0.10313],
+        [0.32257, 0.07256, 0.05560, 0.02365, 0.27551, 0.00132, 0.02612, 0.22266],
+        [0.01896, 0.35141, 0.13581, 0.04859, 0.26610, 0.02612, 0.00100, 0.15200],
+        [0.00144, 0.10009, 0.00101, 0.26064, 0.10313, 0.22266, 0.15200, 0.15903]
     ])
 
     # Create graph

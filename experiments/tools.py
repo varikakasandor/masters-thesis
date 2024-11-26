@@ -34,7 +34,7 @@ def analyse_spectrum(adjacency_matrix, print_info=True, concise=True, bottom_pri
         concise_output = [float(largest_eigenvalues[0]), float(largest_eigenvalues[1]), '...',
                           *[float(val) for val in smallest_eigenvalues]]
         concise_output_str = ', '.join(str(x) if x != '...' else '...' for x in concise_output)
-        print(f"[{concise_output_str}]")
+        print(f"Spectrum: [{concise_output_str}]")
 
     return eigenvalues
 

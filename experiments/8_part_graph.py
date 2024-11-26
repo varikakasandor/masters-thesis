@@ -14,7 +14,7 @@ def create_stochastic_block_graph(n, d, density_matrix):
     G = nx.Graph()
     G.add_nodes_from(range(n))
 
-    # Add edges based on matrix B
+    # Add each edge based on the density matrix at random
     for i in range(num_parts):
         for j in range(num_parts):
             if i <= j:  # Only iterate over upper triangle and diagonal

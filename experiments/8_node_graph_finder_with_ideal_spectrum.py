@@ -40,23 +40,26 @@ def objective(flat_upper):
     row_sums = np.sum(A, axis=1)
     row_sum_penalty = np.sum((row_sums - 1) ** 2)  # Penalize deviation from sum 1
 
-    # Total objective: eigenvalue mismatch + row sum penalty
-    return eigenvalue_diff + 10 * row_sum_penalty  # Adjust weight for penalty if needed
+    # Sparsity-promoting penalty (negative sum of squares)
+    sparsity_penalty = 8 - (flat_upper ** 3).sum()
+
+    # Total objective: eigenvalue mismatch + row sum penalty + sparsity penalty
+    return eigenvalue_diff + 100 * row_sum_penalty + (1 / 10) * sparsity_penalty
 
 
 if __name__ == "__main__":
 
     # Define bounds for each independent variable (all entries > 0)
-    bounds = [(1e-3, 10) for _ in range(36)]  # Avoid zero by setting a small lower bound
+    bounds = [(0, 1) for _ in range(36)]  # Avoid zero by setting a small lower bound
 
     # Differential Evolution parameters
     result = differential_evolution(
         objective,
         bounds,
         strategy='best1bin',
-        maxiter=3000,
+        maxiter=30000,
         popsize=15,
-        tol=1e-1,
+        tol=1e-20,
         mutation=(0.5, 1),
         recombination=0.7,
         disp=True,
@@ -64,38 +67,33 @@ if __name__ == "__main__":
         workers=-1  # Use all available CPU cores
     )
 
-    # Check if the optimization was successful
-    if True:
-        # Retrieve the optimized upper triangular part
-        optimized_upper = result.x
+    # Retrieve the optimized upper triangular part
+    optimized_upper = result.x
+    # Reconstruct the symmetric matrix
+    optimized_matrix = create_symmetric_matrix(optimized_upper)
 
-        # Reconstruct the symmetric matrix
-        optimized_matrix = create_symmetric_matrix(optimized_upper)
+    # Compute its eigenvalues
+    optimized_eigenvalues, _ = eig(optimized_matrix)
 
-        # Compute its eigenvalues
-        optimized_eigenvalues, _ = eig(optimized_matrix)
+    # Sort for comparison
+    optimized_eigenvalues_sorted = np.sort(np.real(optimized_eigenvalues))
+    desired_sorted = np.sort(np.real(desired_eigenvalues))
 
-        # Sort for comparison
-        optimized_eigenvalues_sorted = np.sort(np.real(optimized_eigenvalues))
-        desired_sorted = np.sort(np.real(desired_eigenvalues))
+    print("Optimized Symmetric Matrix:")
+    for row in optimized_matrix:
+        print(["{:.5f}".format(val) for val in row])
 
-        print("Optimized Symmetric Matrix:")
-        for row in optimized_matrix:
-            print(["{:.5f}".format(val) for val in row])
+    print("\nDesired Eigenvalues:")
+    print(desired_sorted)
 
-        print("\nDesired Eigenvalues:")
-        print(desired_sorted)
+    print("\nOptimized Eigenvalues:")
+    print(optimized_eigenvalues_sorted)
 
-        print("\nOptimized Eigenvalues:")
-        print(optimized_eigenvalues_sorted)
+    # Compute and print the difference
+    difference = optimized_eigenvalues_sorted - desired_sorted
+    print("\nDifference between Optimized and Desired Eigenvalues:")
+    print(difference)
 
-        # Compute and print the difference
-        difference = optimized_eigenvalues_sorted - desired_sorted
-        print("\nDifference between Optimized and Desired Eigenvalues:")
-        print(difference)
-
-        # Check row sums
-        print("\nRow Sums:")
-        print(np.sum(optimized_matrix, axis=1))
-    else:
-        print("Optimization failed. Try adjusting the parameters or providing a better initial guess.")
+    # Check row sums
+    print("\nRow Sums:")
+    print(np.sum(optimized_matrix, axis=1))

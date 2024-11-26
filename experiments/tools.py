@@ -4,6 +4,35 @@ import networkx as nx
 from matplotlib import pyplot as plt
 
 
+def adjust_row_sums_to_exactly_one(A):
+    n = A.shape[0]
+    row_sums = A.sum(axis=1)
+
+    while not np.all(row_sums == 1):
+        # Find the (i, j) with A[i, j] largest such that sum(A[i, :]) and sum(A[j, :]) are both not yet 1
+        max_value = -np.inf
+        i_max, j_max = -1, -1
+        for i in range(n):
+            if row_sums[i] != 1:
+                for j in range(i + 1, n):
+                    if row_sums[j] != 1 and A[i, j] > max_value:
+                        max_value = A[i, j]
+                        i_max, j_max = i, j
+        if i_max == -1 or j_max == -1:
+            print("Cannot make more progress")
+            break  # No valid (i, j) found, meaning all row sums are 1
+
+        # Calculate how much to subtract from A[i_max, j_max] and A[j_max, i_max]
+        subtract_amount = min(row_sums[i_max] - 1, row_sums[j_max] - 1, A[i_max, j_max])
+
+        # Update A and row sums
+        A[i_max, j_max] -= subtract_amount
+        A[j_max, i_max] -= subtract_amount
+        row_sums[i_max] -= subtract_amount
+        row_sums[j_max] -= subtract_amount
+
+    return A
+
 def analyse_spectrum(adjacency_matrix, print_info=True, concise=True, bottom_print_cnt=3):
     if print_info and not concise:
         print(

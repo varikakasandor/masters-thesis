@@ -1,3 +1,4 @@
+from tools import *
 import numpy as np
 from scipy.optimize import differential_evolution
 from numpy.linalg import eig
@@ -71,6 +72,7 @@ if __name__ == "__main__":
     optimized_upper = result.x
     # Reconstruct the symmetric matrix
     optimized_matrix = create_symmetric_matrix(optimized_upper)
+    optimized_matrix = adjust_row_sums_to_exactly_one(optimized_matrix)
 
     # Compute its eigenvalues
     optimized_eigenvalues, _ = eig(optimized_matrix)

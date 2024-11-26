@@ -4,13 +4,16 @@ import networkx as nx
 from matplotlib import pyplot as plt
 
 
-def analyse_spectrum(adjacency_matrix, print_info=True):
-    if print_info:
+def analyse_spectrum(adjacency_matrix, print_info=True, concise=True, bottom_print_cnt=3):
+    if print_info and not concise:
         print(
             f"Number of vertices: {adjacency_matrix.shape[0]}, Max degree: {np.max(np.sum(adjacency_matrix, axis=0))}")
 
     # Calculate the eigenvalues
-    eigenvalues, eigenvectors = np.linalg.eigh(adjacency_matrix)
+    eigenvalues, _ = np.linalg.eigh(adjacency_matrix)
+
+    # Reverse the eigenvalues to have them in descending order
+    eigenvalues = eigenvalues[::-1]
 
     # Round the eigenvalues to a reasonable precision to avoid floating point issues
     rounded_eigenvalues = np.round(eigenvalues, decimals=10)
@@ -19,15 +22,20 @@ def analyse_spectrum(adjacency_matrix, print_info=True):
     eigenvalue_multiplicities = Counter(rounded_eigenvalues)
 
     # Print out the eigenvalues and their multiplicities
-    if print_info:
+    if print_info and not concise:
         print("Eigenvalue : Multiplicity")
         for eigenvalue, multiplicity in eigenvalue_multiplicities.items():
             print(f"{eigenvalue} : {multiplicity}")
 
-    smallest_eigenvalue_index = np.argmin(eigenvalues)
-    smallest_eigenvalue = rounded_eigenvalues[smallest_eigenvalue_index]
-    if print_info:
-        print(f"Smallest Eigenvalue: {smallest_eigenvalue}")
+    # Find the smallest and largest eigenvalues
+    if print_info and concise:
+        largest_eigenvalues = rounded_eigenvalues[:2]  # 2 largest eigenvalues
+        smallest_eigenvalues = rounded_eigenvalues[-bottom_print_cnt:]  # bottom_print_cnt smallest eigenvalues
+        concise_output = [float(largest_eigenvalues[0]), float(largest_eigenvalues[1]), '...',
+                          *[float(val) for val in smallest_eigenvalues]]
+        concise_output_str = ', '.join(str(x) if x != '...' else '...' for x in concise_output)
+        print(f"[{concise_output_str}]")
+
     return eigenvalues
 
 

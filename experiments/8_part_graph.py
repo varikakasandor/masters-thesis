@@ -29,10 +29,9 @@ def create_stochastic_block_graph(n, d, density_matrix):
 
 if __name__ == "__main__":
     # Parameters
-    n = 4000  # Total number of nodes
-    d = 500  # Average degree, can be adjusted
+    n = 2400  # Total number of nodes
+    d = 300  # Average degree, can be adjusted
 
-    # Matrix B
     density_matrix = np.array([
         [0.00100, 0.28269, 0.14027, 0.18009, 0.05299, 0.32257, 0.01896, 0.00144],
         [0.28269, 0.00100, 0.04290, 0.13618, 0.01317, 0.07256, 0.35141, 0.10009],
@@ -50,6 +49,9 @@ if __name__ == "__main__":
     # Plot degree distribution
     plot_degree_distribution(G)
 
+    graph_connected_message = "The graph is connected" if nx.is_connected(G) else "The graph is NOT connected"
+
+    print(graph_connected_message)
     # Get adjacency matrix
     adjacency_matrix = nx.adjacency_matrix(G).todense()
 

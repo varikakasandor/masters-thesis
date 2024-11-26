@@ -50,9 +50,8 @@ if __name__ == "__main__":
     plot_degree_distribution(G)
 
     graph_connected_message = "The graph is connected" if nx.is_connected(G) else "The graph is NOT connected"
-
     print(graph_connected_message)
+
     # Get adjacency matrix
     adjacency_matrix = nx.adjacency_matrix(G).todense()
-
     analyse_spectrum(adjacency_matrix)

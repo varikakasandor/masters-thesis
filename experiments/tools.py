@@ -146,11 +146,22 @@ def find_first_jump(eigenvalues, threshold=1):
     return None
 
 
-def plot_degree_distribution(adjacency_matrix):
+def plot_degree_distribution_from_adjacency_matrix(adjacency_matrix):
     degrees = np.sum(adjacency_matrix, axis=0)
     plt.figure()
     plt.hist(degrees, bins=30, edgecolor='black')
     plt.xlabel('Degree')
     plt.ylabel('Frequency')
     plt.title('Degree Distribution')
+    plt.show()
+
+
+def plot_degree_distribution(graph):
+    degrees = [degree for node, degree in graph.degree()]
+    plt.figure(figsize=(10, 6))
+    plt.hist(degrees, bins=range(min(degrees), max(degrees) + 1), edgecolor='black', alpha=0.7)
+    plt.xlabel('Degree')
+    plt.ylabel('Frequency')
+    plt.title('Degree Distribution')
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
     plt.show()

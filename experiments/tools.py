@@ -15,15 +15,17 @@ def adjust_row_sums_to_exactly_one(A):
         for i in range(n):
             if row_sums[i] != 1:
                 for j in range(i + 1, n):
-                    if row_sums[j] != 1 and A[i, j] > max_value:
+                    if (row_sums[j] - 1) * (row_sums[i] - 1) > 0 and A[i, j] > max_value: # i.e. neither of them are 1 and they are wrong from the same side
                         max_value = A[i, j]
                         i_max, j_max = i, j
         if i_max == -1 or j_max == -1:
-            print("Cannot make more progress")
+            print("Cannot make the densities sum up to exactly 1 in each row")
             break  # No valid (i, j) found, meaning all row sums are 1
 
         # Calculate how much to subtract from A[i_max, j_max] and A[j_max, i_max]
-        subtract_amount = min(row_sums[i_max] - 1, row_sums[j_max] - 1, A[i_max, j_max])
+        subtract_amount = min(abs(row_sums[i_max] - 1), abs(row_sums[j_max] - 1), A[i_max, j_max])
+        if row_sums[i_max] < 1:
+            subtract_amount *= -1
 
         # Update A and row sums
         A[i_max, j_max] -= subtract_amount

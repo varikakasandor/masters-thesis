@@ -13,7 +13,7 @@ def adjust_row_sums_to_exactly_one(A):
         for i in range(n):
             if row_sums[i] != 1:
                 for j in range(i + 1, n):
-                    if row_sums[j] != 1 and A[i, j] > max_value:
+                    if (row_sums[j] - 1) * (row_sums[i] - 1) > 0 and A[i, j] > max_value: # i.e. neither of them are 1 and they are wrong from the same side
                         max_value = A[i, j]
                         i_max, j_max = i, j
         if i_max == -1 or j_max == -1:
@@ -21,7 +21,9 @@ def adjust_row_sums_to_exactly_one(A):
             break  # No valid (i, j) found, meaning all row sums are 1
 
         # Calculate how much to subtract from A[i_max, j_max] and A[j_max, i_max]
-        subtract_amount = min(row_sums[i_max] - 1, row_sums[j_max] - 1, A[i_max, j_max])
+        subtract_amount = min(abs(row_sums[i_max] - 1), abs(row_sums[j_max] - 1), A[i_max, j_max])
+        if row_sums[i_max] < 1:
+            subtract_amount *= -1
 
         # Update A and row sums
         A[i_max, j_max] -= subtract_amount
@@ -35,14 +37,14 @@ def adjust_row_sums_to_exactly_one(A):
 if __name__ == "__main__":
     # Example usage
     A = np.array([
-        [0.00000, 0.02670, 0.19414, 0.06657, 0.27480, 0.34947, 0.05822, 0.03012],
-        [0.02670, 0.02281, 0.01004, 0.08708, 0.05447, 0.28525, 0.33166, 0.18201],
-        [0.19414, 0.01004, 0.05084, 0.30032, 0.07428, 0.06199, 0.29378, 0.01462],
-        [0.06657, 0.08708, 0.30032, 0.00003, 0.01096, 0.16554, 0.03216, 0.33737],
-        [0.27480, 0.05447, 0.07428, 0.01096, 0.08020, 0.01227, 0.20091, 0.29212],
-        [0.34947, 0.28525, 0.06199, 0.16554, 0.01227, 0.00000, 0.03250, 0.09299],
-        [0.05822, 0.33166, 0.29378, 0.03216, 0.20091, 0.03250, 0.00000, 0.05079],
-        [0.03012, 0.18201, 0.01462, 0.33737, 0.29212, 0.09299, 0.05079, 0.00000]
+        [0, 0.02670, 0.19414, 0.06657, 0.27479, 0.34946, 0.05822, 0.03012],
+        [0.02670, 0, 0.01004, 0.08708, 0.05447, 0.28525, 0.33164, 0.18201],
+        [0.19414, 0.01004, 0, 0.30031, 0.07428, 0.06199, 0.29378, 0.01462],
+        [0.06657, 0.08708, 0.30031, 0, 0.01096, 0.16554, 0.03216, 0.33735],
+        [0.27479, 0.05447, 0.07428, 0.01096, 0, 0.01227, 0.20091, 0.29212],
+        [0.34946, 0.28525, 0.06199, 0.16554, 0.01227, 0, 0.03250, 0.09299],
+        [0.05822, 0.33164, 0.29378, 0.03216, 0.20091, 0.03250, 0, 0.05079],
+        [0.03012, 0.18201, 0.01462, 0.33735, 0.29212, 0.09299, 0.05079, 0]
     ])
 
     result = adjust_row_sums_to_exactly_one(A)

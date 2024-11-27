@@ -61,7 +61,7 @@ def objective(flat_upper, desired_eigenvalues, k, make_k_colourable=False):
     sparsity_penalty = k - (flat_upper ** 3).sum()
 
     # Total objective: eigenvalue mismatch + row sum penalty + sparsity penalty
-    return eigenvalue_diff + 100 * row_sum_penalty + (1 / 10) * sparsity_penalty
+    return 0.1 * (eigenvalue_diff / k) + 0.9 * (row_sum_penalty / k) + 0.0 * (sparsity_penalty / k)
 
 
 def optimize_symmetric_matrix(desired_eigenvalues, k, make_k_colourable):
@@ -76,14 +76,14 @@ def optimize_symmetric_matrix(desired_eigenvalues, k, make_k_colourable):
     result = differential_evolution(
         objective,
         bounds,
-        strategy='best1bin',
-        maxiter=20000,
+        strategy='best1bin',  # 'rand1bin',
+        maxiter=5000,
         popsize=15,
         tol=1e-20,
         mutation=(0.5, 1),
         recombination=0.7,
         disp=True,
-        polish=True,
+        polish=False,  # True,
         workers=-1,  # Use all available CPU cores
         args=(desired_eigenvalues, k, make_k_colourable)
         # Pass the desired eigenvalues, k, and make_k_colourable flag to the objective function
@@ -93,7 +93,7 @@ def optimize_symmetric_matrix(desired_eigenvalues, k, make_k_colourable):
     optimized_upper = result.x
     # Reconstruct the symmetric matrix
     optimized_matrix = create_symmetric_matrix(optimized_upper, k, make_k_colourable=make_k_colourable)
-    optimized_matrix = adjust_row_sums_to_exactly_one(optimized_matrix)
+    optimized_matrix = adjust_row_sums_to_exactly_one(optimized_matrix, max_iter=1000)
 
     return optimized_matrix
 
@@ -133,7 +133,7 @@ if __name__ == "__main__":
     # Boolean flag to fix diagonal values to be 0
     make_k_colourable = True
 
-    k = 10  # You can change k to any value greater than or equal to 4
+    k = 14  # You can change k to any value greater than or equal to 4
     # Desired eigenvalues as input
     desired_eigenvalues = create_desired_eigenvalues(k)
 

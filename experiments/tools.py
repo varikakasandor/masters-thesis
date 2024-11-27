@@ -1,14 +1,18 @@
 from collections import Counter
+import random
+
 import numpy as np
 import networkx as nx
 from matplotlib import pyplot as plt
 
 
-def adjust_row_sums_to_exactly_one(A):
+def adjust_row_sums_to_exactly_one(A, max_iter=1000):
+    print("Row sum adjustment started")
     n = A.shape[0]
     row_sums = A.sum(axis=1)
-
-    while not np.all(row_sums == 1):
+    iter_cnt = 0
+    while not np.all(row_sums == 1) and iter_cnt < max_iter:
+        iter_cnt += 1
         # Find the (i, j) with A[i, j] largest such that sum(A[i, :]) and sum(A[j, :]) are both not yet 1
         max_value = -np.inf
         i_max, j_max = -1, -1
@@ -18,7 +22,7 @@ def adjust_row_sums_to_exactly_one(A):
                     if (row_sums[j] - 1) * (row_sums[i] - 1) > 0 and A[i, j] > max_value: # i.e. neither of them are 1 and they are wrong from the same side
                         max_value = A[i, j]
                         i_max, j_max = i, j
-        if i_max == -1 or j_max == -1:
+        if i_max == -1 or j_max == -1 or iter_cnt == max_iter:
             print("Cannot make the densities sum up to exactly 1 in each row")
             break  # No valid (i, j) found, meaning all row sums are 1
 
@@ -196,3 +200,21 @@ def plot_degree_distribution(graph):
     plt.title('Degree Distribution')
     plt.grid(axis='y', linestyle='--', alpha=0.7)
     plt.show()
+
+
+def plant_random_3_coloring(G):
+    n = len(G.nodes)
+    nodes = list(G.nodes)
+    random.shuffle(nodes)
+
+    # Split nodes into 3 equal parts
+    V1 = set(nodes[:n // 3])
+    V2 = set(nodes[n // 3: 2 * n // 3])
+    V3 = set(nodes[2 * n // 3:])
+
+    # Remove edges within each part
+    for V in [V1, V2, V3]:
+        edges_to_remove = [(u, v) for u in V for v in V if u != v and G.has_edge(u, v)]
+        G.remove_edges_from(edges_to_remove)
+
+    return G

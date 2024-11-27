@@ -5,34 +5,39 @@ from numpy.linalg import eig
 
 # Desired eigenvalues
 desired_eigenvalues = np.array([1, 1 / 6, 1 / 6, 1 / 6, 1 / 6, -1 / 2, -1 / 2, -1 / 2])
+desired_sorted = np.sort(np.real(desired_eigenvalues))
 
 
-def create_symmetric_matrix(flat_upper):
+def create_symmetric_matrix(flat_upper, make_k_colourable=False):
     """
     Reconstruct a symmetric matrix from its upper triangular entries.
+    If make_k_colourable is True, all diagonal values are fixed to be 0.
     """
-    n = 8
-    symmetric_matrix = np.zeros((n, n))
-    upper_indices = np.triu_indices(n)
+    k = 8
+    symmetric_matrix = np.zeros((k, k))
+    upper_indices = np.triu_indices(k, k=1) if make_k_colourable else np.triu_indices(k)
     symmetric_matrix[upper_indices] = flat_upper
-    symmetric_matrix = symmetric_matrix + symmetric_matrix.T - np.diag(symmetric_matrix.diagonal())
+    symmetric_matrix = symmetric_matrix + symmetric_matrix.T
+
+    if make_k_colourable:
+        np.fill_diagonal(symmetric_matrix, 0)
+
     return symmetric_matrix
 
 
-def objective(flat_upper):
+def objective(flat_upper, make_k_colourable=False):
     """
     Objective function to minimize the difference between the eigenvalues
     of the candidate matrix and the desired eigenvalues, while considering row sums.
     """
     # Reconstruct the symmetric matrix
-    A = create_symmetric_matrix(flat_upper)
+    A = create_symmetric_matrix(flat_upper, make_k_colourable=make_k_colourable)
 
     # Compute eigenvalues
     eigenvalues, _ = eig(A)
 
     # Sort eigenvalues by real part for comparison
     eigenvalues_sorted = np.sort(np.real(eigenvalues))
-    desired_sorted = np.sort(np.real(desired_eigenvalues))
 
     # Compute the eigenvalue mismatch
     eigenvalue_diff = np.sum((eigenvalues_sorted - desired_sorted) ** 2)
@@ -48,32 +53,43 @@ def objective(flat_upper):
     return eigenvalue_diff + 100 * row_sum_penalty + (1 / 10) * sparsity_penalty
 
 
-if __name__ == "__main__":
-
+def optimize_symmetric_matrix(make_k_colourable):
+    """
+    Optimize the symmetric matrix using differential evolution.
+    """
     # Define bounds for each independent variable (all entries > 0)
-    bounds = [(0, 1) for _ in range(36)]  # Avoid zero by setting a small lower bound
+    bounds = [(0, 1) for _ in range(28)] if make_k_colourable else [(0, 1) for _ in
+                                                               range(36)]  # Avoid zero by setting a small lower bound
 
     # Differential Evolution parameters
     result = differential_evolution(
         objective,
         bounds,
         strategy='best1bin',
-        maxiter=30000,
+        maxiter=5000,
         popsize=15,
         tol=1e-20,
         mutation=(0.5, 1),
         recombination=0.7,
         disp=True,
         polish=True,
-        workers=-1  # Use all available CPU cores
+        workers=-1,  # Use all available CPU cores
+        args=(make_k_colourable,)  # Pass the make_k_colourable flag to the objective function
     )
 
     # Retrieve the optimized upper triangular part
     optimized_upper = result.x
     # Reconstruct the symmetric matrix
-    optimized_matrix = create_symmetric_matrix(optimized_upper)
+    optimized_matrix = create_symmetric_matrix(optimized_upper, make_k_colourable=make_k_colourable)
     optimized_matrix = adjust_row_sums_to_exactly_one(optimized_matrix)
 
+    return optimized_matrix
+
+
+def analyze_optimized_matrix(optimized_matrix):
+    """
+    Analyze the optimized matrix by computing eigenvalues, printing the matrix, and checking row sums.
+    """
     # Compute its eigenvalues
     optimized_eigenvalues, _ = eig(optimized_matrix)
 
@@ -99,3 +115,14 @@ if __name__ == "__main__":
     # Check row sums
     print("\nRow Sums:")
     print(np.sum(optimized_matrix, axis=1))
+
+
+if __name__ == "__main__":
+    # Boolean flag to fix diagonal values to be 0
+    make_k_colourable = True
+
+    # Optimize the symmetric matrix
+    optimized_matrix = optimize_symmetric_matrix(make_k_colourable)
+
+    # Analyze the optimized matrix
+    analyze_optimized_matrix(optimized_matrix)

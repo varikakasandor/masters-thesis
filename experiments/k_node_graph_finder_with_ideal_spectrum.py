@@ -4,17 +4,12 @@ from scipy.optimize import differential_evolution
 from numpy.linalg import eig
 
 
-def create_desired_eigenvalues(k):
-    if k < 4:
-        raise ValueError("k must be at least 4 for this construction.")
-
-    # Calculate the value of x such that the sum of the array is 0
-    x = 0.5 / (k - 4)
-
+def create_desired_eigenvalues(k, gamma, tr, threshold):
     # Create the array with the specified structure
-    arr = np.ones(k) * x
+    arr = np.zeros(k)
     arr[0] = 1
-    arr[-3:] = -0.5
+    arr[1] = gamma
+    arr[-tr:] = -threshold
 
     return arr
 
@@ -35,7 +30,7 @@ def create_symmetric_matrix(flat_upper, k, make_k_colourable=False):
     return symmetric_matrix
 
 
-def objective(flat_upper, desired_eigenvalues, k, make_k_colourable=False):
+def objective(flat_upper, desired_eigenvalues, k, tr, make_k_colourable=False):
     """
     Objective function to minimize the difference between the eigenvalues
     of the candidate matrix and the desired eigenvalues, while considering row sums.
@@ -46,22 +41,24 @@ def objective(flat_upper, desired_eigenvalues, k, make_k_colourable=False):
     # Compute eigenvalues
     eigenvalues, _ = eig(A)
 
-    # Sort eigenvalues by real part for comparison
-    eigenvalues_sorted = np.sort(np.real(eigenvalues))
-    desired_sorted = np.sort(np.real(desired_eigenvalues))
+    # Sort eigenvalues descending
+    eigenvalues_sorted = np.sort(eigenvalues)[::-1]
+    desired_sorted = np.sort(desired_eigenvalues)[::-1]
 
-    # Compute the eigenvalue mismatch
-    eigenvalue_diff = np.sum((eigenvalues_sorted - desired_sorted) ** 2)
+    # Eigenvalue conditions
+    eigenvalue_diff_1 = (eigenvalues_sorted[0] - desired_sorted[0]) ** 2  # First eigenvalue should match desired
+    eigenvalue_diff_2 = max(0, eigenvalues_sorted[1] - desired_sorted[1]) ** 2  # Second eigenvalue should match desired
+    eigenvalue_diff_tr = np.sum(np.maximum(0, eigenvalues_sorted[-tr:] - desired_sorted[-tr:]) ** 2)  # Last "tr" eigenvalues should match desired
 
     # Compute the row sum penalty
     row_sums = np.sum(A, axis=1)
     row_sum_penalty = np.sum((row_sums - 1) ** 2)  # Penalize deviation from sum 1
 
-    # Sparsity-promoting penalty (negative sum of squares)
+    # Sparsity-promoting penalty
     sparsity_penalty = k - (flat_upper ** 3).sum()
 
     # Total objective: eigenvalue mismatch + row sum penalty + sparsity penalty
-    return 0.1 * (eigenvalue_diff / k) + 0.9 * (row_sum_penalty / k) + 0.0 * (sparsity_penalty / k)
+    return 0.1 * (eigenvalue_diff_1 + eigenvalue_diff_2 + eigenvalue_diff_tr) + 0.9 * (row_sum_penalty / k) + 0.0 * (sparsity_penalty / k)
 
 
 def optimize_symmetric_matrix(desired_eigenvalues, k, make_k_colourable):
@@ -77,15 +74,15 @@ def optimize_symmetric_matrix(desired_eigenvalues, k, make_k_colourable):
         objective,
         bounds,
         strategy='best1bin',  # 'rand1bin',
-        maxiter=5000,
+        maxiter=30000,
         popsize=15,
-        tol=1e-20,
+        tol=1e-30,
         mutation=(0.5, 1),
         recombination=0.7,
         disp=True,
         polish=False,  # True,
         workers=-1,  # Use all available CPU cores
-        args=(desired_eigenvalues, k, make_k_colourable)
+        args=(desired_eigenvalues, k, tr, make_k_colourable)
         # Pass the desired eigenvalues, k, and make_k_colourable flag to the objective function
     )
 
@@ -133,9 +130,14 @@ if __name__ == "__main__":
     # Boolean flag to fix diagonal values to be 0
     make_k_colourable = True
 
-    k = 14  # You can change k to any value greater than or equal to 4
+    k = 15  # You can change k to any value greater than or equal to 4
+    gamma = 0.1  # Second eigenvalue should be at most gamma
+    tr = 3  # Number of trailing eigenvalues to analyze
+    threshold = 0.6  # Absolute value of the threshold for the last "tr" eigenvalues
+    assert 1 * 1.0 - tr * threshold + (k - 1 - tr) * gamma >= 0 # as the trace of the graph is 0, so the sum of eigenvalues have to be 0
+
     # Desired eigenvalues as input
-    desired_eigenvalues = create_desired_eigenvalues(k)
+    desired_eigenvalues = create_desired_eigenvalues(k, gamma, tr, threshold)
 
     # Optimize the symmetric matrix
     optimized_matrix = optimize_symmetric_matrix(desired_eigenvalues, k, make_k_colourable)

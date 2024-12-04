@@ -6,36 +6,69 @@ import networkx as nx
 from matplotlib import pyplot as plt
 
 
+def plot_density_matrix(A):
+    # Set values below 0.05 to 0
+    A[A < 0.05] = 0
+
+    # Create a graph with A.shape[0] nodes
+    G = nx.Graph()
+    num_nodes = A.shape[0]
+    G.add_nodes_from(range(num_nodes))
+
+    # Add edges with weights corresponding to non-zero values in A
+    for i in range(num_nodes):
+        for j in range(i + 1, num_nodes):  # Iterate through upper triangle to avoid duplicate edges
+            if A[i, j] != 0:
+                G.add_edge(i, j, weight=A[i, j])
+
+    # Set up position and draw the graph
+    pos = nx.spring_layout(G)  # You can change layout if desired
+
+    # Draw nodes
+    nx.draw_networkx_nodes(G, pos, node_size=500, node_color='lightblue')
+
+    # Draw edges with varying thickness based on weight
+    edges = G.edges(data=True)
+    for u, v, data in edges:
+        nx.draw_networkx_edges(G, pos, edgelist=[(u, v)],
+                               width=data['weight'] * 10)  # Multiply weight to scale thickness
+
+    # Draw labels
+    nx.draw_networkx_labels(G, pos, font_size=10, font_color='black')
+
+    plt.axis('off')
+    plt.show()
+
 def adjust_row_sums_to_exactly_one(A, max_iter=1000):
     print("Row sum adjustment started")
     n = A.shape[0]
     row_sums = A.sum(axis=1)
+    print(f"Row sums at the beginning: {row_sums.astype(float)}")
     iter_cnt = 0
     while not np.all(row_sums == 1) and iter_cnt < max_iter:
         iter_cnt += 1
         # Find the (i, j) with A[i, j] largest such that sum(A[i, :]) and sum(A[j, :]) are both not yet 1
-        max_value = -np.inf
-        i_max, j_max = -1, -1
+        min_value = np.inf
+        i_min, j_min = -1, -1
         for i in range(n):
             if row_sums[i] != 1:
                 for j in range(i + 1, n):
-                    if (row_sums[j] - 1) * (row_sums[i] - 1) > 0 and A[i, j] > max_value: # i.e. neither of them are 1 and they are wrong from the same side
-                        max_value = A[i, j]
-                        i_max, j_max = i, j
-        if i_max == -1 or j_max == -1 or iter_cnt == max_iter:
+                    if (row_sums[j] - 1) * (row_sums[i] - 1) > 0 and 0 < A[i, j] < min_value: # i.e. neither of them are 1 and they are wrong from the same side
+                        min_value = A[i, j]
+                        i_min, j_min = i, j
+        if i_min == -1 or j_min == -1 or iter_cnt == max_iter:
             print("Cannot make the densities sum up to exactly 1 in each row")
             break  # No valid (i, j) found, meaning all row sums are 1
-
-        # Calculate how much to subtract from A[i_max, j_max] and A[j_max, i_max]
-        subtract_amount = min(abs(row_sums[i_max] - 1), abs(row_sums[j_max] - 1), A[i_max, j_max])
-        if row_sums[i_max] < 1:
+        # Calculate how much to subtract from A[i_min, j_min] and A[j_min, i_min]
+        subtract_amount = min(abs(row_sums[i_min] - 1), abs(row_sums[j_min] - 1), A[i_min, j_min])
+        if row_sums[i_min] < 1:
             subtract_amount *= -1
 
         # Update A and row sums
-        A[i_max, j_max] -= subtract_amount
-        A[j_max, i_max] -= subtract_amount
-        row_sums[i_max] -= subtract_amount
-        row_sums[j_max] -= subtract_amount
+        A[i_min, j_min] -= subtract_amount
+        A[j_min, i_min] -= subtract_amount
+        row_sums[i_min] -= subtract_amount
+        row_sums[j_min] -= subtract_amount
 
     return A
 

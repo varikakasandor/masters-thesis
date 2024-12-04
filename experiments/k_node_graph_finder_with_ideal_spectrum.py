@@ -46,18 +46,17 @@ def objective(flat_upper, desired_eigenvalues, k, tr, make_k_colourable=False):
     desired_sorted = np.sort(desired_eigenvalues)[::-1]
 
     # Eigenvalue conditions
-    eigenvalue_diff_1 = (eigenvalues_sorted[0] - desired_sorted[0]) ** 2  # First eigenvalue should match desired, but it is already enforced by the row sum constraint
     eigenvalue_diff_2 = max(0, eigenvalues_sorted[1] - desired_sorted[1]) ** 2  # Second eigenvalue should match desired
     eigenvalue_diff_tr = np.sum((eigenvalues_sorted[-tr:] - desired_sorted[
                                                             -tr:]) ** 2)  # np.sum(np.maximum(0, eigenvalues_sorted[-tr:] - desired_sorted[-tr:]) ** 2)  # Last "tr" eigenvalues should match desired
-    eigenvalue_diff_penalty = (0/6) * eigenvalue_diff_1 + (4/6) * eigenvalue_diff_2 + (2/6) * eigenvalue_diff_tr
+    eigenvalue_diff_penalty = (4/6) * eigenvalue_diff_2 + (2/6) * eigenvalue_diff_tr
 
     # Compute the row sum penalty
     row_sums = np.sum(A, axis=1)
     row_sum_penalty = (np.sum((row_sums - 1) ** 2))  # Penalize deviation from sum 1
 
     # Sparsity-promoting penalty
-    sparsity_penalty = (k - (flat_upper ** 3).sum()) / k
+    sparsity_penalty = (k / (tr ** (3 - 1)) - (flat_upper ** 3).sum()) / k  # the ideal would be to have tr entries of 1/tr in each row
 
     # Total objective: eigenvalue mismatch + row sum penalty + sparsity penalty
     return 0.35 * eigenvalue_diff_penalty + 0.64 * row_sum_penalty + 0.01 * sparsity_penalty

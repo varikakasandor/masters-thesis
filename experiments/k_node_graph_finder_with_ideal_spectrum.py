@@ -49,14 +49,15 @@ def objective(flat_upper, desired_eigenvalues, k, tr, make_k_colourable=False):
     eigenvalue_diff_2 = max(0, eigenvalues_sorted[1] - desired_sorted[1]) ** 2  # Second eigenvalue should match desired
     eigenvalue_diff_tr = np.sum((eigenvalues_sorted[-tr:] - desired_sorted[
                                                             -tr:]) ** 2)  # np.sum(np.maximum(0, eigenvalues_sorted[-tr:] - desired_sorted[-tr:]) ** 2)  # Last "tr" eigenvalues should match desired
-    eigenvalue_diff_penalty = (4/6) * eigenvalue_diff_2 + (2/6) * eigenvalue_diff_tr
+    eigenvalue_diff_penalty = (4 / 6) * eigenvalue_diff_2 + (2 / 6) * eigenvalue_diff_tr
 
     # Compute the row sum penalty
     row_sums = np.sum(A, axis=1)
     row_sum_penalty = (np.sum((row_sums - 1) ** 2))  # Penalize deviation from sum 1
 
     # Sparsity-promoting penalty
-    sparsity_penalty = (k / (tr ** (3 - 1)) - (flat_upper ** 3).sum()) / k  # the ideal would be to have tr entries of 1/tr in each row
+    sparsity_penalty = (k / (tr ** (3 - 1)) - (
+                flat_upper ** 3).sum()) / k  # the ideal would be to have tr entries of 1/tr in each row
 
     # Total objective: eigenvalue mismatch + row sum penalty + sparsity penalty
     return 0.35 * eigenvalue_diff_penalty + 0.64 * row_sum_penalty + 0.01 * sparsity_penalty
@@ -75,7 +76,7 @@ def optimize_symmetric_matrix(desired_eigenvalues, k, make_k_colourable):
         objective,
         bounds,
         strategy='best1bin',  # 'rand1bin',
-        maxiter=20000,
+        maxiter=5000,
         popsize=15,
         tol=1e-4,
         mutation=(0.5, 1),
@@ -140,12 +141,17 @@ def analyze_optimized_matrix(optimized_matrix, desired_eigenvalues, tr):
     print(eigenvectors[:, second_eigenvalue_index])
 
 
+# Modify analyze_optimized_matrix to save the optimized matrix as a CSV
+def save_optimized_matrix(optimized_matrix, filename):
+    np.savetxt(filename, optimized_matrix, delimiter=",", fmt="%.5f")
+
+
 if __name__ == "__main__":
     # Boolean flag to fix diagonal values to be 0
     make_k_colourable = True
 
-    k = 18  # You can change k to any value greater than or equal to 4
-    gamma = 0.05  # Second eigenvalue should be at most gamma
+    k = 12  # You can change k to any value greater than or equal to 4
+    gamma = 0.1  # Second eigenvalue should be at most gamma
     tr = 3  # Number of trailing eigenvalues to analyze
     threshold = 0.52  # Absolute value of the threshold for the last "tr" eigenvalues
     assert 1 * 1.0 - tr * threshold + (
@@ -157,6 +163,14 @@ if __name__ == "__main__":
     # Optimize the symmetric matrix
     optimized_matrix = optimize_symmetric_matrix(desired_eigenvalues, k, make_k_colourable)
 
+    # Save the optimized matrix to a CSV file
+    core_filename = f"k{k}_gamma{gamma}_tr{tr}_threshold{threshold}"
+    matrix_filename = f"./runs/optimized_matrix_{core_filename}.csv"
+    save_optimized_matrix(optimized_matrix, matrix_filename)
+
     # Analyze the optimized matrix
     analyze_optimized_matrix(optimized_matrix, desired_eigenvalues, tr)
-    plot_density_matrix(optimized_matrix)
+
+    # Plot and save the density matrix graph
+    plot_filename = f"./runs/density_matrix_plot_{core_filename}.png"
+    plot_density_matrix(optimized_matrix, plot_filename)

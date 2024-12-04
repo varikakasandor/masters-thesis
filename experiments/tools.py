@@ -6,7 +6,7 @@ import networkx as nx
 from matplotlib import pyplot as plt
 
 
-def plot_density_matrix(A):
+def plot_density_matrix(A, filename):
     # Set values below 0.05 to 0
     A[A < 0.05] = 0
 
@@ -37,7 +37,8 @@ def plot_density_matrix(A):
     nx.draw_networkx_labels(G, pos, font_size=10, font_color='black')
 
     plt.axis('off')
-    plt.show()
+    plt.savefig(filename, format='png')  # Save the plot as a PNG file
+    plt.close()  # Close the plot to free memory
 
 def adjust_row_sums_to_exactly_one(A, max_iter=1000):
     print("Row sum adjustment started")

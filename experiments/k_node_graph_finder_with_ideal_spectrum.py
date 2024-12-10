@@ -76,7 +76,7 @@ def optimize_symmetric_matrix(desired_eigenvalues, k, make_k_colourable):
         objective,
         bounds,
         strategy='best1bin',  # 'rand1bin',
-        maxiter=5000,
+        maxiter=50000,
         popsize=15,
         tol=1e-4,
         mutation=(0.5, 1),
@@ -150,9 +150,9 @@ if __name__ == "__main__":
     # Boolean flag to fix diagonal values to be 0
     make_k_colourable = True
 
-    k = 12  # You can change k to any value greater than or equal to 4
-    gamma = 0.1  # Second eigenvalue should be at most gamma
-    tr = 3  # Number of trailing eigenvalues to analyze
+    k = 25  # You can change k to any value greater than or equal to 4
+    gamma = 0.06  # Second eigenvalue should be at most gamma
+    tr = 4  # Number of trailing eigenvalues to analyze
     threshold = 0.52  # Absolute value of the threshold for the last "tr" eigenvalues
     assert 1 * 1.0 - tr * threshold + (
                 k - 1 - tr) * gamma >= 0  # as the trace of the graph is 0, the sum of eigenvalues has to be 0

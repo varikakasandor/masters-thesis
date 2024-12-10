@@ -2,7 +2,7 @@ import numpy as np
 import networkx as nx
 import random
 import matplotlib.pyplot as plt
-from tools import analyse_spectrum, plot_degree_distribution
+from tools import *
 
 
 def generate_bipartite_graph(n, d, d_prime):
@@ -61,8 +61,8 @@ def print_eigenvalues(adjacency_matrix):
 
 if __name__ == "__main__":
     n = 3000  # Total number of nodes, must be divisible by 2
-    d = 500  # Parameter d (degree of regularity between parts)
-    d_prime = 50  # Parameter d' (degree of regularity within each part)
+    d = 400  # Parameter d (degree of regularity between parts)
+    d_prime = 5  # Parameter d' (degree of regularity within each part)
 
     # Generate the bipartite graph with d' regular graphs within each part and (d - d') regular bipartite edges
     adjacency_matrix, V1, V2 = generate_bipartite_graph(n, d, d_prime)
@@ -70,12 +70,12 @@ if __name__ == "__main__":
     # Phase 0: Initial graph
     print("Eigenvalues after phase 0:")
     print_eigenvalues(adjacency_matrix)
-    plot_degree_distribution(adjacency_matrix)
+    plot_degree_distribution_from_adjacency_matrix(adjacency_matrix)
 
     # Phase 1: Split into 3 parts and remove intra-part edges for three-color planting
     adjacency_matrix = split_and_remove_edges_for_three_coloring(adjacency_matrix, n)
     print("\nEigenvalues after phase 1:")
     print_eigenvalues(adjacency_matrix)
-    plot_degree_distribution(adjacency_matrix)
+    plot_degree_distribution_from_adjacency_matrix(adjacency_matrix)
 
     # Further analysis or visualization can be added here if necessary.

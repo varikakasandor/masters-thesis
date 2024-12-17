@@ -31,9 +31,9 @@ def random_independent_set(n, size):
 
 
 if __name__ == "__main__":
-    n = 3000  # Number of nodes
-    d = 500  # Degree of the d-regular graph
-    iter = 20  # Number of iterations
+    n = 4000  # Number of nodes
+    d = 700  # Degree of the d-regular graph
+    iter = 30  # Number of iterations
 
     # Generate initial d-regular graph
     adjacency_matrix = generate_d_regular_graph(n, d)

@@ -81,7 +81,7 @@ def plot_degree_distribution(adjacency_matrix, partitions):
 
 if __name__ == "__main__":
     n = 3000  # Total vertices
-    d = 500  # Degree
+    d = 1500  # Degree
     c = 0.05  # Fraction of vertices rerouted
 
     print("Starting graph generation...")

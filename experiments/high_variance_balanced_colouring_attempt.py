@@ -1,6 +1,9 @@
 import numpy as np
 import random
-from tools import analyse_spectrum, plot_degree_distribution_from_adjacency_matrix
+
+from matplotlib import pyplot as plt
+
+from tools import analyse_spectrum, plot_degree_distribution_from_adjacency_matrix, analyse_2nd_largest_eigenvalue
 
 
 def generate_d_regular_graph(n, d, alpha):
@@ -61,11 +64,31 @@ def generate_d_regular_graph(n, d, alpha):
     return adjacency_matrix
 
 
+def plot_alpha_vs_eigenvalue(n, d, num_grid_points):
+    alphas = np.linspace(0.5, 0.75, num_grid_points)
+    second_largest_eigenvalues = []
+
+    for alpha in alphas:
+        adjacency_matrix = generate_d_regular_graph(n, d, alpha)
+        second_largest = analyse_2nd_largest_eigenvalue(adjacency_matrix)
+        second_largest_eigenvalues.append(second_largest)
+
+    plt.plot(alphas, second_largest_eigenvalues, marker='o')
+    plt.title(f"Relationship Between Alpha and Lambda_2 for n={n}, d={d}")
+    plt.xlabel("Alpha")
+    plt.ylabel("Normalised 2nd Largest Eigenvalue")
+    plt.grid(True)
+    plt.show()
+
+
 if __name__ == "__main__":
     n = 4000
-    d = 1000
-    alpha = 0.51  # Example parameter
+    d = 500
 
+    NUM_GRID_POINTS = 30
+    plot_alpha_vs_eigenvalue(n, d, NUM_GRID_POINTS)
+
+    """alpha = 0.51  # Example parameter
     adjacency_matrix = generate_d_regular_graph(n, d, alpha)
     analyse_spectrum(adjacency_matrix)
-    plot_degree_distribution_from_adjacency_matrix(adjacency_matrix)
+    plot_degree_distribution_from_adjacency_matrix(adjacency_matrix)"""

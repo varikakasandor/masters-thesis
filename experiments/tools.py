@@ -40,6 +40,7 @@ def plot_density_matrix(A, filename):
     plt.savefig(filename, format='png')  # Save the plot as a PNG file
     plt.close()  # Close the plot to free memory
 
+
 def adjust_row_sums_to_exactly_one(A, max_iter=1000):
     print("Row sum adjustment started")
     n = A.shape[0]
@@ -54,7 +55,8 @@ def adjust_row_sums_to_exactly_one(A, max_iter=1000):
         for i in range(n):
             if row_sums[i] != 1:
                 for j in range(i + 1, n):
-                    if (row_sums[j] - 1) * (row_sums[i] - 1) > 0 and 0 < A[i, j] < min_value: # i.e. neither of them are 1 and they are wrong from the same side
+                    if (row_sums[j] - 1) * (row_sums[i] - 1) > 0 and 0 < A[
+                        i, j] < min_value:  # i.e. neither of them are 1 and they are wrong from the same side
                         min_value = A[i, j]
                         i_min, j_min = i, j
         if i_min == -1 or j_min == -1 or iter_cnt == max_iter:
@@ -72,6 +74,7 @@ def adjust_row_sums_to_exactly_one(A, max_iter=1000):
         row_sums[j_min] -= subtract_amount
 
     return A
+
 
 def analyse_spectrum(adjacency_matrix, print_info=True, concise=True, bottom_print_cnt=3):
     if print_info and not concise:
@@ -252,3 +255,9 @@ def plant_random_3_coloring(G):
         G.remove_edges_from(edges_to_remove)
 
     return G
+
+
+def analyse_2nd_largest_eigenvalue(matrix):
+    eigenvalues = np.linalg.eigvalsh(matrix)
+    eigenvalues = np.sort(eigenvalues)
+    return eigenvalues[-2] / eigenvalues[-1]

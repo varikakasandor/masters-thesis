@@ -62,9 +62,9 @@ def generate_d_regular_graph(n, d, alpha):
 
 
 if __name__ == "__main__":
-    n = 3000
-    d = 500
-    alpha = 0.5  # Example parameter
+    n = 4000
+    d = 1000
+    alpha = 0.51  # Example parameter
 
     adjacency_matrix = generate_d_regular_graph(n, d, alpha)
     analyse_spectrum(adjacency_matrix)

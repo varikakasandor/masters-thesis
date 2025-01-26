@@ -82,8 +82,9 @@ def analyse_spectrum(adjacency_matrix, print_info=True, concise=True, bottom_pri
             f"Number of vertices: {adjacency_matrix.shape[0]}, Max degree: {np.max(np.sum(adjacency_matrix, axis=0))}")
 
     # Calculate the eigenvalues
-    eigenvalues, _ = np.linalg.eigh(adjacency_matrix)
-
+    eigenvalues, eigenvectors = np.linalg.eigh(adjacency_matrix)
+    print(eigenvectors[-2])
+    plt.plot(np.arange(len(eigenvectors[-2])), eigenvectors[-2])
     # Reverse the eigenvalues to have them in descending order
     eigenvalues = eigenvalues[::-1]
 

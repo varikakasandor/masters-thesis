@@ -40,9 +40,9 @@ def compute_second_smallest_eig(alpha, beta, n, d):
 
 if __name__ == '__main__':
     # Parameters
-    n = 3000  # total vertices
-    d = 500  # density parameter
-    num_points = 20
+    n = 4000  # total vertices
+    d = 1000  # density parameter
+    num_points = 30
     # For a valid triangle (n1, n2, n3 as "side lengths") we need:
     #   n1 <= n2+n3, n2 <= n1+n3, n3 <= n1+n2.
     # With n1 = alpha*n, n2 = beta*n, n3 = n - n1 - n2, this forces:
@@ -53,7 +53,7 @@ if __name__ == '__main__':
     tasks = []
     for i, a in enumerate(alphas):
         for j, b in enumerate(betas):
-            if a + b < 0.5 or b < a:  # skip invalid parameters
+            if a + b < 0.5 or b < a or 1 - a - b < b:  # skip invalid parameters
                 continue
             tasks.append((i, j, a, b))
 

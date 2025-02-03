@@ -54,7 +54,7 @@ def plot_spectrum(adjacency_matrix):
 
 if __name__ == "__main__":
     n = 3000  # Total number of vertices (must be even)
-    d = 400  # Degree for the initial bipartite graph
+    d = 800  # Degree for the initial bipartite graph
 
     # Step 1: Generate the initial bipartite graph
     G, A, B = generate_bipartite_graph(n, d)
@@ -67,3 +67,4 @@ if __name__ == "__main__":
     # print(f"Generated graph with {G.number_of_nodes()} nodes and {G.number_of_edges()} edges.")
     analyse_spectrum(adjacency_matrix)
     plot_degree_distribution_from_adjacency_matrix(adjacency_matrix)
+

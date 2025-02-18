@@ -39,6 +39,9 @@ def compute_second_smallest_eig(alpha, beta, n, d):
 
 
 if __name__ == '__main__':
+    """A = generate_graph(4000, 0.2, 0.3, 1000)
+    analyse_spectrum(A)
+    exit()"""
     # Parameters
     n = 4000  # total vertices
     d = 1000  # density parameter

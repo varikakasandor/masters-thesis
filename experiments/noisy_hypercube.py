@@ -55,6 +55,6 @@ def plot_eigenvalue_distribution(n, gamma):
 
 if __name__ == "__main__":
     # Example usage
-    n = 50
-    gamma = 1 / 20
+    n = 100
+    gamma = 9 / 100
     plot_eigenvalue_distribution(n, gamma)

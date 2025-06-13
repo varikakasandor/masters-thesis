@@ -1,0 +1,429 @@
+\section{Techniques}
+\label{sec:techniques}
+
+% [(1) Spectral result]
+
+% [(2) Some general discussion about pseudo-randomness, why it is necessary, etc.]
+
+% [(3) 3-colorings in one-sided expanders are always pseudo-random.]
+
+% connection of coloring to graph spectrum
+% hoffmann bound?
+% lovasz theta number
+
+To discuss the spectral graph techniques used by our coloring algorithms,
+we introduce some convenient notation and terminology commonly used, e.g., in the literature on Markov chains.
+
+Let \(G\) be an undirected, connected graph with vertex set \(V\) and let \(\bm x \bm y\) denote a uniformly random edge of \(G\) with vertices \(\bm x\) and \(\bm y\) as endpoints.
+Since the graph is undirected, the random vertices \(\bm x\) and \(\bm y\) have the same distribution without loss of generality.
+For a vertex subset \(S\subseteq V\), we denote by \(\mu(S)=\Pr\{\bm x\in S\}\) its probability under this distribution.
+(For regular graphs, this probability is the fraction of vertices contained in \(S\).)
+
+Let \(A\) denote the adjacency matrix for \(G\) with every row normalized to sum to \(1\).
+This matrix acts as a linear operator on real-valued functions \(f\from V\to \R\),
+\begin{equation}
+  A f (x)
+  = \E \Brac{f(\bm y) \Mid \bm x = x}
+  \mper
+\end{equation}
+This operator is self-adjoint with respect to the following inner product for functions \(f,g\from V\to \R\),
+\begin{equation}
+  \iprod{f,g}
+  \seteq \E f(\bm x) g(\bm x)\mper
+\end{equation}
+We denote the Euclidean norm with respect to this inner product by \(\norm{f}\seteq \iprod{f,f}^{1/2}=\Paren{\E f^{2}}^{1/2}\).
+
+The linear operator \(A\) has all eigenvalues in the interval \([-1,1]\subseteq \R\) and largest eigenvalue \(1\).
+Since the graph \(G\) is connected, the top eigenspace is one-dimensional and contains all constant functions on \(V\).
+Let \(\lambda<1\) denote the second largest eigenvalue.
+Then, the quadratic form of \(A\) satisfies the inequality,
+\begin{equation}
+  \iprod{f,Af}\le (1-\lambda)\cdot \Paren{\E f}^{2} + \lambda \cdot \E f^{2}
+  \mper
+\end{equation}
+The \emph{spectral gap} \(1-\lambda\) provides a measure of well-connectedness of \(G\).
+We denote the \emph{(edge) expansion} of a vertex subset \(S\) by \(\phi_{G}(S)\seteq \Pr\set{\bm y\not \in S\mid \bm x\in S}\) and the \emph{expansion} of \(G\) as \(\phi(G)\seteq \min_{S\colon \mu(S)\le 1/2 } \phi_{G}(S)\).
+By Cheeger's inequality \cite{cheeger, alon-milman}, the expansion of \(G\) agrees up to a quadratic factor with the spectral gap,
+\begin{equation}
+  \phi(G)^{2}
+  \lesssim 1-\lambda
+  \lesssim \phi(G)
+  \mper
+\end{equation}
+While the above inequality is most informative for \(\lambda\) close to \(1\), smaller values of \(\lambda\) have interesting combinatorial consequences, e.g., they imply stronger expansion bounds for small vertex subsets \(S\subseteq V\),
+\begin{equation}
+  \phi_{G}(S)
+  = 1-\iprod{\Ind_{S},A \Ind_{S}} / \mu(S)
+  \ge 1- (1-\lambda)\cdot \mu(S) - \lambda
+  \mper
+\end{equation}
+Here, \(\Ind_{S}\from V\to \set{0,1}\) denotes the indicator function of \(S\) satisfying \(\E \Ind_{S}=\E\Ind_{S}^{2}=\mu(S)\).
+
+\paragraph{Subspace methods for expansion.}
+
+Several important combinatorial optimization problems are related to finding (small) non-expanding sets in graphs, e.g., \textsc{uniform sparsest cut} \cite{leighton-rao,arora-rao-vazirani}, \textsc{unique games} \cite{khot, arora-barak-steurer, raghavendra-steurer}, and \textsc{small-set expansion} \cite{raghavendra-steurer, raghavendra-steurer-tetali}.
+By extending the above discussion, we see that all non-expanding sets must be close to the subspace spanned by eigenvectors with eigenvalue above a certain threshold.
+
+Letting \(P^{\ge \tau}\) denote the orthogonal projector into the subspace spanned by eigenvectors with eigenvalue at least \(\tau\), we generalize the previous upper bound on the quadratic form \(\iprod{f,Af}\)
+\begin{equation}
+  \iprod{f,Af}
+  \le (1-\tau)\cdot \norm{P^{\ge \tau}f}^{2} + \tau \E f^{2}
+  \mper
+\end{equation}
+A concrete consequence of the above inequality is that the indicator \(\Ind_{S}\) of a subset \(S\subseteq V\) with expansion \(\phi_{G}(S)\le \e\)  has projection into the top-most eigenspaces at least \(\norm{P^{\ge 1-\eta}\Ind_{S}}^{2}\ge (1-\e/\eta)\norm{\Ind_{S}}^{2}\) because \(1-\e \le 1-\phi_{G}(S)=\iprod{\Ind_{S},A\Ind_{S}}/\mu(S)\le \eta\cdot \norm{P^{\ge 1-\eta}\Ind_{S}}^{2}/\norm{\Ind_{S}}^{2}+1-\eta\).
+
+Indeed, many algorithmic tasks related to expansion become tractable for graphs that have only few eigenvalues above a certain threshold \cite{arora-khot-kolla-steurer-tulsiani-vishnoi,arora-barak-steurer,barak-raghavendra-steurer,guruswami-sinop} by enumerating a fine enough cover of the Euclidean unit ball of the corresponding subspace.
+This observation drives worst-case subexponential-time approximation algorithms for \textsc{unique games} and several related problems \cite{arora-barak-steurer, steurer-d-games} and motivates the notion of \emph{(top-)threshold rank} for graphs,
+\begin{equation}
+  \rank_{\ge \tau}(G) = \rank P^{\ge \tau} = \Card{\Set{i \mid \lambda_{i}(A)\ge \tau}}
+  \mper
+\end{equation}
+While small threshold rank enables enumeration-based algorithms for many problems, it turns out that large threshold rank implies the existence of small non-expanding sets \cite{arora-barak-steurer, steurer, lee-oveis-gharan-trevisan, raghavendra-vempala-tetali-louis}.
+This combinatorial ramification of large threshold rank underlies the aforementioned subexponential-time approximation algorithms, e.g., for the construction of suitable graph decompositions.
+
+
+\paragraph{Subspace methods beyond expansion?}
+
+In this work, we aim to extend these developments to vertex-based problems like \textsc{coloring}, \textsc{vertex cover} and \textsc{independent set},
+strengthening recent seminal work on rounding large independent sets in expanders \cite{bafna-hsieh-kothari}.
+
+By Hoffman's bound \cite{hoffman}, an independent set \(S\) in \(G\) means that the Markov operator \(A\) for \(G\) has at least one eigenvalue at most \(-\tfrac{\mu(S)}{1-\mu(S)}\).
+Indeed, the projection \(f=\Ind_{S}-\mu(S)\) of the indicator \(\Ind_{S}\) orthogonal to the top eigenspace of \(A\) satisfies \(\E f^{2}=\mu(S)\cdot (1-\mu(S))\) and
+\begin{equation}
+  \iprod{f,Af}
+  = \iprod{\Ind_{S},A \Ind_{S}}-\mu(S)^{2}
+  = -\tfrac{\mu(S)}{1-\mu(S)} \cdot \E f^{2}
+  \mper
+\end{equation}
+In particular, for independent sets \(S\) with volume \(\tfrac {1-\e}2\), the above Rayleigh quotient for \(f\) is \(\tfrac{1-\e}{1+\e}\ge 1-2\e\).
+By a similar argument as before for non-expanding sets, most of the function \(f\) is captured by the eigenspaces with eigenvalues at most \(-0.9\) so that \(\norm{P^{\le -0.9}f}\ge (1-O(\e))\cdot \norm{f}^{2}\),
+where \(P^{\le -\tau}\) denotes the projector to the span of the eigenvectors of \(A\) with eigenvalue at most \(-\tau\).
+Therefore, by enumerating a fine enough cover of the unit ball of the image of \(P^{\le -0.9}\), we can find a function \(O(\e)\)-close to \(f\).
+With such a function in our hands, we can round it to a vertex subset \(O(\e)\)-close to \(S\).
+After removing a vertex cover of the edges with both endpoints in that set, we obtain an independent set of volume at least \(\tfrac{1-O(\e)}{2}\).
+In this way, we can find independent sets of volume close to \(\tfrac 12\) in time exponential in the \emph{bottom-threshold rank} \(\rank_{\le -0.9}(G)\), defined as
+\begin{equation}
+  \rank_{\le -\tau} (G)
+  = \rank P^{\le -\tau}
+  = \card{\set{i \mid \lambda_{i}(A)\le -\tau}}
+  \mper
+\end{equation}
+
+\paragraph{Coloring graphs with bounded bottom-threshold rank?}
+
+At this point, it is natural to expect efficient algorithms for finding independent sets of volume \(\tfrac 1 k\) or \(k\)-colorings for most vertices on graphs with small bottom-threshold rank.
+However, we show in this work that this expectation is wrong and that such algorithms would refute the Unique Games Conjecture \cite{khot}:
+\begin{quote}
+  For all constants \(\tau,\e>0\), there exists a constant \(R\ge 1\)
+  such that it is UG-hard\footnote{
+    We say that a problem is UG-hard if there is a reduction from gapped \textsc{unique games} to that problem.
+    In particular, it means that the problem is NP-hard assuming the Unique Games Conjecture.
+  } to find a \(3\)-coloring for a \(0.9\) faction of vertices in graphs \(G\) that have a balanced \(3\)-coloring for all but an \(\e\) fraction of vertices and that have bounded bottom-threshold \(\rank_{\le -\tau}(G)\le R\).
+\end{quote}
+(With the same quantifiers, it is UG-hard to find an independent set of volume \(\e\) in graphs have a \(4\)-coloring for all but an \(\e\) fraction of vertices and have bounded bottom-threshold rank.)
+These hardness results also refute an explicit prediction in previous work \cite{bafna-hsieh-kothari} that hardness reductions for coloring or independent set must produce instances with large (super-constant) bottom-threshold rank.
+
+Underlying our hardness results is the issue that for independent sets \(S\) of volume bounded away from \(\tfrac 12\), we can guarantee only that its (centered) indicator function has non-trivial correlation \(\Theta(\mu(S))\) with the bottom most eigenspaces.
+This amount of correlation turns out to be enough for solving many edge-based problems like edge expansion or 2-CSP.
+Concretely, we could efficiently find colorings with only a tiny fraction of monochromatic edges in low-threshold-rank graphs \cite{barak-raghavendra-steurer}.
+The computational intractability arises if we try to solve vertex-based problems in such graphs, e.g., finding colorings that are proper for a significant fraction of vertices.
+(In other words, the monochromatic edges have a small vertex cover.)
+
+A key technical contribution of our work identifies simple structural conditions on coloring instances to guarantee that the bottom-most eigenspaces capture enough information about colorings to enable efficient algorithms.
+Our starting point is generalization of the notion of pseudorandom colorings \cite{kuman-louis-tulsiani}.
+In order to understand what information we can extract from the bottom-most eigenspaces, we construct from the input graph \(G\) and its optimal \(k\)-coloring \(\chi\from V\to [k]\), a \emph{model graph} \(H\) whose eigenspaces are easy to understand and capture enough information to be able to reconstruct the coloring \(\chi\).
+Then, we aim to show that \(H\) approximates \(G\) well-enough to guarantee that the bottom-most eigenspaces of \(G\) capture almost as much information about \(\chi\) as those of the model graph \(H\).
+
+\paragraph{Recovering partitions from non-degenerate low-variance models.}
+In order to specify our construction of the model \(H\) from the input graph \(G\) and any (not necessarily proper) \(k\)-coloring \(\chi\from V\to [k]\), we describe how to obtain the normalized adjacency matrix \(B\) for \(H\):
+Partition the rows and columns of the normalized adjacency \(A\) according to the coloring \(\chi\) and replace in the resulting \(k\)-by-\(k\) block matrix every block by its average entry.
+While one can the model \(H\) as a graph on \(k\) vertices (corresponding to the blocks of the partition \(\chi\)), it will be more convenient to view \(H\) as a graph on the same vertex set as \(G\).
+Concretely, the Markov operator \(B\) of the model \(H\) acts on functions \(f\from V\to \R\) as follows,
+\begin{equation}
+  Bf(x') = \E \Brac{f(\bm y') \Mid \chi(\bm x)=\chi(x')\,,~\chi(\bm y) = \chi(\bm y') }
+  \mper
+\end{equation}
+Here, \(\bm x \bm y\) denotes a random edge of \(G\) as before and \(\bm y'\) is an independent random vertex with the same marginal distribution as \(\bm y\) (and \(\bm x\)).
+
+The functions in the image of \(B\) are constant on the blocks of the partition \(\chi\).
+Indeed, let \(\chi_{1},\ldots,\chi_{k}\) be the indicator functions of the blocks of \(\chi\) so that \(\chi_{a}=\Ind_{\chi^{-1}(a)}\).
+Then, every function orthogonal to \(\chi_{1},\ldots,\chi_{k}\) is in the kernel of \(B\).
+Therefore, every function in the image of \(B\) is a linear combination of \(\chi_{1},\ldots,\chi_{k}\).
+However, the image of \(B\) may be a strict subspace of the span of these indicator functions and the indicator functions are not necesarily in the image of \(B\).
+
+When can we recover the partition \(\chi\) from the image of \(B\)?
+For a function \(f\from V\to \R\) in the image of \(B\), let \(f(c)\) denote the value that \(f\) assigns to block \(c\).
+Then all of the following statements are equivalent:
+
+\begin{enumerate}
+\item The image of \(B\) uniquely determines the partition \(\chi\).
+\item For every distinct pair of colors \(a,b\in [k]\), the image of \(B\) contains a function \(f\) that assigns different values to block \(a\) and block \(b\) so that \(f(a)\neq f(b)\).
+\item For every distinct pair of colors \(a,b\in [k]\), the function \(\chi_{a}/\E\chi_{a}-\chi_{b}/\E\chi_{b}\) is \emph{not} orthogonal to the image of \(B\).
+\item For every distinct pair of colors \(a,b\in [k]\), the function \(\chi_{a}/\E\chi_{a}-\chi_{b}/\E\chi_{b}\) is \emph{not} in the kernel of \(B\).
+\item For every distinct pair of colors \(a,b\in [k]\), there exists a color \(c\in [k]\) such that
+  \begin{equation}
+    \Pr\Set{\chi(\bm y)=c \mid \chi(\bm x)=a}
+    \neq \Pr\Set{\chi(\bm y)=c \mid \chi(\bm x)=b}
+    \mper
+  \end{equation}
+\item The row stochastic matrix \(M\in\R_{\ge 0}^{k\times k}\) with entries \(M_{a,b}=\Pr\Set{\chi(\bm y)=b \mid \chi(\bm x)=a}\) has no repeated rows.
+\end{enumerate}
+
+Let us assume that the image of \(B\) uniquely determines the partition \(\chi\).
+A priori, it is unclear how to exploit this property of the model graph algorithmically because we can construct it explicitly only if we have access to the partition \(\chi\).
+
+Next we will discuss that a strong enough variance bound implies that the image of \(B\) is captured by eigenspaces of \(A\) with eigenvalue bounded away from \(0\).
+In this way, we can simulate the enumeration of the image of \(B\) by enumerating subspaces defined in terms of eigenspaces of the input matrix \(A\).
+
+Our notion of variance captures how well \(A\) approximates \(B\) acting on the indicator functions \(\chi_{1},\ldots,\chi_{k}\) of the partition \(\chi\).
+Concretely, we define the variance of \(G\) with respect to the model \(H\) as
+\begin{equation}
+  \Var(G;H)\seteq \sum_{a=1}^{k} \norm{(A-B)\chi_{a}}^{2}/\E \chi_{a}
+  \mper
+\end{equation}
+Suppose that \(B\) has rank \(r\le k\) and that \(h_{1},\ldots,h_{r}\) are orthonormal eigenfunctions of \(B\) with non-zero eigenvalues \(\lambda_{1}(B),\ldots,\lambda_{r}(B)\).
+Let \(\lambdamin(B)=\min\Set{\abs{\lambda_{i}(B)} \mid i\in [r]}\) denote the smallest non-zero eigenvalue of \(B\) in absolute value.
+Let \(P_{\eta}\) denote the projection operator to the subspace spanned by eigenfunctions of \(A\) with eigenvalue at most \(\lambdamin(B)-\eta\) in absolute value.
+In particular, every eigenvalue of \(A\) captured by \(P_{\eta}\) has distance at least \(\eta\) from every non-zero eigenvalue of \(B\).
+We aim to show that all projections \(\norm{P_{\eta} h_{i}}^{2}\) are small as it allows us to conclude that most of \(h_{i}\) is captured by eigenspaces of \(A\) with eigenvalue at least \(\lambdamin(B)-\eta\) in absolute value (which we may afford to search exhaustively).
+Indeed, we can upper bound this projection in terms of \(\norm{(A-B)h_{i}}^{2}\),
+\begin{align}
+  \norm{(A-B)h_{i}}^{2}
+  &= \norm{(A-\lambda_{i}(B)\cdot I)h_{i}}^{2}\\
+  &= \sum_{j} \Paren{\lambda_{j}(A)-\lambda_{i}(B)}^{2} \cdot \iprod{g_{j},h_{i}}^{2}\\
+  &\ge \eta^{2}\sum_{j\colon \abs{\lambda_{j}(A)-\lambda_{i}(B)}\ge \eta} \iprod{g_{j},h_{i}}^{2}\\
+  &\ge \eta^{2} \norm{P_{\eta} h_{i}}^{2}
+  \mper
+\end{align}
+Here, we use that \(h_{i}\) is an eigenfunction of \(B\) with eigenvalue \(\lambda_{i}(B)\) and we let \(\set{g_{j}}\) be a full eigenbasis for the Markov operator \(A\) of \(G\).
+At the same time, we can upper bound \(\norm{(A-B)h_{i}}^{2}\) in terms of our notion of variance.
+Let us extend the \(h_{1},\ldots,h_{r}\) to an orthonormal basis \(h_{1},\ldots,h_{k}\) of the span \(U\) of \(\chi_{1},\ldots,\chi_{k}\).
+Then,
+\begin{align}
+  \sum_{i=1}^{r}\norm{(A-B)h_{i}}^{2}
+  & \le   \sum_{i=1}^{k}\norm{(A-B)h_{i}}^{2} \\
+  & =  \sum_{i=1}^{k}\iprod{h_{i},(A-B)^{2}h_{i}} \\
+  & = \Tr \Paren{I_{U} (A-B)^{2} I_{U}}\\
+  &  =   \sum_{i=1}^{k}\norm{(A-B)\chi_{a}}^{2}/\E \chi_{a} = \Var(G;H)
+    \mper
+\end{align}
+Here, \(I_{U}\) denotes the projection operator to the subspace \(U\) and we use that both \(h_{1},\ldots,h_{k}\) and \(\tfrac {1}{(\E\chi_{1})^{1/2}}\chi_{1},\ldots,\tfrac {1}{(\E\chi_{k})^{1/2}}\chi_{k}\) are two orthonormal bases for the same subspace \(U\).
+Putting the previous two inequalities, we obtain the following bound on the error we suffer by factoring out the subspace spanned by eigenvectors of \(A\) with eigenvalue close to \(0\) in absolute value.
+\begin{equation}
+  \sum_{i=1}^{r}\norm{P_{\eta} h_{i}}^{2} \le \eta^{-2}\cdot \Var(G; H)\mper
+\end{equation}
+We show by a concentration argument that for randomly planted colorings in worst-case host graphs, the resulting coloring instance has a model graph that uniquely determines the planted coloring and it has variance tending to \(0\) with growing average degree.
+Perhaps surprisingly, we show that a crisp deterministic property of the input graph, namely one-sided spectral expansion, also implies strong bounds on our notion of variance.
+
+\paragraph{One-sided spectral expansion implies low variance}
+
+For \(\lambda>0\), we say that a graph \(G\) is a \(\lambda\)-one-sided-expander if the second largest eigenvalue of its Markov operator is at most \(\lambda\).
+We use the term one-sided expander to emphasize that we do not restrict the bottom eigenvalues smaller than \(0\).
+As we discussed above, this distinction between positive and negative eigenvalues is crucial for coloring and independent set problems.
+Indeed, a two-sided bound on the eigenvalues different from \(1\) would rule out the existence of large independent sets.
+
+Consider a \(\lambda\)-one-sided expander \(G\) with a proper \(k\)-coloring \(\chi\from V\to [k]\).
+Construct the model graph \(H\) for \(G\) and \(\chi\) as above.
+We show that the variance of \(G\) with respect to \(H\) satisfies the bound
+\begin{equation}
+  \Var(G;H) \le \lambda \cdot k
+  \mper
+\end{equation}
+As before, we let \(A\) and \(B\) be the Markov operators of \(G\) and \(H\) and we let \(\chi_{1},\ldots,\chi_{k}\from V\to \set{0,1}\) be the indicator functons of the blocks of coloring \(\chi\).
+To bound the variance, we are to show that \(A\chi_{a}\) is close to \(B\chi_{a}\) for all colors \(a\in [k]\).
+% Let us compare the values of these functions on some block \(b\) of coloring \(\chi\).
+The function \(A\chi_{a}\) is equal to \(\psi_{a}(x)\seteq \Pr\Set{\chi(\bm y)=a \mid \bm x=x}\),
+where \(\bm x \bm y\) denotes a uniformly random edge of \(G\) as before.
+At the same time, in every block \(b\) of \(\chi\), the function \(B\chi_{a}\) is constant and equal to \(\Pr\Set{\chi(\bm y)=a\mid \chi(\bm x)=b}=\E\Brac{\psi_{a}(\bm x) \mid \chi(\bm x)=b}\).
+Hence, we can express the contribution of \(\norm{(A-B)\chi_{a}}^{2}\) to \(\Var(G;H)\),
+\begin{equation}
+  \norm{(A-B)\chi_{a}}^{2}
+  = \sum_{b=1}^{k}\Pr\Set{\chi(\bm x)=b}
+  \cdot \Var\Brac{\psi_{a}(\bm x) \mid \chi(\bm x)=b}
+  \mper
+\end{equation}
+If the variance of \(\psi_{a}\), conditioned on block \(b\), is large,
+it implies that a subset of block \(b\) has an unusually large number of neighbors in block \(a\),
+which contradicts the one-sided expansion property of \(G\).
+Concretely, we claim that every pair of distinct colors \(a,b\in[k]\) satisfies \(\Var\Brac{\psi_{a}(\bm x) \mid \chi(\bm x)=b}\le \lambda \tfrac{\E \chi_{a}}{\E \chi_{b}}\).
+Indeed, consider the function \(f=\chi_{b}\cdot (\psi_{a}-\alpha)+\lambda\cdot \chi_{a}\) for \(\alpha=\E\Brac{\psi_{a}(\bm x)\mid \chi(\bm x)=b}\).
+
+The expectation of this function satisfies \(\E f = \lambda \E\chi_{a}\).
+Since the functions \(\chi_{b}\cdot (\psi_{a}-\alpha)\) and \(\chi_{a}\) are orthogonal, we can compute the norm of \(f\) as,
+\begin{equation}
+  \E f^{2}= \E \chi_{b}\cdot(\psi_{a}-\alpha)^{2} + \lambda^{2}\E\chi_{a}
+  \mper
+\end{equation}
+
+
+Since \(\chi\) is a proper coloring and there no monochromatic edges, we can compute the quadratic form of \(A\) evaluated at \(f\),
+\begin{align}
+  \iprod{f,Af}
+  &=2\lambda \cdot\E \chi_{b} (\psi_{a}-\alpha) A\chi_{a} \\
+  &=2\lambda \cdot\E \chi_{b} (\psi_{a}-\alpha) \psi_{a} \\
+  &=2\lambda \cdot\E \chi_{b} (\psi_{a}-\alpha)^{2}
+    \mper
+\end{align}
+Here, we use in the third step that we chose \(\alpha\) such that \(\E \chi_{b}(\psi_{a}-\alpha)=0\).
+  
+By the inequality for \(\lambda\)-one-sided-expanders,
+\begin{align}
+    2\lambda \E \chi_{b} \cdot(\psi_{a}-\alpha)^{2}
+    & = \iprod{f,Af} \\
+    & \le (1-\lambda) (\E f)^{2} + \lambda \E f^{2} \\
+    & =   (1-\lambda) \lambda^{2} (\E \chi_{a})^{2} + \lambda \E \chi_{b} (\psi_{a}-\alpha)^{2} + \lambda^{3} \E \chi_{a}
+\end{align}
+By solving the inequality for the conditional variance \(\E \chi_{b}(\psi_{a}-\alpha)^{2}\),
+we obtain the desired bound,
+\begin{equation}
+  \E\chi_{b}(\psi_{a}-\alpha)^{2}
+  \le \lambda \E \chi_{a} \cdot \Paren{(1-\lambda)\E \chi_{a}+\lambda}\le \lambda \E \chi_{a}
+  \mper
+\end{equation}
+We remark that this variance bound is robust and deteriorates gracefully in the presense of a small fraction of monochromatic edges.
+
+\paragraph{Relating positive and negative graph eigenvalues} 
+
+The discussion so far focused on the question whether the bottom eigenspaces of the graphs Markov operator capture enough information about colorings or not.
+However, in order to obtain efficient algorithms, we also need to bound the number of significant bottom eigenvalues so that we can afford to enumerate the subspace their eigenfunctions span.
+
+To this end, we show that, perhaps surprisingly, bottom-threshold ranks can never be much larger than top-threshold ranks.
+Concretely, for all thresholds \(\tau>0\) and \(\tau'<\tau^{2}\), we can upper bound the bottom-threshold rank in terms of the top-threshold rank,
+\begin{equation}
+  \rank_{\le -\tau}(G)\le \Paren{\tfrac{\tau^{2}-\tau'}{1-\tau'}}^{-2}\cdot \rank_{\ge \tau'}(G)
+  \mper
+\end{equation}
+Since one-side spectral expansion and small-set (edge) expansion imply upper bounds on top-threshold ranks, the above inequality allows us to translate these properties also to upper bounds on bottom-threshold ranks.
+In the extreme case \(\tau=1\), the bottom-threshold rank counts the number of bipartite connected compontents, which we can clearly upper bound by the total number of connected components, which is the top-threshold rank for \(\tau'=1\).
+
+To illustrate the above inequality, consider orthonormal eigenfunctions \(g_{1},\ldots,g_{t}\) of the Markov operator \(A\) of \(G\) with eigenvalues at \(-\tau\).
+Define a vector embedding of the vertices \(g\from V\to \R^{t}\) with \(g(x)\seteq \tfrac 1{\sqrt t}(g_{1}(x),\ldots,g_{t}(x))\).
+By orthonormality of the functions \(g_{1},\ldots,g_{t}\), this embedding satisfies \(\E\norm{g(\bm x)}^{2}=\tfrac 1 t\sum_{i=1}^{t}\norm{g_{i}}^{2}=1\) and \(\E\iprod{g(\bm x),g(\bm x')}=\tfrac 1 t^{2}\sum_{i,j}\iprod{g_{i},g_{j}}^{2}=\tfrac 1 t\), where \(\bm x'\) is an independent random vertex with the same marginal distribution as \(\bm x\).
+Furthermore, since \(g_{1},\ldots,g_{t}\) are eigenfunctions with eigenvalue at most \(-\tau\), we have
+\begin{equation}
+  \E \iprod{g(\bm x),g(\bm y)}=\tfrac 1 t \sum_{i=1}^{t} \iprod{g_{i},A g_{i}} \le -\tau
+  \mper
+\end{equation}
+Using the tensoring trick \cite{khot-vishnoi,arora-khot-kolla-steurer-tulsiani-vishnoi}, let us a construct a new vector embedding \(f\from V\to \R^{t^{2}}\)of the vertices
+\begin{equation}
+  f(x) \seteq \norm{g(x)} \cdot \bar g(x)^{\otimes 2}\mcom
+\end{equation}
+where \(\bar g(x)=\tfrac 1{\norm{g(x)}}g(x)\) denotes the normalized vector embedding.
+By Cauchy--Schwarz,
+\begin{align}
+  \tau
+  &\le \E \abs{\iprod{g(\bm x),g(\bm y)}}\\
+  &=\E \norm{g(\bm x)}\cdot \norm{g(\bm y)}\cdot \abs{\iprod{\bar g(\bm x),\bar g(\bm y)}}\\
+  &\le \Paren{\E \norm{g(\bm x)}\cdot \norm{g(\bm y)}}^{1/2} \cdot \Paren{\E \norm{g(\bm x)}\cdot \norm{g(\bm y)}\cdot \iprod{\bar g(\bm x),\bar g(\bm y)}^{2}}^{1/2}
+  \\
+  &\le  \Paren{\E \norm{g(\bm x)}\cdot \norm{g(\bm y)}\cdot \iprod{\bar g(\bm x),\bar g(\bm y)}^{2}}^{1/2}
+  \\
+  &=  \Paren{\E \iprod{f(\bm x),f(\bm y)}}^{1/2}
+    \mper
+\end{align}
+At the same time, the vector embedding continues to satisfy \(\E \norm{f(\bm x)}^{2}=\E \norm{g(\bm x)}^{2}=1\) and
+\begin{equation}
+  \E \iprod{f(\bm x),f(\bm x')}^{2}=  \E \iprod{g(\bm x),g(\bm x')}^{2}\cdot \iprod{\bar g(\bm x),\bar g(\bm x')}^{2}
+  \le  \E \iprod{g(\bm x),g(\bm x')}^{2}=\tfrac 1 t
+  \mper
+\end{equation}
+By a characterization of the top-threshold rank in terms of vector embeddings \cite{barak-raghavendra-steurer}, this function \(f\) constitues a witness that for every \(\tau'<\tau^{2}\), the top-threshold rank is at least
+\begin{equation}
+  \rank_{\ge  \tau'}(G)\ge \Paren{\tfrac {\tau^{2}-\tau'}{1-\tau'}}^{2} \cdot t
+  \mper
+\end{equation}
+
+\paragraph{Algorithmic meta theorem and dichotomy for coloring one-sided expanders.}
+
+Putting together the results discussed so far, we obtain an appealing algorithmic meta theorem and dichotomy result for a particular class of coloring problems on one-sided spectral expanders.
+
+Let \(G\) be a undirected, connected graph with vertex set \(V\).
+For \(\e>0\), we say that \(\chi\from V\to[k]\) is an \emph{\((k,\e)\)-coloring} if \(\chi\) can be made a proper \(k\)-coloring by removing a vertex subset of volume at most \(\e\).
+For a reversible,\footnote{Here, \(M\) being reversible means that there exists a diagonal matrix \(D\) such that \(D M\) is a symmetric matrix.} row stochastic matrix \(M\in \R_{\ge 0}^{k\times k}\) with all zeroes on the diagonal and \(\delta>0\), we say that \(\chi\from V\to [k]\) is a \emph{\((M,\delta)\)-coloring} if \(\chi\) is \((k,\delta)\)-coloring and the model graph for \(G\) with respect is \(\delta\)-close to \(M\) so that for all pairs of colors \(a,b\in [k]\),
+\begin{equation}
+  \Abs{M_{ab} - \Pr_{\bm x\bm y \sim G}\Set{\chi(\bm y)=b\Mid \chi(\bm x)=a}}
+  \le \delta\mper
+\end{equation}
+We say that \(G\) is \((M,\delta)\)-\emph{colorable} if there exists a \((M,\delta)\)-coloring for \(G\).
+
+We will use the matrix \(M\) in order to parametrize graph coloring instances on one-sided expanders.
+To solve the problem, it will be enough to find any good enough coloring of the graph.
+However, the matrix \(M\) will represent an additional promise on what colorings exist in the graph.
+Also note that every \(k\)-coloring \(\chi\) is an \(M\)-coloring for some reversible, row-stochastic matrix \(M\) with zeroes on the diagonal.
+
+Formally, we define an algorithm \(\cA\) to solve \(M\)-\textsc{expander-coloring} if for every \(\e>0\), there exists a \(\delta>0\) such that given a \((M,\delta)\)-colorable \(\delta\)-one-sided-expander \(G\), the algorithm \(\cA\) outputs a \((k,\e)\)-coloring for \(G\).
+In order for this problem to be non-trivial, we need the matrix \(M\) to have second largest eigenvalue at most \(0\).
+In this way, \((M,\delta)\)-colorable \(\delta\)-one-sided-expander exist for every \(\delta>0\).
+In particular, a stochastic block model graph with large enough degree parameter (as a function of \(\delta\)) and suitable block probabilities (as a function of \(M\)) has the desired properties with high probability.
+
+We show that, assuming the Unique Games Conjecture, \(M\)-\textsc{expander-coloring} admits a polynomial-time algorithm in the sense above if and only if \(M\) has no repeated rows.
+More precisely, we show that for every reversible, row stochastic matrix \(M\) with zeros on the diagonal and second largest eigenvalue at most \(0\):
+
+\begin{enumerate}
+\item If \(M\) has no repeated rows, then there exists a polynomial-time for \(M\)-\textsc{expander-coloring}.
+\item If \(M\) has repeated rows, then there exists a polynomial-time reduction from problems predicted to be NP-hard by the Unique Games Conjecture to \(M\)-\textsc{expander-coloring}.
+\end{enumerate}
+
+We remark that it is not important for our algorithms to know the underlying model matrix \(M\).
+(However, by carefully enumerating all potential model matrices, one could also assume to know the underlying matrix \(M\).)
+
+For the algorithmic part of our meta-theorem, we just need to combine the ideas discussed so far.
+Let \(\e>0\).
+Suppose that \(M\) has no repeated rows and that \(G\) is a \((M,\delta)\)-colorable \(\delta\)-one-side-expander for sufficiently small \(\delta>0\) (as a function of \(M\) and \(\e\)).
+Let \(\chi\) be \((M,\delta)\)-coloring of \(G\).
+We can derive that the matrix \(M'_{ab}=\Pr\Set{\chi(\bm y)=b\mid \chi(\bm x)=a}\) has no repeated rows because it is sufficiently close to the matrix \(M\), which has that property.
+Thus, as discussed before, the partition \(\chi\) is uniquely determined by the image of the Markov operator \(B\) of the model graph \(H\) for \(G\) with respect to \(\chi\).
+Since \(G\) is a \(\delta\)-one-sided-expander, we obtain an upper bound of \(\delta\cdot k\) on the variance \(\Var(G;H)\) of the input graph \(G\) with respect to the model graph \(H\).
+As we saw before, this kind of variance bound implies that the bottom-most eigenspaces of the input graph are close to those of the model graph and therefore allow us to approximately recover the partition \(\chi\).
+At the same time, we can upper bound the dimension of the span of those eigenspaces by bounding the bottom-threshold rank in terms of the top-threshold rank (equaling \(1\) for one-sided spectral expanders).
+We conclude that we can approximately recover the partition \(\chi\) in polynomial time by exhaustively enumerating a fine enough cover of the subspace spanned by the bottom-most eigenspaces of \(G\).
+
+For the hardness part of our meta-theorem, we generalize a previous hardness reduction for coloring one-sided expanders \cite{bafna-hsieh-kothari}.
+The starting point of the reduction is the following problem shown to be NP-hard under the Unique Games Conjecture for every \(\e>0\) \cite{MR2648426-Bansal09}:
+\begin{quote}
+  Given a regular graph \(G\) that contains two disjoint independent sets, each of volume at least \(\tfrac 12-\e\), find an independent set of volume at least \(\e\).
+\end{quote}
+Let \(M\) be a reversible, row-stochastic \(k\)-by-\(k\) matrix with zeroes on the diagonal and second largest eigenvalue at most \(0\).
+Let \(p_{1},\ldots,p_{k}\ge 0\) with \(\sum_{i=1}^{k} p_i = 1\) be the stationary measure for \(M\) so that \(p_{a}M_{ab}=p_{b}M_{ba}\).
+Suppose that the first two rows of \(M\) are identical and that \(p_{1}\le p_{2}\).
+The idea of the reduction is to create a graph \(G'\) on \(k\) blocks consistent with \(M\) and to embed the hard instance \(G\) within the first two blocks.
+Concretely, our reduction outputs the following graph \(G'\), where we choose its number of vertices \(n\) such that \(\tfrac 12 \card{V(G)}=p_{1} n\).
+Let \(V_{1,2}=V(G) \cup V'_{1,2}\), where \(V'_{1,2}\) consists of \((p_{2}-p_{1})\cdot n\) fresh vertices, and create disjoint blocks \(V_{3},\ldots,V_{k}\) of fresh vertices such that \(\card{V_{i}}=p_{i}\cdot n\) for all \(i\in \set{3,\ldots,k}\).
+This construction ensures \(\card{V_{1,2}}=(p_{1}+p_{2})\cdot n\).
+Choose an arbitary bipartition \(V_{1}\) and \(V_{2}\) of \(V_{1,2}\) such that \(\card {V_{1}}=p_{1}n\) and \(\card{V_{2}}=p_{2}n\).
+For simplicity, we choose \(G'\) as a weighted graph with the following distribution \(\bm x\bm y\) over edges, where \(\delta>0\) is a paramter of the reduction:
+\begin{enumerate}
+\item With probability \(\delta>0\), choose \(\bm x \bm y\) as a random edge in the input graph \(G\) for the reduction.
+\item With the remaining probability \(1-\delta\), choose two random pair of colors \(\bm a \bm b\) according to the probabilities \(p_{a,b}=p_{a}\cdot M_{a,b}\) and choose \(\bm x\) to be a uniformly random vertex in \(V_{\bm a}\) and \(\bm y\) to be uniformly random vertex in \(V_{\bm b}\).
+\end{enumerate}
+We remark that, by subsampling the edges of the graph \(G'\), we could obtain a sparse, unweighted graph that inherits enough of the properties of \(G'\) for the reduction to go through.
+
+For sufficiently small \(\delta\), the model graph for \(G'\) with respect to the partition \(V_{1},\ldots,V_{k}\) is arbitrarily close to \(M\).
+Since the second largest eigenvalue of \(M\) is at most \(0\) that also means that \(G'\) is an arbitrarily good one-sided spectral expander, i.e., the second largest eigenvalue of \(G'\) tends to \(0\) as \(\delta\to 0\).
+If we find a \((k,p_{1})\)-coloring in \(G'\), then at least half of the vertices of \(G\) are covered by \(k\) independent sets and we obtain an independent set of volume at least \(\tfrac{1}{2k}\) for \(G\).
+Finally, we need to argue that \(G'\) satisfies the promise of being \((M,\delta')\)-colorable in case that the input graph \(G\) contains two disjoint independent sets, each of volume at least \(1/2-\e\).
+To this end, extend the two large independent sets in \(G\) to a bipartition \(V^{*}_{1}\) and \(V^{*}_{2}\) of \(V_{1,2}\) with \(p_{1}n\) and \(p_{2}n\) vertices, respectively.
+Note that the edges with both endpoints in the same part of this bipartition have a vertex cover of size at most \(4\e p_{1} n\).
+Here, we also use that the edge probability satisfies \(p_{1,2}=p_{1,1}=p_{2,2}=p_{2,1}=0\) because \(M\) has zeros on the diagonal and its first two rows are identical.
+It follows that the \(k\)-partition \(V^{*}_{1},V^{*}_{2,}V_{3},\ldots,V_{k}\) is a \((k,4\e)\)-coloring of \(G'\).
+Furthermore, the model graph for \(G'\) with respect to this partition tends to \(M\) as \(\delta\to 0\) because the first two rows of \(M\) are identical.
+(Indeed, for that property it does not matter which bipartition of \(V_{1,2}\) we choose as long as we respect the two parts have the right cardinalities.)
+
+% sketch how the algorithm works by combining the ideas discussed so far
+
+% sketch how the lower bound works by reducing from UG-hard instances for independent sets with volume closeto \(1/2\)
+
+
+% \paragraph{Finding balanced 3-colorings of expanders}
+
+% \paragraph{Finding randomly planted colorings in (small-set) expanders}
+
+% \paragraph{Finding small vertex covers in expanders}
+
+
+%%% Local Variables:
+%%% mode: LaTeX
+%%% TeX-master: "../main.tex"
+%%% End:
+
+

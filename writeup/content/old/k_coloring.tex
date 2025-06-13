@@ -1,0 +1,199 @@
+\section{Recovering pseudo-random $k$-colorings [DEPRECATED, KEPT HERE FOR REFERENCE PURPOSES]}\label{sec: kcoloring}
+
+We start by defining various notions of colorings of graphs.
+First, we define a $b$-almost coloring, which is simply a legal coloring on $n-b$ of the vertices.
+
+\begin{definition}[Almost coloring]
+\label{def: almostcoloring}
+    Let $G$ be an $n$-vertex graph.
+    For a given $b<n$, a {\em $b$-almost} coloring is a \kcl of $n-b$ vertices that is legal on these vertices.
+    The remaining $b$ vertices are left uncolored and are referred to as {\em free}.
+\end{definition}
+
+Second, we define $b$-approximated and $b$-partial colorings, which are defined with respect to a ground truth coloring of the graph.
+
+\begin{definition}[Approximated coloring]
+    \label{def: approximatedcoloring}
+    Let $G$ be an $n$-vertex graph that admits a \kcl $f$.
+    For a given $b<n$, a {\em $b$-approximated} coloring w.r.t\ $f$ is a \kcl
+    that is not necessarily legal, but it is identical to $f$ on a set of at least $n-b$ vertices.
+\end{definition}
+
+\begin{definition}[Partial coloring]
+    \label{def: partialcoloring}
+    Let $G$ be an $n$-vertex graph that admits a \kcl $f$.
+    For a given $b<n$, a {\em $b$-partial} coloring w.r.t.\ $f$ is a \kcl of $n-b$ vertices that is identical to $f$ on these vertices.
+    The remaining $b$ vertices are left uncolored and are referred to as {\em free}.
+\end{definition}
+
+\paragraph{Pseudo-random $k$-colorings}
+    \andor{TODO: rewrite all these wrt to partitions instead of colorings}Our results in this section will depend on pseudo-random properties of $k$-colorings of graphs, which we define in terms of matrices $\AVG$, $\nAVG_d$, and $\VAR \in \R^{k \times k}$.
+    Assume that a graph $G$ admits a \kcl $f$ with color classes $V_{[k]}$.
+    For any $x\in V(G)$ and $1\leq i\leq k$, let $\D{x}{i}:=\sum_{y\in V_i} \1[(x, y)\in E(G)]$ denote the degree of a vertex towards a color class.
+    Let $\AVG$ be the $k\times k$ matrix defined by the average degrees between color classes: $\AVG{i}{j}:=\frac{1}{\abs{V_i}}\sum_{x\in V_i} \D{x}{j}$.
+    Similarly, let $\VAR$ be the $k\times k$ matrix defined by the variance of the degrees between color classes: $\VAR{i}{j}:=\frac{1}{\abs{V_i}}\sum_{x\in V_i} \Paren{\D{x}{j}-\AVG{i}{j}}^2$.
+    Finally, for some $d$ let $\nAVG_d:=\AVG-\frac{d}{k-1}\Paren{\Allones-\Id}$ be the centered average degree matrix -- when obvious from the context (e.g. the graph is $d$-regular), we omit the subscript $d$.
+
+We are ready to state our main result for graphs that admit pseudo-random $k$-colorings.
+
+\begin{theorem}[Pseudo-random $k$-colorings, small bottom rank]
+    \label[theorem]{thm: kcoloringrecoverybottom}
+    Let $k \geq 3$ be a constant.
+    For $d \geq O(1)$ large enough, let $G$ be an $n$-vertex $d$-regular graph that admits a \kcl.
+    Suppose its normalized adjacency matrix $\bar{A}$ satisfies $\rank_{\leq - (1-\Omega(1)) \zeta}(\bar{A}) \leq t$ for $\zeta = \frac{1}{k-1}-\frac{1}{d}\Norm{\nAVG_d}_2 > 0$ and $t \in \mathbb{N}$.
+    Let $\beta = \frac{1}{d^2} \norm{\VAR}_1$. 
+    There exists an algorithm with runtime $n^{O(1)}(\beta/\zeta^2)^{-O(t)}$ that returns an $n^{O(1)}(\beta/\zeta^2)^{-O(t)}$-sized list of $k$-colorings, one of which is an $O(\beta n / \zeta^3)$-approximate coloring.
+    Furthermore, given this list, it is possible to compute in polynomial time an $O(\beta n / \zeta^3)$-almost coloring.
+\end{theorem}
+
+Then, by \cref{cor:spectral_small_to_small}, we immediately get a result under the assumption that the top threshold rank is small.
+
+\begin{corollary}[Pseudo-random $k$-colorings, small top rank]
+\label[theorem]{thm: kcoloringrecovery}
+    Let $k \geq 3$ be a constant.
+    For $d \geq O(1)$ large enough, let $G$ be an $n$-vertex $d$-regular graph that admits a \kcl.
+    Suppose its normalized adjacency matrix $\bar{A}$ satisfies $\rank_{\geq (1-\Omega(1))\zeta^2/2}(\bar{A}) \leq t$ for $\zeta = \frac{1}{k-1}-\frac{1}{d}\Norm{\nAVG_d}_2 > 0$ and $t \leq \Omega(\zeta^4 \sqrt{n})$.
+    Let $\beta = \frac{1}{d^2} \norm{\VAR}_1$. 
+    There exists an algorithm with runtime $n^{O(1)}(\beta/\zeta^2)^{-O(t/\zeta^4)}$ that returns an $n^{O(1)}(\beta/\zeta^2)^{-O(t/\zeta^4)}$-sized list of $k$-colorings, one of which is a $O(\beta n/\zeta^3)$-approximate coloring.
+    Furthermore, given this list, there is an algorithm with runtime polynomial in $n$ and the list size that returns an $O(\beta n/\zeta^3)$-almost coloring.
+\end{corollary}
+\begin{proof}
+    Because $\rank_{\geq (1-\Omega(1))\zeta^2/2}(\bar{A}) \leq t$, we get by applying \cref{cor:spectral_small_to_small} with $\sigma = \zeta^2/2$ that\linebreak $\rank_{\leq -(1-\Omega(1))\zeta}(\bar{A}) \leq 4t/\zeta^4$.
+    The result then follows by \cref{thm: kcoloringrecoverybottom}.
+    % By $d$-regularity and $\lambda_t\leq \Paren{\frac{1}{k-1}-\alpha-\Omega(1)}^2d$ we can apply \cref{cor:spectral_small_to_small} to find $t'=O(t)$ and $\delta=1+\Omega(1)$ such that
+    % $$\lambda_{n-t'}\geq -\delta\Paren{\frac{1}{k-1}-\alpha-\Omega(1)}d\geq -\Paren{\frac{1}{k-1}-\alpha-\Omega(1)}d$$
+    % holds.
+    % Hence, the proof follows by \cref{thm: kcoloringrecoverybottom}.
+\end{proof}
+
+We proceed with the proof of \cref{thm: kcoloringrecoverybottom}.
+
+\begin{proof}[Proof of \cref{thm: kcoloringrecoverybottom}]
+    Let $v_2, \ldots, v_k \in \R^k$ denote the $k-1$ eigenvectors corresponding to the bottom $k-1$ eigenvalues of $\AVG$, rescaled to have $\ell_2$-norm $\sqrt{\frac{1}{n}}$.
+    Let $f:V(G)\to[k]$ be the assumed \kcl.
+    Let us construct the ``coloring encoding vectors" $u_2, \ldots, u_k \in \R^n$ defined by $u_i[x]:=v_i[f(x)]$.
+    We now show that the $u_i$s are \textit{almost} eigenvectors of $A_G$:
+
+    \begin{lemma}[Approximate eigenvectors]
+        \label[lemma]{lemma: almosteigenvectors}
+        If $\norm{\VAR}_1\leq\beta d^2$, then $\Norm{\lambda_i(\AVG)\;u_i-A u_i}_2^2\leq \beta d^2$ for all $i=2, \ldots, k$.
+    \end{lemma}
+    \begin{proof}
+    By expanding the $\ell_2$-norm and expressing $u_i$ using $v_i$, we get:
+        \begin{align*}
+            &\Norm{\lambda_i(\AVG)\;u_i-A u_i}_2^2\\
+            &=\sum_{j\in[k]}\sum_{x\in V_j} \Paren{\lambda_i(\AVG)\;u_i[x] -\sum_{j'\in[k]}\sum_{y\in V_{j'}}A[x, y]u_i[y]}^2\\
+            &=\sum_{j\in[k]}\sum_{x\in V_j} \Paren{\lambda_i(\AVG)\;v_i[j] -\sum_{j'\in[k]}\sum_{y\in V_{j'}}A[x, y]v_i[j']}^2\\
+            &=\sum_{j\in[k]}\sum_{x\in V_j} \Paren{\lambda_i(\AVG)\;v_i[j] -\sum_{j'\in[k]}d_{xj'} v_i[j']}^2\,.
+        \end{align*}
+
+        Using that $\lambda_i(\AVG)\;v_i = \AVG\;v_i$ and expanding it, we get: 
+        $$=\sum_{j\in[k]}\sum_{x\in V_j} \Paren{\sum_{j'\in[k]} v_i[j']\Paren{\AVG{j}{j'} - d_{xj'}}}^2\,.$$
+
+        By applying Cauchy-Schwarz and then simplifying using that $\sum_{j'\in[k]} v_i[j']^2=\Norm{v_i}_2^2=\frac{1}{n}$ and the definition of $\VAR{j}{j'}$, we get the upper bound:
+        $$\leq\frac{1}{n}\sum_{j\in[k]}\Abs{V_j}\Paren{\sum_{j'\in[k]} \VAR{j}{j'}}\,.$$
+
+        Finally, using that $\sum_{j'\in[k]} \VAR{j}{j'}\leq \norm{\VAR}_1\leq\beta d^2$ and simplifying using that $\sum_{j\in[k]}\Abs{V_j}=n$, we get the desired bound.
+        % \andor{We could use $\VAR{i}{i}=0$ to get a $(k-1)$ instead of $k$ but I decided it is more important to keep the formula nice?!}
+    \end{proof}
+
+    Let $\gamma:= \lambda_{n-t}(A)+\Paren{\frac{1}{k-1}-\frac{1}{d}\Norm{\nAVG_d}_2}$, which by assumption is at least $\Omega\Paren{\frac{1}{k-1}-\frac{1}{d}\Norm{\nAVG_d}_2} = \Omega(\zeta)$.
+    Let $e_1, \ldots, e_n$ be an orthonormal eigenbasis corresponding to the eigenvectors of $A$.
+    We now show that $u_2, \ldots, u_k$ are not only almost eigenvectors, but they also lie among the bottom eigenvectors of $A$:
+
+    \begin{lemma}[Closeness to bottom eigenvectors]
+        \label[lemma]{lemma: liesinbottom}
+        If $\lambda_{n-t}(A)\geq -\Paren{\frac{1}{k-1}-\frac{1}{d} \norm{\nAVG}_2-\gamma}d$ and\linebreak$\Norm{\lambda_i(\AVG)\; u_i-A u_i}_2^2\leq \beta d^2$ for all $i = 2, \ldots, k$, then there exists $\tilde{u}_i\in \operatorname{span}\Paren{e_{n-t+1}, \ldots, e_n}$ with $\norm{\tilde{u}_i}_2 \leq \norm{u_i}_2$ and $\Norm{u_i-\tilde{u}_i}_2^2\leq \frac{\beta}{\gamma^2}$ for all $i = 2, \ldots, k$.
+    \end{lemma}
+    \begin{proof}
+        To complement the upper bound in \cref{lemma: almosteigenvectors}, we first give a lower bound on\linebreak$\Norm{\lambda_i(\AVG)\; u_i-A u_i}_2^2$.
+        Writing $u_i$ in the orthonormal eigenbasis of $A$ as $\sum_{j\in [n]}c_i[j]e_j$ for some vector of coefficients $c_i$, we get
+        $$\Norm{\lambda_i(\AVG)\; u_i-A u_i}_2^2=\sum_{j\in [n]} c_{i}[j]^2\Paren{\lambda_j(A)-\lambda_i(\AVG)}^2\,.$$
+
+        By \cref{lemma: negative_second_eigenvalue}, we have for all $i = 2, \ldots, n$ that $\lambda_i(\AVG)\leq -\zeta d$.
+        On the other hand, by the assumption $\lambda_{n-t}(A)\geq -\Paren{\zeta -\gamma}d$, we have for all $j = 1, \ldots, n-t$ that $\lambda_j(A)\geq -\Paren{\zeta -\gamma}d$.
+        Hence, the above expression can be lower bounded as
+        $$\Norm{\lambda_i(\AVG)\; u_i-A u_i}_2^2 \geq \gamma^2 d^2\sum_{j = 1}^{n-t} c_{i}[j]^2\,.$$
+
+        Comparing this to the upper bound from \cref{lemma: almosteigenvectors}, we get
+        $$\sum_{j = 1}^{n-t} c_{i}[j]^2\leq \frac{\beta}{\gamma^2}\,.$$
+
+        Hence, letting $\tilde{u}_i:=\sum_{j = n-t+1}^{n}c_i[j]e_j$ and observing that $\Norm{u_i-\tilde{u}_i}_2^2=\sum_{j=1}^{n-t} c_{i}[j]^2$ finishes the proof.
+    \end{proof}
+
+    We also observe that $u_2, \ldots, u_k$ have norm bounded by $1$:
+    \[\Norm{u_i}^2 = \sum_{a\in[k]}\Abs{V_a}v_i[a]^2 \leq \sum_{a\in[k]}\Abs{V_a}\sum_{b\in[k]}v_i[b]^2 = \sum_{a \in [k]} \Abs{V_a} \frac{1}{n} =  1\,.\] 
+    Then by \cref{lemma: liesinbottom} the same norm bound also applies to $\tilde{u}_2, \ldots, \tilde{u}_k$.
+    % Let us now bound the norms of $u_{2}, \ldots, u_k$:
+
+    % \begin{lemma}\label[lemma]{lemma: boundedcoefficients}
+    %     For all $i = 2, \ldots, k$, $\Norm{u_i}_2\leq \sqrt{c}\Paren{1+\frac{\sqrt{\beta}}{\gamma}}$.
+    % \end{lemma}
+    % \begin{proof}
+    %     By the definition of $u_i$ using $v_i$, and the length of $v_i$, we can upper bound $\Norm{u_i}_2^2$:
+
+
+    %     \begin{align*}
+    %         &\Norm{u_i}_2^2\\
+    %         &= \sum_{a\in[k]}\Abs{V_a}v_i[a]^2\\
+    %         &\leq \sum_{a\in[k]}\Abs{V_a}\sum_{a\in[k]}v_i[a]^2\\
+    %         &=k \,.
+    %     \end{align*}
+        
+    %     On the other hand, by \cref{lemma: liesinbottom}, $\Norm{\tilde{u}_i-u_i}_2^2\leq \frac{\beta k}{\gamma^2}$, so we get the desired upper bound by triangle inequality.
+    % \end{proof}
+
+    % Let $c:=\sqrt{c}\Paren{1+\frac{\sqrt{\beta}}{\gamma}}$.
+    % We start by constructing an $\sqrt{\e/\gamma}$-cover of the unit ball in the subspace spanned by $v_{n-t+1}, \ldots, v_n$.
+    % To do this, we can simply construct an $\sqrt{\e/\gamma}$-cover of the unit ball in $\R^t$, and then for each $t$-dimensional vector $\hat{u}'$ in this cover we construct the $n$-dimensional vector $\hat{u} = \sum_{i=1}^t \hat{u}'_i v_{n-i+1}$.
+    % By standard arguments (see Example 5.8 in~\cite{MR3967104-Wainwright19}), we can construct such a cover of size $O(\sqrt{\e/\gamma})^t$, in time polynomial in the size of the cover.
+
+    The vectors $\tilde{u}_{2}, \ldots, \tilde{u}_k$ lie within the $t$-dimensional unit ball in $\operatorname{span}\Paren{e_{n-t+1}, \ldots, e_n}$, for which we can build a $\sqrt{\beta}/\gamma$-cover of size $O(\gamma/\sqrt{\beta})^t$.% $O\Paren{\Paren{\frac{c}{\sqrt{\beta}}}^t}$.
+    Then, for each $i = 2, \ldots, k$, there exists some $\hat{u}_i$ in the cover with $\Norm{\hat{u}_i-\tilde{u}_i}_2^2\leq \beta/\gamma^2$.
+    By the triangle inequality, using by \cref{lemma: liesinbottom} that $\Norm{\tilde{u}_i-u_i}_2^2\leq\beta/\gamma^2$, we get $\Norm{\hat{u}_i-u_i}_2^2=O(\beta/\gamma^2)$.
+
+    Using that $k=O(1)$, we get that there are $O\Paren{\gamma/\sqrt{\beta}}^{kt}=(\beta/\gamma^2)^{-O(t)}$ possible combinations of $k$ vectors from the cover.
+
+    Now we use an adaptation of Algorithm 10 of \cite{MR3536556-David16} to partition the vertices based on the $\hat{u}_{\btw{2}{k}}$ vectors:
+
+    \andor{format better, e.g. indentation}
+
+    \begin{algorithm}[H]
+        For every possible $k$-tuple of vertices $x_{1}, \ldots, x_k \in [n]$ try the following coloring:
+        
+        \hspace{8pt} Let $S_1 = \{x_1\}, \ldots, S_k = \{ x_k\}$. For all other vertices $y \in [n]$, add $y$ into any color class $S_{i}$ for which it holds that
+        \[
+        \sum_{j=2}^k \Paren{\hat{u}_j(y)-\hat{u}_j(x_i)}^2\leq\frac{\zeta}{k^2n}
+        \]
+        
+        \hspace{8pt} or into an arbitrary $S_i$ if it doesn't hold for any $i$. Then add $\Set{S_1, \ldots, S_k}$ to the list of potential $k$-colorings.
+        \protect\caption{\label{alg: spectralclustering}Spectral clustering algorithm}
+    \end{algorithm}
+
+    \begin{lemma}[Based on Lemma B.16 of \cite{MR3536556-David16}]
+        \label[lemma]{lemma: spectralclustering}
+        % Let $G$ be a $d$-regular $n$-vertex graph that admits a \kcl with $\Norm{\nAVG}_2\leq \Paren{\frac{1}{k-1}-\zeta} d$.
+        Let $\delta_i = \hat{u}_i-u_i$, and suppose that $||\delta_i||^2 \leq \eta$ for all $i=1,\ldots,k$.
+        Then \cref{alg: spectralclustering} runs in time $n^{O(k)}$ and returns a set of $O(n^k)$ $k$-colorings, one of which is a $O\Paren{\frac{\eta k^4}{\zeta }n}$-approximate coloring.
+    \end{lemma}
+
+    For the proof, see \cref{app: kcoloring}.
+    Running \cref{alg: spectralclustering} on each possibility takes time $n^{O(1)}(\beta/\gamma^2)^{-O(t)}$, and \cref{lemma: spectralclustering} shows that on the vectors $\hat{u}_{2}, \ldots, \hat{u}_{k}$ it returns an approximated coloring with parameter
+    $$O\Paren{\frac{\max_{i=2,\ldots,k} \Norm{\hat{u}_i-u_i}_2^2 k^4}{\zeta} n}=O\Paren{\frac{\beta k^4 n}{\gamma^2\zeta }}=O\Paren{\frac{\beta k^4 n}{\zeta^3}}\,.$$
+
+    % By [current theorem], we can find a $\beta^{-O(t)}$-sized list of $k$-colorings, one of which is a $\Paren{\frac{\beta k^3}{\gamma^2}n}$-approximate coloring.
+    Given this list, we can use a standard $2$-approximation for the vertex cover problem on each color class of each $k$-coloring in the list, mark the vertices included in the vertex cover as free, and then return the largest resulting almost coloring. This guarantees that we can obtain a $O\Paren{\frac{\beta k^4 n}{\zeta^3}}$-almost coloring.
+\end{proof}
+
+% \begin{theorem}\label[theorem]{thm: kcoloringrecoverybottom}
+%     Let $3\leq k=O(1)$, $t\geq 2$, $d\geq O(k)$, $0\leq \alpha<\frac{1}{k-1}$ and $0<\beta<1$ be parameters.
+%     Let $G$ be an $n$-vertex \andor{double check that I don't actually need $d$-regularity -- it is quite surprising} graph with $\lambda_{n-t}\geq - \Paren{\frac{1}{k-1}-\alpha-\Omega(1)} d$.
+%     Assume that $G$ admits a \kcl such that $\norm{\nAVG_d}_{2}\leq\alpha d$ and $\norm{\VAR}_1\leq\beta d^2$.
+%     There is an algorithm with runtime $n^{O(1)}\beta^{-O(t)}$ that finds an $O(\beta n)$\andor{should I make the dependence on $k^3$ and $\frac{1}{\gamma^2}$ explicit?}-almost coloring.
+% \end{theorem}
+
+% \begin{proof}
+%     By \cref{thm: kcoloringrecoverybottomlistapproximate}, we can find a $\beta^{-O(t)}$-sized list of $k$-colorings, one of which is a $\Paren{\frac{\beta k^3}{\gamma^2}n}$-approximate coloring.
+%     Then, using a standard $2$-approximation for the vertex cover problem yields a $O\Paren{\frac{\beta k^3}{\gamma^2}n}$-almost coloring on at least one of them, and this can be verified in time $O(n^2)$.
+% \end{proof}
+

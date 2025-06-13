@@ -1,0 +1,561 @@
+% nag when using outdated macros
+\RequirePackage[l2tabu,orthodox]{nag}
+\documentclass
+[11pt,letterpaper]
+{article} 
+
+% SETUP
+%
+\providecommand{\lambdamin}{\lambda_{\mathrm{min}}}
+%
+% {{{ restate }}}
+% set of macros to deal with restating theorem environments (or anything
+% else with a label)
+% adapted from Boaz Barak
+\newcommand\MYcurrentlabel{xxx}
+% \MYstore{A}{B} assigns variable A value B
+
+\usepackage{etoolbox} % for \protected@xdef
+
+\newcommand{\MYstore}[2]{%
+  \global\expandafter \protected@xdef \csname MYMEMORY #1 \endcsname{#2}%
+}
+%\newcommand{\MYstore}[2]{%
+%  \global\expandafter \def \csname MYMEMORY #1 \endcsname{#2}%
+%}
+% \MYload{A} outputs value stored for variable A
+\newcommand{\MYload}[1]{%
+  \csname MYMEMORY #1 \endcsname%
+}
+% new label command, stores current label in \MYcurrentlabel
+\newcommand{\MYnewlabel}[1]{%
+  \renewcommand\MYcurrentlabel{#1}%
+  \MYoldlabel{#1}%
+}
+% new label command that doesn't do anything
+\newcommand{\MYdummylabel}[1]{}
+\newcommand{\torestate}[1]{%
+  % overwrite label command
+  \let\MYoldlabel\label%
+  \let\label\MYnewlabel%
+  #1%
+  \MYstore{\MYcurrentlabel}{#1}%
+  % restore old label command
+  \let\label\MYoldlabel%
+}
+\newcommand{\restatetheorem}[1]{%
+  % overwrite label command with dummy
+  \let\MYoldlabel\label
+  \let\label\MYdummylabel
+  \begin{theorem*}[Restatement of \cref{#1}]
+    \MYload{#1}
+  \end{theorem*}
+  \let\label\MYoldlabel
+}
+\newcommand{\restatecorollary}[1]{%
+  % overwrite label command with dummy
+  \let\MYoldlabel\label
+  \let\label\MYdummylabel
+  \begin{corollary*}[Restatement of \cref{#1}]
+    \MYload{#1}
+  \end{corollary*}
+  \let\label\MYoldlabel
+}
+\newcommand{\restatelemma}[1]{%
+  % overwrite label command with dummy
+  \let\MYoldlabel\label
+  \let\label\MYdummylabel
+  \begin{lemma*}[Restatement of \cref{#1}]
+    \MYload{#1}
+  \end{lemma*}
+  \let\label\MYoldlabel
+}
+\newcommand{\restateprop}[1]{%
+  % overwrite label command with dummy
+  \let\MYoldlabel\label
+  \let\label\MYdummylabel
+  \begin{proposition*}[Restatement of \cref{#1}]
+    \MYload{#1}
+  \end{proposition*}
+  \let\label\MYoldlabel
+}
+\newcommand{\restatefact}[1]{%
+  % overwrite label command with dummy
+  \let\MYoldlabel\label
+  \let\label\MYdummylabel
+  \begin{fact*}[Restatement of \cref{#1}]
+    \MYload{#1}
+  \end{fact*}
+  \let\label\MYoldlabel
+}
+\newcommand{\restatedefinition}[1]{%
+  % overwrite label command with dummy
+  \let\MYoldlabel\label
+  \let\label\MYdummylabel
+  \begin{definition*}[Restatement of \cref{#1}]
+    \MYload{#1}
+  \end{definition*}
+  \let\label\MYoldlabel
+}
+\newcommand{\restate}[1]{%
+  % overwrite label command with dummy
+  \let\MYoldlabel\label
+  \let\label\MYdummylabel
+  \MYload{#1}
+  \let\label\MYoldlabel
+}
+
+% {{{ names }}}
+% Hungarian/Polish/East European names
+\newcommand{\Erdos}{Erd\H{o}s\xspace}
+\newcommand{\Renyi}{R\'enyi\xspace}
+\newcommand{\Lovasz}{Lov\'asz\xspace}
+\newcommand{\Juhasz}{Juh\'asz\xspace}
+\newcommand{\Bollobas}{Bollob\'as\xspace}
+\newcommand{\Furedi}{F\"uredi\xspace}
+\newcommand{\Komlos}{Koml\'os\xspace}
+\newcommand{\Luczak}{\L uczak\xspace}
+\newcommand{\Kucera}{Ku\v{c}era\xspace}
+\newcommand{\Szemeredi}{Szemer\'edi\xspace}
+\newcommand{\Hastad}{H{\aa}stad\xspace}
+\newcommand{\Hoelder}{H\"{o}lder\xspace}
+\newcommand{\Holder}{\Hoelder}
+\newcommand{\Brandao}{Brand\~ao\xspace}
+
+% {{{ etex }}}
+\usepackage[notes=true,later=false,camera=false]{dtrt}
+%\usepackage{macros}
+\usepackage[utf8]{inputenc}
+\usepackage{etex}
+\usepackage{ stmaryrd }
+% {{{ common }}}
+\usepackage{xspace,enumerate}
+%\usepackage[dvipsnames]{xcolor}
+\usepackage[T1]{fontenc}
+\usepackage[full]{textcomp}
+% {{{ babelamerican }}}
+\usepackage[american]{babel}
+% {{{ mathtools }}}
+\usepackage{mathtools}
+% {{{ boldmath }}}
+% fix for "too many math alphabets" problem
+\newcommand\hmmax{0} % default 3
+% \usepackage{bm}
+% \usepackage{stmaryrd}
+% {{{ amsthm }}}
+
+\usepackage{amsthm}
+\usepackage{empheq}
+\newcommand*\widefbox[1]{\fbox{\hspace{2em}#1\hspace{2em}}}
+   \usepackage{hyperref}
+%\hypersetup{hyperindex=true,pdfpagemode=UseOutlines,bookmarksnumbered=true,bookmarksopen=true,bookmarksopenlevel=2,pdfstartview=FitH,pdfborder={0 0 1},linkbordercolor=dt@linkcolor,citebordercolor=dt@linkcolor,urlbordercolor=dt@linkcolor}
+\usepackage[capitalise,nameinlink]{cleveref}
+\crefname{algocf}{Algorithm}{Algorithms}
+\Crefname{algocf}{Algorithm}{Algorithms}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem*{theorem*}{Theorem}
+\newtheorem*{lemma*}{Lemma}
+
+\makeatletter
+\def\thm@space@setup{%
+  \thm@preskip=\parskip \thm@postskip=0pt
+}
+\makeatother
+
+\usepackage[parfill]{parskip}
+
+\usepackage{paralist}
+\usepackage{turnstile}
+\usepackage{mdframed}
+\usepackage{tikz}
+\usepackage{caption}
+% \DeclareCaptionType{Algorithm}
+\usepackage{newfloat}
+
+% {{{ geometry-nice }}}
+\usepackage[
+letterpaper,
+top=1.2in,
+bottom=1.2in,
+left=1in,
+right=1in]{geometry}
+% {{{ newpx }}}
+\usepackage{newpxtext} % T1, lining figures in math, osf in text
+\usepackage{textcomp} % required for special glyphs
+\usepackage[varg,bigdelims]{newpxmath}
+\usepackage[scr=rsfso]{mathalfa}% \mathscr is fancier than \mathcal
+\usepackage{bm} % load after all math to give access to bold math
+% \useosf %no longer needed
+\linespread{1.1}% Give Palatino more leading (space between lines)
+\let\mathbb\varmathbb
+% {{{ microtype }}}
+\usepackage{microtype}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% NOTES
+\newcommand{\rares}[1]{\dtcolornote[Rares]{blue}{#1}}
+\newcommand{\yiding}[1]{\dtcolornote[Yiding]{orange}{#1}}
+\newcommand{\andor}[1]{\dtcolornote[Andor]{red}{#1}}
+\newcommand{\david}[1]{\dtcolornote[David]{purple}{#1}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FORMATTING
+\allowdisplaybreaks
+\newcommand{\doclearpage}{%
+\iffull
+\clearpage
+\else
+\fi
+}
+\newcommand{\defemph}[1]{\textbf{\emph{#1}}}
+\newcommand{\keywords}[1]{\bigskip\par\noindent{\footnotesize\textbf{Keywords\/}: #1}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% round parentheses
+\newcommand{\paren}[1]{(#1)}
+\newcommand{\Paren}[1]{\left(#1\right)}
+\newcommand{\bigparen}[1]{\big(#1\big)}
+\newcommand{\Bigparen}[1]{\Big(#1\Big)}
+% square brackets
+\newcommand{\brac}[1]{[#1]}
+\newcommand{\Brac}[1]{\left[#1\right]}
+\newcommand{\bigbrac}[1]{\big[#1\big]}
+\newcommand{\Bigbrac}[1]{\Big[#1\Big]}
+\newcommand{\Biggbrac}[1]{\Bigg[#1\Bigg]}
+% absolute value
+\newcommand{\abs}[1]{\lvert#1\rvert}
+\newcommand{\Abs}[1]{\left\lvert#1\right\rvert}
+\newcommand{\bigabs}[1]{\big\lvert#1\big\rvert}
+\newcommand{\Bigabs}[1]{\Big\lvert#1\Big\rvert}
+% cardinality
+\newcommand{\card}[1]{\lvert#1\rvert}
+\newcommand{\Card}[1]{\left\lvert#1\right\rvert}
+\newcommand{\bigcard}[1]{\big\lvert#1\big\rvert}
+\newcommand{\Bigcard}[1]{\Big\lvert#1\Big\rvert}
+% set
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\Set}[1]{\left\{#1\right\}}
+\newcommand{\bigset}[1]{\big\{#1\big\}}
+\newcommand{\Bigset}[1]{\Big\{#1\Big\}}
+% norm
+\newcommand{\norm}[1]{\lVert#1\rVert}
+\newcommand{\Norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\bignorm}[1]{\big\lVert#1\big\rVert}
+\newcommand{\Bignorm}[1]{\Big\lVert#1\Big\rVert}
+\newcommand{\Biggnorm}[1]{\Bigg\lVert#1\Bigg\rVert}
+% 2-norm
+\newcommand{\normt}[1]{\norm{#1}_2}
+\newcommand{\Normt}[1]{\Norm{#1}_2}
+\newcommand{\bignormt}[1]{\bignorm{#1}_2}
+\newcommand{\Bignormt}[1]{\Bignorm{#1}_2}
+% 2-norm squared
+\newcommand{\snormt}[1]{\norm{#1}^2_2}
+\newcommand{\Snormt}[1]{\Norm{#1}^2_2}
+\newcommand{\bigsnormt}[1]{\bignorm{#1}^2_2}
+\newcommand{\Bigsnormt}[1]{\Bignorm{#1}^2_2}
+% norm squared
+\newcommand{\snorm}[1]{\norm{#1}^2}
+\newcommand{\Snorm}[1]{\Norm{#1}^2}
+\newcommand{\bigsnorm}[1]{\bignorm{#1}^2}
+\newcommand{\Bigsnorm}[1]{\Bignorm{#1}^2}
+% 1-norm
+\newcommand{\normo}[1]{\norm{#1}_1}
+\newcommand{\Normo}[1]{\Norm{#1}_1}
+\newcommand{\bignormo}[1]{\bignorm{#1}_1}
+\newcommand{\Bignormo}[1]{\Bignorm{#1}_1}
+% infty-norm
+\newcommand{\normi}[1]{\norm{#1}_\infty}
+\newcommand{\Normi}[1]{\Norm{#1}_\infty}
+\newcommand{\bignormi}[1]{\bignorm{#1}_\infty}
+\newcommand{\Bignormi}[1]{\Bignorm{#1}_\infty}
+% inner uct
+\newcommand{\iprod}[1]{\langle#1\rangle}
+\newcommand{\Iprod}[1]{\left\langle#1\right\rangle}
+\newcommand{\bigiprod}[1]{\big\langle#1\big\rangle}
+\newcommand{\Bigiprod}[1]{\Big\langle#1\Big\rangle}
+%%% probability
+% expectation, probability, variance
+\newcommand{\Esymb}{\mathbb{E}}
+\newcommand{\Psymb}{\mathbb{P}}
+\newcommand{\Vsymb}{\mathbb{V}}
+\DeclareMathOperator*{\E}{\Esymb}
+\DeclareMathOperator*{\ProbOp}{\Psymb}
+\renewcommand{\Pr}{\ProbOp}
+%%% middle
+%\newcommand{\given}{\;\middle\vert\;}
+\newcommand{\given}{\mathrel{}\middle\vert\mathrel{}}
+%\newcommand{\given}{\mathrel{}\middle|\mathrel{}}
+% {{{ miscmacros }}}
+% middle delimiter in the definition of a set
+\newcommand{\suchthat}{\;\middle\vert\;}
+
+% big middle separator (for conditioning probability spaces)
+\newcommand{\bigmid}{~\big|~}
+\newcommand{\Bigmid}{~\Big|~}
+\newcommand{\Mid}{\nonscript\;\middle\vert\nonscript\;}
+
+% tensor product
+\newcommand{\tensor}{\otimes}
+% add explanations to math displays
+\newcommand{\where}{\text{where}}
+\newcommand{\textparen}[1]{\text{(#1)}}
+\newcommand{\using}[1]{\textparen{using #1}}
+\newcommand{\smallusing}[1]{\text{(\small using #1)}}
+\newcommand{\by}[1]{\textparen{by #1}}
+% spectral order (Loewner order)
+\newcommand{\sge}{\succeq}
+\newcommand{\sle}{\preceq}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% MACROS
+\DeclareMathOperator*{\argmax}{\arg\!\max}
+\DeclareMathOperator*{\argmin}{\arg\!\min}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\N}{{\mathbb N}}
+
+\newcommand{\boolnorm}[1]{{\lVert #1 \rVert}_{\infty \to 1}}
+\newcommand{\floor}[1]{\lfloor #1 \rfloor}
+\newcommand{\seq}{\subseteq}
+\newcommand{\e}{\varepsilon}
+\newcommand{\defeq}{:=}
+\newcommand{\seteq}{\mathrel{\mathop:}=}
+\newcommand{\F}{{\mathbb F}}
+\newcommand{\cF}{{\mathcal F}}
+
+\newcommand{\1}{\mathbf{1}}
+\newcommand{\ip}[1]{\langle #1 \rangle}
+\newcommand{\conj}[1]{\overline{#1}}
+\newcommand{\tr}{\mathrm{tr}}
+\newcommand{\Tr}{\mathrm{Tr}}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\coeff}[1]{\widehat{#1}}
+\newcommand{\C}{\mathbb C}
+\newcommand{\Bits}{\{0,1\}}
+\newcommand{\zo}{\Bits}
+\newcommand{\Fits}{\{-1,1\}}
+\newcommand{\on}{\Fits}
+\newcommand{\Var}{\mathrm{Var}}
+\renewcommand{\a}{\alpha}
+\newcommand{\codim}{\mathrm{codim}}
+\newcommand{\pE}{\tilde{\E}}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\Bad}{\mathsf{Bad}}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\poly}{\mathrm{poly}}
+\newcommand{\val}{\mathrm{val}}
+\newcommand{\bound}{b}
+\newcommand{\ceil}[1]{\lceil #1 \rceil}
+\newcommand{\relat}[1]{\overset{#1}{\leftrightarrow}}
+\newcommand{\mper}{\,.}
+\newcommand{\mcom}{\,,}
+\newcommand{\kikuchi}{Kikuchi }
+\newcommand{\setQ}{Q}
+\newcommand{\Id}{\mathbb{I}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\support}{\operatorname{supp}}
+\newcommand{\rank}{\operatorname{rank}}
+
+
+\newcommand{\algval}{\mathrm{alg}\text{-}\mathrm{val}}
+\newcommand{\sosval}{\mathrm{sos}\text{-}\mathrm{val}}
+\newcommand{\size}{\mathrm{size}}
+\newcommand{\polylog}{\mathrm{polylog}}
+\newcommand{\op}{\mathrm{op}}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cR}{\mathcal R}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cM}{\mathcal M}
+\newcommand{\Bin}{\textrm{Bin}}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\tO}{\tilde{O}}
+\newcommand{\cut}{\mathsf{cut}}
+\newcommand{\FK}{\mathsf{FK}}
+\newcommand{\cL}{\mathcal{L}}
+
+\newcommand{\RIP}{\operatorname{RIP}}
+\newcommand{\RNO}{\operatorname{RNO}}
+
+% declare function f by $f \from X \to Y$
+\newcommand{\from}{\colon}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Andor added the following:
+\usepackage{xspace}
+\usepackage{comment}
+\usepackage{dsfont}
+% \usepackage{algorithm}
+% \usepackage{algorithmic}
+% \usepackage{xparse}
+\newcommand{\tcl}{$3$-coloring\xspace}
+\newcommand{\kcl}{$k$-coloring\xspace}
+
+\newcommand{\avg}{\operatorname{avg}}
+\newcommand{\ALG}{\mathcal{A}}%{\operatorname{ALG}}
+
+\makeatletter
+\newcommand{\AVG}{%
+  \@ifnextchar\bgroup{\AVG@i}{\operatorname{AVG}}%
+}
+\newcommand{\AVG@i}[1]{\AVG@ii{#1}}
+\newcommand{\AVG@ii}[2]{\operatorname{AVG}[#1, #2]}
+\makeatother
+
+\makeatletter
+\newcommand{\AVGT}{%
+  \@ifnextchar\bgroup{\AVGT@i}{\operatorname{AVG}}%
+}
+\newcommand{\AVGT@i}[1]{\AVGT@ii{#1}}
+\newcommand{\AVGT@ii}[2]{\operatorname{AVG}[#1, #2]}
+\makeatother
+
+\makeatletter
+\newcommand{\nAVG}{%
+  \@ifnextchar\bgroup{\nAVG@i}{\widetilde{\operatorname{AVG}}}%
+}
+\newcommand{\nAVG@i}[1]{\nAVG@ii{#1}}
+\newcommand{\nAVG@ii}[2]{\widetilde{\operatorname{AVG}}[#1, #2]}
+\makeatother
+
+\makeatletter
+\newcommand{\VAR}{%
+  \@ifnextchar\bgroup{\VAR@i}{\operatorname{VAR}}%
+}
+\newcommand{\VAR@i}[1]{\VAR@ii{#1}}
+\newcommand{\VAR@ii}[2]{\operatorname{VAR}[#1, #2]}
+\makeatother
+
+\makeatletter
+\newcommand{\VART}{%
+  \@ifnextchar\bgroup{\VART@i}{\operatorname{VAR}}%
+}
+\newcommand{\VART@i}[1]{\VART@ii{#1}}
+\newcommand{\VART@ii}[2]{\operatorname{VAR}[#1, #2]}
+\makeatother
+
+\newcommand{\D}[2]{d_{#1#2}}
+\newcommand{\tD}[2]{\tilde{d}_{#1#2}}
+
+\renewcommand{\Id}{\mathbf{I}}
+\newcommand{\Allones}{\mathbf{J}}
+\newcommand{\one}{\mathbb{1}}
+\newcommand{\zero}{\mathbb{0}}
+
+\newcommand{\btw}[2]{\Brac{#1\mathclose{:}#2}}
+\newcommand{\whp}{w.h.p.\ }
+
+\newcommand{\indic}{\mathds{1}}
+\newcommand{\Ind}{\mathds{1}}
+\renewcommand{\P}{\mathbb{P}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\usepackage{mdframed}
+\usepackage[linesnumbered, ruled, vlined]{algorithm2e}
+
+\usepackage{fancyhdr}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%\makeatletter
+%\forcsvlist{\expandafter\newtheorem*\expandafter{\csname ##1*\endcsname}{\csname ##1\endcsname}}{lemma,theorem,definition,proposition,corollary,fact,remark,claim}
+%\makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\FormatAuthor}[3]{
+\begin{tabular}{c}
+#1 \\ {\small\texttt{#2}} \\ {\small #3}
+\end{tabular}
+}
+\input{title}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\maketitle
+\thispagestyle{empty}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{abstract}
+  \input{content/abstract}
+\end{abstract}
+% \clearpage
+\pagestyle{plain}
+\setcounter{page}{1}
+
+\clearpage
+\tableofcontents{}
+\thispagestyle{empty}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{content/intro}
+\input{content/results}
+\input{content/techniques}
+\input{content/notations}
+\input{content/spectral_result}
+\input{content/k_partitioning}
+\input{content/variance}
+\input{content/algorithms}
+\input{content/hardness}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\appendix 
+\input{content/threshold_rank}
+\input{content/random_planting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

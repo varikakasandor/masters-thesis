@@ -1,0 +1,94 @@
+\section{Variance bound for 3 colorings of expanders}
+
+% some setup
+% remove things that have been discussed before
+
+\providecommand{\Vbad}{V_{\mathrm{bad}}}
+
+Let~\(G\) be an undirected graph with vertex set~\(V\).
+
+Let \(\bm x\bm y\) denote a uniformly random edge of \(G\).
+Since the graph is undirected, the random variables \(\bm x\) and \(\bm y\) have the same distribution without loss of generality.
+For a vertex subset \(S\subseteq V\), we denote by \(\mu(S)=\Pr\{\bm x\in S\}\) its probability under this distribution.
+(For regular graphs, this probability is the fraction of vertices contained in \(S\).)
+
+Let \(A\) denote the random walk (transition) matrix for \(G\).
+In other words, \(A\) is the adjacency matrix of \(G\) with every column normalized to sum to \(1\).
+This matrix acts as a linear operator on real-valued functions \(f\from V\to \R\),
+\[
+A f (x) = \E \Brac{f(\bm y) \Mid \bm x = x}\mper
+\]
+This operator is self-adjoint with respect to the inner product for functions \(f,g\from V\to \R\),
+\[
+\iprod{f,g} \seteq \E f(\bm x) g(\bm x)\mper
+\]
+We denote the Euclidean norm with respect to this inner product by \(\norm{f}\seteq \iprod{f,f}^{1/2}=\Paren{\E f^{2}}^{1/2}\).
+
+The linear operator \(A\) has largest eigenvalue \(1\) with all-ones \(\Ind\) as eigenfunction.
+Let \(\lambda\) denote the second largest eigenvalue of \(A\).
+If \(G\) has a spectral gap, i.e., \(\lambda<1\), all other eigenfunctions \(\xi\) are orthogonal to \(\Ind\) with respect to the above inner product and thus satisfies \(\E \xi=0\).
+Every function \(f\from V\to \R\) has projection \((\E f)\cdot \Ind\) to the all-ones eigenspace and thus satisfies the inequality,
+\begin{equation}
+  \iprod{f,Af}\le (\E f)^{2} + \lambda \cdot\Paren{\E f^{2}- \Paren{\E f}^{2}}\mper
+\end{equation}
+
+Suppose~\(\chi\from V\to [k]\) is a (not necessarily proper) \(k\)-coloring of~\(G\).
+Let~\(\Vbad\) be a vertex cover of monochromatic edges under~\(\chi\).
+For \(a\in [k]\), let \(\chi_{a}\from V\to \set{0,1}\) denote the indicator function of color class \(a\).
+We let \(\psi_{a}\from V\to \R_{\ge 0}\) denote the image of \(\chi_{a}\) under \(A\) so that  \(\psi_{a}=A\chi_{a}\) and,
+\begin{equation}
+  \psi_{a}(x) = \Pr\Set{\chi(\bm y)= a \Mid \bm x = x}\mper
+\end{equation}
+
+\begin{lemma}
+  For all distinct \(a,b\in [k]\), the variance of \(\psi_{b}\) conditioned on \(\chi_{a}\) satisfies
+  \begin{equation}
+    \E\Brac{ (\psi_{b}(\bm x)-\alpha_{a,b})^{2}\Mid \chi(\bm x)=a}
+    \le \lambda \tfrac{\E \chi_{b}}{\E \chi_{a}} + \lambda^{-1} E_{a,b}
+    \mcom
+  \end{equation}
+  where \(\alpha_{a,b}=\E\Brac{\psi_{b}(\bm x)\Mid \chi(\bm x)=a}\) and \(E_{a,b}\lesssim \mu\Paren{\Vbad \cap \chi^{-1}(a)} + \lambda^{2} \cdot \mu\Paren{\Vbad\cap \chi^{-1}(b)}\).
+  \david{more natural to bound the error in terms of the fraction of monochromatic edges as opposed to the size of the vertex cover.}
+\end{lemma}
+
+\begin{proof}
+  For scalars \(\alpha,\beta>0\) to be determined later, we consider the function \(f= \chi_{a} \cdot (\psi_{b}-\alpha) + \beta\cdot \chi_{b}\).
+  The expectation of this function satisfies \(\E f =  \E \chi_{a} \cdot (\psi_{b}-\alpha) + \beta \E\chi_{b}\).
+  Since the functions \(\chi_{a}\cdot \psi_{b}\) and \(\chi_{b}\) are orthogonal, we can compute the norm of \(f\) as,
+  \begin{equation}
+    \E f^{2}= \E \chi_{a}\cdot(\psi_{b}-\alpha)^{2} + \beta^{2}\E\chi_{b}
+    \mper
+  \end{equation}
+  Since \(\Vbad\) covers all monochromatic edges, we can bound the quadratic form of \(A\) evaluated at \(f\),
+  \begin{align}
+    \iprod{f,Af}
+    &=  \iprod{\chi_{a} \cdot (\psi_{b}-\alpha),A (\chi_{a} \cdot (\psi_{b}-\alpha))} + \beta^{2}\iprod{\chi_{b},A\chi_{b}} + 2\beta\cdot \iprod{\chi_{a}(\psi_{b}-\alpha), A\chi_{b}}\\
+    &\ge -2 \mu\Paren{\Vbad \cap \chi^{-1}(a)} - 2 \beta^{2} \cdot \mu\Paren{\Vbad\cap \chi^{-1}(b)} + 2\beta \cdot\E \chi_{a} (\psi_{b}-\alpha)^{2}
+    \mper
+  \end{align}
+  Here, we also use that \(A\) is an expectation operator so that \(\norm{A g}_{\infty}\le \norm{g}_{\infty}\) for every function \(g\from V\to \R\) and that \(\E \chi_{a}(\psi_{b}-\alpha)=0\).
+  
+  By choosing \(\alpha=\E\chi_{a}\psi_{b} \cdot \Paren{\E \chi_{a}}^{-1}\), we cancel the first term in our expression for \(\E f\) so that this expectation simplifies to \(\E f=\beta \E \chi_{b}\).
+  We abbreviate the above bound on the contribution of monochromatic edges by \(E_{a,b}\seteq 2 \mu\Paren{\Vbad \cap \chi^{-1}(a)} + 2 \beta^{2} \cdot \mu\Paren{\Vbad\cap \chi^{-1}(b)} \).
+  In this way, we obtain the inequality,
+  \begin{align}
+    2\beta \E \chi_{a} \cdot(\psi_{b}-\alpha)^{2}
+    & \le E_{a,b} + \iprod{f,Af} \\
+    & \le E_{a,b} +  (\E f)^{2} + \lambda \E f^{2} \\
+    & =   E_{a,b} + \beta^{2} (\E \chi_{b})^{2} + \lambda \E \chi (\psi_{b}-\alpha)^{2} + \lambda \beta^{2} \E \chi_{b}
+  \end{align}
+  Since the variance term \(\E \chi_{a} \cdot (\psi_{b}-\alpha)^{2}\) appears on both sides of the inequality with different coefficients, we can obtain an upper bound on this term by choosing \(\beta=\lambda\) and solving the resulting inequality for the variance term,
+  \begin{equation}
+    \E \chi_{a} \cdot(\psi_{b}-\alpha)^{2}
+    \le \lambda^{-1} E_{a,b} + \lambda (\E \chi_{b})^{2} + \lambda^{2} \E\chi_{b}
+    \le\lambda^{-1} E_{a,b} + 2\lambda \E\chi_{b}
+    \mcom
+  \end{equation}
+  as desired.
+\end{proof}
+
+
+%%% Local Variables:
+%%% mode: LaTeX
+%%% TeX-master: "../main"
+%%% End:

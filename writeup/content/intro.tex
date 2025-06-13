@@ -1,0 +1,77 @@
+\section{Introduction}
+
+% [Introduction to coloring. Coloring random graphs: Blum and Spencer~\cite{MR1344544-Blum95}, Alon and Kahale~\cite{MR1484153-Alon97}.]
+
+Finding proper \(k\)-colorings in graphs for \(k\ge 3\) is among the first computational problems shown to be NP-hard \cite{MR4679190-Karp72}.
+% TODO; discuss approximation algorithms for coloring
+As a consequence, much research has focused on approximation algorithms for this problem and identifying assumptions on the input that allow us to solve the problem efficiently \cite{MR819128-83, MR1369207-94, MR1344544-Blum95, MR1439867-97, MR1484153-Alon97, MR1623197-98, MR1774844-00, MR1948749-01, MR2277147-06, MR2538841-09, MR2863244-Arora11, MR3536556-David16, MR3634492-17, kumar2018finding, MR4764817-24}.
+
+Most relevant to this paper, Blum and Spencer~\cite{MR1344544-Blum95} and Alon and Kahale~\cite{MR1484153-Alon97} studied an average-case setting in which a $k$-coloring is planted in a random graph,
+and showed that polynomial-time algorithms can recover the planted $k$-coloring with high probability.
+This result was subsequently derandomized by David and Feige~\cite{MR3536556-David16}:
+They obtain the same guarantees if the $k$-coloring is planted \emph{at random} in a (two-sided) expander graph, where we require all but one eigenvalue of its normalized adjacency matrix to be close to \(0\).
+Furthermore, they can recover a $k$-coloring for a $0.99$ fraction of the vertices even if the $k$-coloring is planted \emph{adversarially} in such a graph.
+
+Kuman, Louis, and Tulsiani~\cite{kumar2018finding} provide a different derandomization result:
+given a graph that admits a $3$-coloring satisfying a particular pseudo-randomness condition, their algorithms finds a $3$-coloring for a $0.99$ fraction of the vertices in time $n^{O(t)}$, where $t$ is the number of eigenvalues of the graph smaller than $-0.51$.
+
+\paragraph{Two-sided vs one-sided expansion.}
+
+The results of Alon-Kahale and David-Feige crucially exploit the fact that both the positive and negative part of the spectrum of the graph are severely restricted.
+
+% [More recent, derandomization: Arora and Ge~\cite{MR2863244-Arora11}, David and Feige~\cite{MR3536556-David16}, Kumar, Louis, and Tulsiani~\cite{kumar2018finding}.]
+
+% \rares{This paragraph repeats information from before}
+% More recently, David and Feige~\cite{MR3536556-David16} derandomized various aspects of~\cite{MR1484153-Alon97}.
+% Of most relevance to us, they obtain the same guarantees even if the balanced $k$-coloring is planted at random in a regular two-sided expander graph, instead of a random regular graph.
+% Here, we call a graph is a two-sided expander if $\max\{\lambda_2, -\lambda_n\}$ is bounded away from $1$, where $1 = \lambda_1 \geq ... \geq \lambda_n$ are the eigenvalues of the normalized adjacency matrix of the graph.
+% Furthermore, the algorithms of David and Feige also find a $k$-coloring on $0.99n$ of the vertices of the graph even if the $k$-coloring is planted adversarially instead of randomly.
+
+Recent seminal work developed the first algorithms for one-sided expander graphs, where the negative part of the spectrum is completely unrestricted \cite{bafna-hsieh-kothari}.
+The current work further develops our understanding of the computational landscape of coloring and independent set problems on one-sided expander graphs and provides answers to key questions left open by this prior work.  
+
+% [Previous works use two-sided expanders, or more generally small bottom threshold rank. One-sided expanders: Bafna, Hsieh, and Kothari~\cite{bafna-hsieh-kothari}. They can find small independent sets.]
+
+% \paragraph{Bottom threshold rank}
+
+% [Explanation...]
+
+% [Our contribution]
+
+% [(1) One-sided expanders have constant threshold rank. Also generalization to bounded top threshold rank. State result. Say it is technically intricate.]
+
+% [This does not trivialize problem. As~\cite{bafna-hsieh-kothari} showed, it is still hard to even find small independent sets in 4-colorable/6-colorable one-sided expanders.]
+
+% [(2) Need pseudo-randomness in coloring. Indeed, we can recover a 0.99 k-coloring for any pseudo-random k-colorable one-sided expander. (To figure out if we want to discuss non-balancedness here.) If random planted, as in~\cite{MR3536556-David16}, can even get full coloring.]
+
+% [(3) However, 3-colorable one-sided expanders are always pseudo-random. Therefore, we can recover a 0.99 3-coloring for any pseudo-random 3-colorable one-sided expander.]
+
+% [(4) Finally,~\cite{bafna-hsieh-kothari} have a result for graphs with $(1/2-\e)$-independent set. We can get here a $(1/2-\e')$-independent set.]
+
+% [Optional: to figure out whether/where to state hardness results.]
+
+
+
+
+% \subsection{Notation}
+% \label{sec:notation}
+
+% \paragraph{General notations} For positive integers $l\leq l'$ , let $[l]$ denote $\Set{1\ldots, l}$ and let $\btw{l}{l'}$ denote $\Set{l\ldots, l'}$.
+
+% \paragraph{Graph notations}
+% Given a graph $G=(V, E)$, we denote by $A_G$ its unnormalized adjacency matrix, and by $\bar{A}_G = \frac{1}{d_{\avg}(G)} A_G$ its normalized adjacency matrix (we omit the subscript when it is clear from context).
+% \david{This notion of normalized adjacency matrix is non standard and potentially problematic.}
+
+% Given disjoint vertex sets $S, T \subseteq V$, we use $E(S, T)$ to denote the set of edges with one endpoint in $S$ and one endpoint in $T$. When $S = \set{s}$ is a single vertex, we simplify the notation to $E(s, T)$ (analogously for the case when $T$ is a single vertex).
+
+% \paragraph{Matrix notations} Given matrix $M$, we denote by $\lambda_i(M)$ the $i$-th largest eigenvalue of $M$.
+
+% \subsection{Organization}
+% \label{sec:organization}
+
+
+
+%%% Local Variables:
+%%% mode: LaTeX
+%%% TeX-master: "../main.tex"
+%%% End:

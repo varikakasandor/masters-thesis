@@ -1,0 +1,675 @@
+\section{Deferred proofs}
+
+\begin{comment}
+
+\subsection{Deferred proofs from \cref{sec: kcoloring}}\label{app: kcoloring}
+
+\begin{lemma}\label[lemma]{lemma: negative_second_eigenvalue}
+    All the eigenvalues of $\AVG$ are real.
+    Furthermore, if $\Norm{\nAVG}_2\leq \alpha d$, then $\lambda_2(\AVG)\leq -\Paren{\frac{1}{k-1}-\alpha}d$.
+\end{lemma}
+\begin{proof}
+    Let $S$ be the $k\times k$ positive diagonal matrix defined by $S[i, i]=\Abs{V_i}$.
+    Then, $\AVG':=S^{1/2}\AVG\; S^{-1/2}$ is symmetric, because by counting the edges between color classes we have $\AVG{i}{j}\ \Abs{V_i}=\AVG{j}{i}\ \Abs{V_j}$. 
+    Therefore, the spectrum of $\AVG$ is the same as that of $\AVG'$, and in particular, it is real.
+
+    Splitting $\AVG'$ into $\frac{d}{k-1}S^{1/2}(\mathbf{J}-\mathbf{I})S^{-1/2}$ and $S^{1/2}\nAVG\ S^{-1/2}$ and using Weyl's inequality, we get
+    $$\lambda_2(\AVG')\leq \lambda_2\Paren{\frac{d}{k-1}S^{1/2}(\mathbf{J}-\mathbf{I})S^{-1/2}}+\lambda_1\Paren{S^{1/2}\nAVG\ S^{-1/2}}\,.$$
+
+    Due to similarity, this upper bound equals
+    $$\lambda_2\Paren{\frac{d}{k-1}(\mathbf{J}-\mathbf{I})}+\lambda_1\Paren{\nAVG}\,.$$
+
+    Then, using the upper bound $\Norm{\nAVG}_2\leq \alpha d$ and that $\lambda_2\Paren{\mathbf{J}-\mathbf{I}}=-1$, we get the desired result.  
+\end{proof}
+
+
+    \begin{lemma}\label[lemma]{lemma: smalldeviationevecsimilar}
+    Let $B$ be a symmetric matrix with an eigenvalue $\lambda_i$ and corresponding unit eigenvector $v$ and let $\delta = \min_{j\neq i} |\lambda_j - \lambda_i|$ be the spectral gap around it. Let $A:=B+E$ where $\Norm{E}_2 \leq \alpha\delta$. Then, there exists a unit eigenvector $v'$ of $A$ such that $\Norm{v' - v}_2 \leq \frac{2\alpha}{1-2\alpha}$.\andor{we probably don't need this lemma after all}
+\end{lemma}
+
+\begin{proof}
+    Since $B$ is symmetric, it is orthogonally diagonalisable. Hence, by the Bauer-Fike theorem, all eigenvalues of $A$ lie within $\Norm{E}\leq \alpha\delta$ of the eigenvalues of $B$. In particular, the eigenvalue $\lambda_i$ of $B$ is perturbed to an eigenvalue $\lambda'_i$ of $A$ such that $\Abs{\lambda'_i - \lambda_i} \leq \alpha\delta$. Let $v'$ be the unit eigenvector corresponding to $\lambda'_i$ in $A$, and let us write it as $\phi v+w$ for some $w\perp v$. Then,
+    
+    $$Av'=\phi\lambda'_i v + \lambda'_i w\,.$$
+
+    On the other hand, we have
+
+    \begin{align*}
+        Av'&=(B+E)(\phi v+w)\\
+        &=\phi Bv + Bw + E(\phi v+w)\\
+        &=\phi \lambda_i v + B w + E(\phi v+w)\\
+    \end{align*}
+
+    Combining the two equations, we get
+
+    \begin{equation}
+        (B - \lambda'_i I)w = \phi(\lambda'_i - \lambda_i)v - E(\phi v + w)\,.
+        \label{eq: keyequationperturbation}
+    \end{equation}
+
+    Note that the eigenvalues of $B-\lambda'_i I$ are exactly $\lambda_j-\lambda'_i$. Hence, by triangle inequality, all these eigenvalues are at least $\Abs{\lambda_j-\lambda_i}-\Abs{\lambda_i-\lambda'_i}\geq \delta-\alpha\delta\geq (1-\alpha)\delta$ in absolute value, so $\Norm{B-\lambda'_i I}_2\geq (1-\alpha)\delta$. Hence, using $\Abs{\lambda'_i - \lambda_i} \leq \alpha\delta$, $\Norm{v}_2=1$, $\Norm{E}_2\leq \alpha\delta$ and triangle inequality on the right-hand side of \cref{eq: keyequationperturbation}, after taking norms of both sides, we get
+
+    $$(1-\alpha)\delta\Norm{w}_2\geq \Abs{\phi}\alpha\delta + \alpha\delta\Paren{\Abs{\phi}+\Norm{w}_2}\,.$$
+
+    Dividing by $\delta$ and simplifying we get
+    
+    $$\Norm{w}_2\leq \frac{2\alpha}{1-2\alpha}\Abs{\phi}\,.$$
+
+    As $v'$ is unit-norm and $v\perp w$, we have $\Abs{\phi}^2+\Norm{w}_2^2=1$, incorporating which leads to
+    
+    $$\Abs{\phi}\geq \frac{1}{\sqrt{1+\Paren{\frac{2\alpha}{1-2\alpha}}^2}}\,.$$
+
+    Now note that by $v\perp w$, 
+    
+    $$\Norm{v-v'}_2^2=\Norm{v-\Paren{\phi v+w}}_2^2=\Paren{1-\Abs{\phi}}^2+\Norm{w}_2^2=\Paren{1-\Abs{\phi}}^2+\Paren{1-\Abs{\phi}^2}=2(1-\Abs{\phi})\,.$$
+
+    Using the lower bound on $\Abs{\phi}$ and $\frac{1}{\sqrt{1+x^2}}\geq 1-\frac{x^2}{2}$ the result follows:
+
+    $$\Norm{v-v'}_2\leq \sqrt{2\Paren{1-\frac{1}{\sqrt{1+\Paren{\frac{2\alpha}{1-2\alpha}}^2}}}}\leq \frac{2\alpha}{1-2\alpha}\,.$$
+
+\end{proof}
+
+
+\begin{lemma}\label[lemma]{lemma: regularavgimpliesnosmallcomponents}
+    Let $G$ be a $d$-regular $n$-vertex that admits a \kcl with $\Norm{\nAVG}_2\leq \Paren{\frac{1}{k-1}-\zeta} d$ for some $0\leq\zeta\leq \frac{1}{k-1}$.
+    Then the \kcl is $\frac{\zeta}{k}$-large.
+\end{lemma}
+\begin{proof}
+    For the sake of contradiction, assume $|V_1|<\frac{\zeta}{k} n$.
+    Using that $\sum_{i\in[k]}|V_i|=n$, there exists $a \in \Set{2, \ldots, k}$ such that $|V_a|\geq \frac{n}{k}$.
+    Now note that by counting the edges between $V_1$ and $V_a$ in two different ways, we have $|V_1|\AVG{1}{a}=|V_a|\AVG{a}{1}$.
+    Hence, using $d$-regularity to upper bound $\AVG{1}{a}$ by $d$, we get
+    $$\AVG{a}{1}=\frac{\AVG{1}{a}|V_1|}{|V_a|}< \frac{d\ \frac{\zeta}{k} n}{\frac{n}{k}}=\zeta d$$
+
+    Then $\nAVG{a}{i} <\Paren{\zeta-\frac{1}{k-1}} d$, which implies $\Norm{\nAVG}_2> \Paren{\frac{1}{k-1}-\zeta} d$, a contradiction.
+\end{proof}
+
+\begin{lemma}\label[lemma]{lemma: balancedcompsizesimplydiffevectors}
+    Let $G$ be a $d$-regular $n$-vertex graph that admits an $\e$-large \kcl. Then, there exist eigenvectors $v_i$ of $\AVG$ such that, for all $a\neq b\in [k]$, there is some $i\in\Set{2,\ldots,k}$ satisfying $\Abs{v_i[a]-v_i[b]}\geq 2\sqrt{\frac{\e}{k-1}}\Norm{v_i}_2$.
+\end{lemma}
+
+\begin{proof}
+    Let $S$ be a positive diagonal matrix defined by $S[i, i]=\Abs{V_i}$. Then, $\AVG':=S^{1/2}\AVG\ S^{-1/2}$ is symmetric, so the spectrum of $\AVG$ is the same as that of $\AVG'$.
+    
+    Let $w_{[k]}$ be an orthonormal eigenbasis of $\AVG'$ and let $M'$ be the orthogonal matrix whose columns are $w_{[k]}$. Then, the rows $M'[j, :]$ of $M'$ are also orthonormal. Let $M$ be the corresponding matrix whose rows are the eigenvectors $v_{i}:=S^{-1/2}w_{i}$ of $\AVG$. Note that $M[j, :]=\frac{1}{\sqrt{\Abs{V_j}}}M'[j, :]$, so the rows of $M$ are orthogonal and have $\ell_2$-norm $\frac{1}{\sqrt{\Abs{V_j}}}$. Hence,
+    
+    $$\Norm{M[a,:]-M[b,:]}_2^2=\Norm{M[a,:]}_2^2+\Norm{M[b,:]}_2^2=\frac{1}{\Abs{V_a}}+\frac{1}{\Abs{V_b}}\,.$$
+    
+    Note that due to $d$-regularity, a principal eigenvector of $\AVG$ is $\1$, so $M[a, 1]-M[b, 1]=0$. Hence, using that $\Abs{V_a}+\Abs{V_b}\leq n$, there exists $i\in\Set{2,\ldots,k}$ such that
+    
+    $$\Abs{v_i[a]-v_i[b]}\geq \sqrt{\frac{1}{k-1}\Paren{\frac{1}{\Abs{V_a}}+\frac{1}{\Abs{V_b}}}}\geq \frac{2}{\sqrt{(k-1)n}}\,.$$
+
+    Finally, using $\e$-largeness, we get
+    $$\Norm{v_i}_2=\Norm{S^{-1/2}v_i}_2\leq \Norm{S^{-1/2}}_2\Norm{w_i}_2\leq \frac{1}{\sqrt{\e n}}\,,$$
+    from which the result follows.
+\end{proof}
+
+%\restatelemma{lemma: spectralclustering}
+
+\begin{proof}[Proof of \cref{lemma: spectralclustering}]
+    Define a set of good vertices $\mathrm{Good}:=\Set{x\in V(G)\mid \delta_i(x)^2\leq \frac{\zeta}{12k^3n}\;\forall i}$, i.e., those indices where the vectors $\hat{u}_{\btw{2}{k}}$ we found are close to the vectors $u_{\btw{2}{k}}$.
+    By an averaging argument it holds that $\Abs{\mathrm{Good}}\geq n - k\frac{\eta}{\frac{\zeta}{12k^3n}}=\Paren{1-\frac{12\eta k^4}{\zeta}}n$.
+
+    Now assume $x,y\in \mathrm{Good}$ such that $f(x)=f(y)$.
+    In that case, $\Paren{\hat{u}_i(x)-u_i(x)}^2=\delta_i(x)^2\leq \frac{\zeta }{12k^3n}$ and $\Paren{\hat{u}_i(y)-u_i(y)}^2=\delta_i(y)^2\leq \frac{1}{12k^3n}$ by goodness, and $u_i(x)=v_i(f(x))=v_i(f(y))=u_i(y)$ by $f(x)=f(y)$.
+    By using that $(a+b+c)^2\leq 3(a^2+b^2+c^2)$, we write $\Paren{\hat{u}_i(x)-\hat{u}_i(y)}^2$ as
+    $$\Paren{\Paren{\hat{u}_i(x)-u_i(x)}+\Paren{u_i(x)-u_i(y)}+\Paren{u_i(y)-\hat{u}_i(y)}}^2$$
+    and put all the above together as
+    $$\Paren{\hat{u}_i(x)-\hat{u}_i(y)}^2\leq \frac{\zeta}{2k^3n}\,.$$
+
+    Hence, summing up for different $i$s, we get $\sum_{j=2}^k \Paren{\hat{u}_j(x)-\hat{u}_j(y)}^{2}\leq \frac{\zeta }{2k^2n}$, i.e., $x, y$ satisfy the condition in \cref{alg: spectralclustering}.
+    
+    Now let us show the contrapositive, i.e., when $x,y\in \mathrm{Good}$ but $f(x)\neq f(y)$, then they don't satisfy the condition in \cref{alg: spectralclustering}. Let $a$ be the coordinate where $\Abs{v_a(f(x))-v_a(f(y))}$ is maximal. Then, by triangle inequality we get
+    
+    \begin{align*}
+        \sum_{i\in\btw{2}{k}}\Paren{\hat{u}_i(x)-\hat{u}_i(y)}^2&\geq \Paren{\hat{u}_a(x)-\hat{u}_a(y)}^2\\
+        &=\Paren{\Paren{v_a(f(x))-v_a(f(y))}-\Paren{\delta_a(y)-\delta_a(x)}}^2\\
+        &\geq \Paren{\Abs{v_a(f(x))-v_a(f(y))}-\Abs{\delta_a(y)-\delta_a(x)}}^2\,.
+    \end{align*}
+
+    Now we observe that the first term is much larger than the second one.
+    Combining \cref{lemma: regularavgimpliesnosmallcomponents} and \cref{lemma: balancedcompsizesimplydiffevectors}, we get $\Abs{v_a(f(x))-v_a(f(y))}\geq \frac{2\sqrt{\zeta}}{k\sqrt{n}}$, while $\Abs{\delta_a(y)-\delta_a(x)}\leq \Abs{\delta_a(y)}+\Abs{\delta_a(x)}\leq \frac{\sqrt{\zeta}}{k\sqrt{3kn}}$ due to the goodness of $x$ and $y$.
+    Plugging it back and using $k\geq 3$, we get
+    \[\sum_{i=2}^k\Paren{\hat{u}_i(x)-\hat{u}_i(y)}^2 \geq \Paren{2-\frac{1}{\sqrt{3k}}}^2\frac{\zeta }{k^2n} > \frac{\zeta }{k^2n}\,,\]
+    % \begin{align*}
+    %     &\\
+    %     &\geq \Paren{2-\frac{1}{\sqrt{3k}}}^2\frac{\zeta }{k^2n}\\
+    %     &> \frac{\zeta }{k^2n}\,,
+    % \end{align*}
+    not satisfying the condition in \cref{alg: spectralclustering}.
+    Hence, overall for good vertices $x$ and $y$, $y$ gets put into the same color class as $x$ if and only if $f(x)=f(y)$.
+    Therefore, when $x_{[k]}$ have different colors and they are all in $\mathrm{Good}$, each vertex in $\mathrm{Good}$ will have a unique and correct color class $S_i$ for which the condition in \cref{alg: spectralclustering} is satisfied.
+    Hence, in that case there will no invalid edges within $\mathrm{Good}$, and the returned coloring is a $\frac{12\eta k^4}{\zeta }n$-approximate coloring.
+
+    The running time is $n^{O(k)}$.
+\end{proof}
+\end{comment}    
+
+\subsection{Random planted setting}\label{app: randomplanted}
+
+Before proving \cref{thm: kcoloringplantedfullrecovery}, let us prove some lemmas that will be used in the proof.
+
+\begin{lemma}\label[lemma]{lemma: threshold_rank_kept}
+    Let $H$ an $n$-vertex graph with $\lambda_{t_1}(H)\leq r_1$ and $\lambda_{n-t_2}(H)\geq -r_2$, for some $r_1, r_2 >0$ and $t_1,n-t_2\in [n]$.
+    Then, after planting a \kcl in $H$, the resulting graph $G$ has $\lambda_{n-k(t_1-1)-t_2}(G)\geq -(r_1+r_2)$.
+\end{lemma}
+
+\begin{proof}
+    Let $A_F:= A_H-A_G$.
+    Observe that $F$ consists of the $k$ disconnected parts $F_{[k]}$ corresponding to the $k$ color classes, and therefore the spectrum $\sigma(A_F)$ is the concatenation of the spectra $\sigma\Paren{A_{F_{[k]}}}$.
+    For all $i\in [k]$, $A_{F_i}$ is a principal submatrix of $A_H$, and hence Cauchy's interlacing theorem gives $\lambda_{t_1}(A_{F_i})\leq \lambda_{t_1}(A_H)\leq r_1$, yielding $\lambda_{k(t_1-1)+1}(A_F)\leq r_1$.
+    Now we can use Weyl's inequality to combine the spectral guarantees on $F$ and $H$ into a guarantee on $G$:
+    \begin{align*}
+        &\lambda_{n-k(t_1-1)-t_2}(A_G)\\
+        &=\lambda_{(n-t_2)+\Paren{n-k(t_1-1)}-n}(A_H+(-A_F))\\
+        &\geq \lambda_{n-t_2}(A_H)+\lambda_{n-k(t_1-1)}(-A_F)\\
+        &= \lambda_{n-t_2}(A_H)-\lambda_{k(t_1-1)+1}(A_F)\\
+        &\geq -(r_1+r_2)\,.
+    \end{align*}
+\end{proof}
+
+\begin{proof}[Proof of \cref{lemma: emlonesided}]
+    Let $\chi \in \{0,1\}^n$ be the indicator vector of $S$ and write $\chi$ in the orthonormal eigenbasis $e_{[n]}$ of $A_H$:
+    $$\chi = \sum_{i=1}^n \alpha_i e_i\,.$$
+
+    Hence, by orthonormality, we can write
+
+    \begin{align*}
+        &\Abs{E(H_S)}\\
+        &=\frac{1}{2} \chi^\top A_H \chi\\
+        &=\frac{1}{2} \Paren{\sum_{i=1}^n \alpha_i e_i^\top } \Paren{\sum_{i=1}^n \lambda_i e_i e_i^\top } \Paren{\sum_{i=1}^n \alpha_i e_i}\\
+        &=\frac{1}{2} \sum_{i=1}^n \lambda_i \alpha_i^2
+    \end{align*}
+
+    Using $d$-regularity, we have $\lambda_1=d$.
+    Then, as $e_1=\frac{1}{\sqrt{n}}\1$, we get $\alpha_1=\Iprod{e_1, \chi }=\frac{|S|}{\sqrt{n}}$, so $\lambda_1 \alpha_1^2=\frac{d|S|^2}{n}$.
+    For the terms with $i>1$, as $\alpha_i^2\geq 0$, we can upper bound $\lambda_i \alpha_i^2$ by $\lambda_2 \alpha_i^2\leq cd\alpha_i^2$.
+    Plugging these back we get
+    $$\Abs{E(H_S)}\leq \frac{1}{2}\Paren{\frac{d|S|^2}{n} + cd\sum_{i=2}^n \alpha_i^2}\,.$$
+
+    Then, using $\sum_{i=2}^n \alpha_i^2\leq \sum_{i=1}^n \alpha_i^2=\Norm{\chi}_2^2=|S|$ gives the desired bound.
+\end{proof}
+
+\begin{proof}[Proof of \cref{lemma: ssveonesided}]
+    Let $T:=N(S)\cup S$.
+    Then, as all edges touching $S$ are in $E(H_{T})$, we have
+    $$e(H_{T})\geq \frac{1}{2}|S|d\,.$$ 
+
+    On the other hand, by \cref{lemma: emlonesided}, writing $|T|=x|S|$ and using $|S|\leq \alpha n$, we get
+    $$e(H_{T})\leq \frac{d|T|}{2}\Paren{\frac{|T|}{n}+c}\leq\frac{1}{2}x\Paren{c+\alpha x}|S|d\,.$$
+
+    Comparing the two bounds, and solving the resulting quadratic inequality, we get 
+    $$x\geq \frac{\sqrt{c^2 + 4\alpha}-c}{2\alpha}=\frac{2}{c+\sqrt{c^2+4\alpha}}\,.$$
+
+    By using $\sqrt{a+b}\leq \sqrt{a}+\sqrt{b}$ and that $\Abs{N(S)\setminus S}\geq \Abs{N(S)}-|S|$ we get the desired result.
+\end{proof}
+
+\begin{fact}\label[fact]{fact: balancedparts}
+    Let $H$ be an $n$-vertex $d$-regular graph. For some $k=O(1)$, let $G$ be the graph obtained from $H$ by randomly planting a \kcl in it. With high probability, all color classes have size $\frac{n}{k}\pm o(n)$.
+\end{fact}
+
+\begin{proof}
+    The proof follows directly from the Chernoff bound using $k=O(1)$.
+\end{proof}
+
+\begin{lemma}\label[lemma]{lemma: boundedavgdeviation}
+    Let $H$ be an $n$-vertex $d$-regular graph. For some $k=O(1)$, let $G$ be the graph obtained from $H$ by randomly planting a \kcl in it. Then, \whp it holds in $G$ that $\Norm{\nAVG_{\frac{k-1}{k}d}}_2=o(d)$.
+\end{lemma}
+
+\begin{proof}
+    By construction, the diagonal of $\AVG$ is $0$. Let $i\neq j\in [k]$ be arbitrary. By linearity of expectation,
+    
+    $$\E\Brac{\sum_{x\in V_i} \D{x}{j}}=\E\Brac{\sum_{x\sim y\in E(H)}\Paren{\1[x\in V_i\land\ y\in V_j]+\1[x\in V_j\land\ y\in V_i]}}=\frac{nd}{2}\frac{2}{k^2}=\frac{n}{k}\frac{d}{k}\,.$$
+    
+    \andor{would be easier later when dividing by $\Abs{V_i}$ to get $\Abs{V_i}\frac{d}{k}$ instead but can I have a random variable in the result of an expected value?}By $d$-regularity, the effect of changing the color of a single vertex on $\sum_{x\in V_i} \D{x}{j}$ is $O(d)$. Hence, McDiarmid's inequality gives that $\sum_{x\in V_i} \D{x}{j}$ is with probability $O(n^{-1})$ within $O(d\sqrt{n\ln{n}})$ of its expectation. Using \cref{fact: balancedparts} and putting all together, we get
+
+    $$\AVG{i}{j}=\frac{\frac{n}{k}\frac{d}{k}\pm O(d\sqrt{n\ln{n}})}{\frac{n}{k}\pm o(n)}=\frac{d}{k}\pm o(d)$$
+
+    \whp.\andor{TODO: is this $\pm$ way of writing things fine? double check correctness} Hence, letting $d':=\frac{k-1}{k}d$ we have
+
+    $$\Abs{\nAVG_{d'}[i, j]}= \Abs{\Paren{\AVG-\frac{d}{k}\Paren{\Allones-\Id}}[i, j]}=\Abs{\AVG{i}{j}-\frac{d}{k}}=o(d)\,.$$
+
+    By $k=O(1)$ and $\Norm{\nAVG_{d'}}_2\leq \Norm{\nAVG_{d'}}_F$, we get $\Norm{\nAVG_{d'}}_2=o(d)$ as desired.
+\end{proof}
+
+
+\begin{lemma}\label[lemma]{lemma: boundedvariance}
+    Let $H$ be an $n$-vertex $d$-regular graph. For some $k=O(1)$, let $G$ be the graph obtained from $H$ by randomly planting a \kcl in it. Then, \whp for all $i\neq j\in[k]$ it holds in $G$ that $\VAR{i}{j}=o(d^2)$.
+\end{lemma}
+
+\begin{proof}
+    Writing $d_{xj}-\AVG{i}{j}$ in the numerator of $\VAR{i}{j}$ as $(d_{xj}-\frac{d}{k})+(\frac{d}{k}-\AVG{i}{j})$ and using $(a+b)^2\leq 2(a^2+b^2)$ we get
+    
+    $$\VAR{i}{j}\leq 2\Paren{\frac{1}{\Abs{V_i}}\sum_{x\in V_i}\Paren{d_{xj}-\frac{d}{k}}^2+\Paren{\AVG{i}{j}-\frac{d}{k}}^2}\,.$$
+
+    By \cref{lemma: boundedavgdeviation}, \whp $\Paren{\AVG{i}{j}-\frac{d}{k}}^2=o(d^2)$. Conditioned on $\Abs{V_i}$, for some $x\in V_i$ we have $d_{xj}\sim Bin(d, \frac{1}{k})$, so $\E\Brac{\Paren{d_{xj}-\frac{d}{k}}^2}=d\frac{1}{k}\Paren{1-\frac{1}{k}}$ and by linearity of expectation\andor{overall it is some kind of law of total probability argument, right? is it fine this way?}, we have
+
+    $$\E\Brac{\sum_{x\in V_i}\Paren{d_{xj}-\frac{d}{k}}^2}=nd\frac{1}{k}\Paren{1-\frac{1}{k}}=O(nd)\,.$$
+    
+    Following the arguments of Lemma B.2 in \cite{MR3536556-David16}, the effect of changing the color of a single vertex on $\sum_{x\in V_i}\Paren{d_{xj}-\frac{d}{k}}^2$ is $O(d^2)$. Hence, McDiarmid's inequality gives that $\sum_{x\in V_i}\Paren{d_{xj}-\frac{d}{k}}^2$ is with probability $O(n^{-1})$ within $O(d^2 \sqrt{n\ln{n}})$ of its expectation. By \cref{fact: balancedparts} we have $\Abs{V_i}=\Omega(n)$, showing
+    
+    $$\VAR{i}{j}\leq\frac{O(nd)+O(d^2\sqrt{n\ln{n}})}{\Omega(n)}+o(d^2)=o(d^2)$$
+
+    as desired.
+\end{proof}
+
+\begin{lemma}[Adaptation of Lemma B.19 of \cite{MR3536556-David16}]\label[lemma]{lemma: highmindegreesubgraph}
+    Let $0<\alpha, c<1$ be parameters. Let $H$ be a $d$-regular $n$-vertex graph with $\lambda_2(H)\leq cd$. For any $S\subseteq V$ with $\Abs{S}<\alpha n$, there exists $R\subseteq V\setminus S$ such that $\Abs{R}\geq \Paren{1-2\alpha}n$ and the minimum degree in $H_R$ is at least $(1-2\alpha-c)d$.
+\end{lemma}
+
+\begin{proof}
+    Let $\e:=2\alpha + c$. Consider the following iterative procedure. Repeatedly remove a vertex $v_t$ from $V\setminus \Paren{S \cup \bigcup_{i=1}^{t-1} v_i}$ if $v_t$ has more than $\e d$ neighbors in $S_t := S \cup \bigcup_{i=1}^{t-1} v_i$. Assume towards a contradiction that this process stops after more than $t:=\Abs{S}$ steps. Then, by using the vertices in $S_t\setminus S$, we can lower bound the number of edges in $H_{S_t}$:
+
+    $$e(H_{S_t})\geq \Abs{S_t\setminus S} \e d= \frac{1}{2}\Abs{S_t}\e d\,.$$
+
+    On the other hand, be \cref{lemma: emlonesided},
+
+    $$e(H_{S_t})\leq \frac{\Abs{S_t}d}{2}\Paren{\frac{\Abs{S_t}}{n} + c}\,.$$
+
+    Comparing the two and using $\Abs{S}=\frac{1}{2}\Abs{S_t}$ we get
+
+    $$\Abs{S}\geq\frac{1}{2}\Paren{\e-c}n=\alpha n$$
+
+    which contradicts upper bound assumption on $\Abs{S}$. Hence, letting $R:=V\setminus S_t$ it must hold that $\Abs{R}\geq n-2\Abs{S}\geq \Paren{1-2\alpha}n$ and the minimum degree in $H_R$ is at least $(1-\e)d=(1-2\alpha-c)d$ by construction.
+\end{proof}
+
+\begin{definition}\label{def: statisticallybad}
+    In a $d$-regular $n$-vertex graph $G$ that admits a \kcl $f$, we call a vertex $x$ \textit{statistically bad}, if there is a color $c\neq f(x)$ such that $x$ has less than $\frac{1}{2k}d$ neighbors $y$ with $f(y)=c$. We denote the set of statistically bad vertices by $SB(G)$, writing $SB$ when it is clear from context which graph we are referring to.
+\end{definition}
+
+\begin{lemma}[Restatement of Lemma B.14 of \cite{MR3536556-David16}]\label[lemma]{lemma: sbupperbound}
+   Let $H$ be a $d\geq O(1)$-regular $n$-vertex graph. Let $G$ be the graph obtained from $H$ by randomly planting a \kcl in it. It holds that $\Abs{SB(G)}\leq n2^{-\Omega(d)}$ \whp.
+\end{lemma}
+
+\begin{algorithm}[H]
+    As long as there is a vertex $x$ that has color $c_1$, and a color $c_2\neq c_1$ such that $x$ has less than $\frac{1}{6k}d$ neighbors with color $c_2$, uncolor $x$.\andor{why does \cite{MR3536556-David16} need another condition?}
+    \protect\caption{\label{alg: uncoloring}Uncoloring Algorithm}
+\end{algorithm}
+
+
+\begin{lemma}[Adaptation of Lemma B.20 of \cite{MR3536556-David16}]\label[lemma]{lemma: approximatetopartial}
+    Let $\alpha\leq\frac{1}{24k}$ be a parameter. Let $H$ be a $d\geq O(1)$-regular $n$-vertex  graph with $\lambda_2\leq \frac{1}{9k}d$. 
+    Let $G$ be the graph obtained from $H$ by randomly planting a \kcl $f$ in it. Given an $\alpha n$-approximate \kcl $g$ of $G$, \cref{alg: uncoloring} \whp returns an $\Paren{1-4\alpha}n$-partial \kcl of $G$.
+\end{lemma}
+
+\begin{proof}
+    Let $c:=\frac{1}{9k}$. When $d$ is at least a large enough constant, $2^{-\Omega(d)}\leq \alpha$ holds. Let $B:=\Set{x\in V\mid f(x)\neq g(x)}$ denote the set of vertices wrongly colored by $g$. Note that $\Abs{B}\leq \alpha n$ by assumption, and $\Abs{SB(G)}\leq 2^{-\Omega(d)}\leq \alpha n$ by \cref{lemma: sbupperbound}. Hence, applying \cref{lemma: highmindegreesubgraph} on $H$ to $B\cup SB$ we get a set $R$ with $|R|=(1-4\alpha)n$ such that the minimum degree in $H_R$ is at least $\Paren{1-4\alpha-c}d$. Using $R\cap SB=\emptyset$, for any $x\in R$ and $c\neq f(x)$ we get that $x$ has degree at least $\Paren{\frac{1}{2k}-4\alpha-c}d\geq \frac{1}{6k}d$ into $\Set{y\in R\mid f(y)=c}$, i.e. into the vertices in $R$ colored with $c$. It follows by induction that no vertices in $R$ will be uncolored at any step of \cref{alg: uncoloring}. Hence, the coloring returned has size at least $|R|=(1-4\alpha)n$. It only remains to show that the coloring returned is proper. In fact, we will show that all vertices in $B$ will get uncolored, from which the statement follows.
+
+    For the sake of contradiction, assume there exist vertices $B_2\subseteq B$ that remain colored by the end of the process. Let $x\in B_2$ be any such vertex. As $x$ has never been uncolored, at the end of the process it has at least $\frac{1}{6k}d$ neighbors $y$ with $g(y)=c\neq g(x)$. In particular, choosing $c=f(x)$, let $Q$ denote those neighbors $y$ of $x$ with $g(y)=f(x)$. As $x$ and $y$ are neighbors in $G$, we have $f(x)\neq f(y)$, so $g(y)\neq f(y)$, which implies $Q\subseteq B_2$. Summarizing, any vertex in $G_{B_2}$ has degree at least $\frac{1}{3k}d$. Therefore, $$e(G_{B_2})\geq \frac{\frac{1}{6k}d|B_2|}{2}= \frac{d|B_2|}{12k}\,.$$
+
+    On the other hand, by \Cref{lemma: emlonesided}, $$e(G_{B_2})\leq e(H_{B_2})\leq \frac{d\Abs{B_2}}{2}\Paren{\frac{\Abs{B_2}}{n}+c}\,.$$
+    
+    Using $\Abs{B_2}>0$ and the bounds on $\alpha$ and $c$, we can combine and simplify the above two inequalities to get $$\Abs{B_2}\geq \Paren{\frac{1}{6k}-c}n> \alpha n\,.$$
+
+    However, as $\Abs{B_2}\leq \Abs{B}\leq \alpha n$ by assumption, we get a contradiction, so $\Abs{B_2}=0$ finishing the proof.
+\end{proof}
+
+\begin{algorithm}[H]
+    As long as there is an uncolored vertex $x$ that has neighbors in every color except for some color $c$, color $x$ using $c$. 
+    \protect\caption{\label{alg: saferecoloring} Safe Recoloring Algorithm}
+\end{algorithm}
+
+\begin{lemma}[Adaptation of Lemma B.21 of \cite{MR3536556-David16}]\label[lemma]{lemma: partialtologncomps}
+    Let $H$ be a $d$-regular $n$-vertex  graph with $\lambda_2\leq \frac{1}{16k^2}d$. 
+    Let $G$ be the graph obtained from $H$ by randomly planting a \kcl $f$ in it. Starting from a $\frac{1}{256k^4}n$-partial \kcl $g$ of $G$, let $U$ be the set of vertices left uncolored by \cref{alg: saferecoloring}. Then, \whp each component in $G_U$ has size at most $\ln{n}$.
+\end{lemma}
+
+\begin{proof}
+    The closely follows that of Lemma B.21 of \cite{MR3536556-David16}, so we only provide the parts that are changed. Let us first prove a helper lemma similar to Claim B.22 of \cite{MR3536556-David16}:
+    \begin{lemma}\label[lemma]{lemma: largecoloredneighborhoodprob}
+        Let $C$ be any set of vertices of size $t_1$, let $D:=N_{H}\Paren{C}\setminus C$
+        and let $t_2:=\Abs{D}$. If $t_2\ge 2k^2t_1$ then $C\subseteq U$ and $D\subseteq V\setminus U$ with probability at most $e^{-\frac{1}{2k}t_2}$.
+    \end{lemma}
+    \begin{proof}
+        Partition the vertices of $D$ to disjoint subsets $\Set{D_{v}}$, where $v\in C$ and $D_{v}\subseteq N_{H}\Paren{v}$. Consider some $D_{v}$ and assume that $v$ is colored by $1$. If both $v\in U$ and $D_{v}\subseteq V\setminus U$ then the set of colors that vertices in $D_{v}$ are using must be contained in exactly one
+        of the sets $[k]\setminus {c}$ for some $c\neq 1$ (otherwise \cref{alg: saferecoloring} would color $v$).
+        Therefore the probability that both $v\in U$ and $D_{v}\subseteq V\setminus U$
+        is at most $(k-1)\Paren{\frac{k-1}{k}}^{\Abs{D_{v}}}$. Hence, the probability that both $C$ is in $U$ and $D\subseteq V\setminus U$ is at most
+        \begin{align*}
+            \prod_{D_{v}\in\Set{ D_{v}} }(k-1)\Paren{\frac{k-1}{k}}^{\Abs{D_{v}}} & =(k-1)^{\Abs{\Set{ D_{v}} }}\Paren{\frac{k-1}{k}}^{t_2}\\
+            & \le(k-1)^{t_1}\Paren{\frac{k-1}{k}}^{t_2}\\
+            %& =(k-1)^{t_1+t_2}k^{-t_2}\\
+            & =e^{(t_1+t_2)\ln(k-1)-t_2\ln{k}}\\
+            & \le e^{-\frac{1}{2k}t_2}
+        \end{align*}
+        using $t_2\ge 2k^2t_1$ and $\ln{k}-\ln(k-1)\geq \frac{1}{k}$ on the last line.
+    \end{proof}
+    %Let $C\subset U$ be any set of vertices of size $t_1$ such that $G_{C}$ is connected. Note that if $G_{C}$ is connected then $H_{C}$ is connected. Hence we can consider the set $\bar{C}$ to be a connected set in $H$ such that $C\subseteq\bar{C}\subset U$ and $N\Paren{\bar{C}}\setminus\bar{C}\subseteq V\setminus U$ (as long as there exist vertices in $\Paren{N\Paren{\bar{C}}\setminus\bar{C}}\cap U$ we repeatedly add them to $\bar{C}$, and it is straightforward to show that $\bar{C}$ is connected in $H$). Thus if we show that \whp no connected subsets $\bar{C}$ of $H$ with cardinality $\ln n$ are in $U$ if $N\Paren{\bar{C}}\subseteq V\setminus U$ then the proof follows. The key point of the proof is that (since $U$ is small) no (small connected) subsets of $U$ with with a small neighborhood are in $V\setminus U$ (due to $G$'s expansion) and when a connected set has a large enough neighborhood we can use \cref{lemma: largecoloredneighborhoodprob} to show they are likely to not be contained in $U$. To fully exploit \cref{lemma: largecoloredneighborhoodprob} we use the union bound in a delicate manner that depends on the neighborhood size of the (connected) sets in order to sum sets with large neighborhood size with small probabilities. In order to do so we use \cref{lemma: numsetsneighborhoodsize}.\andor{much of the text here is copied word by word from Feige, is that okay assuming we state it properly above? if not, what should I do -- ask chatgpt to rephrase it?}
+
+
+    Letting $N_{H}\Paren{n,t_1,t_2}$ denote the number of connected components of size $t_1$ with a neighborhood of size exactly $t_2$ and letting $P_{t_1,t_2}:=\max_{C\subset H,\Abs{C}=t_1,\Abs{N\Paren{C}}=t_2}\Pr\Brac{\text{\ensuremath{C}\,\ is in\,\ensuremath{U}}}$, we get by union bound that the probability that there exists a connected component in $G_{U}$ of size $\Omega(\ln n)$ is at most
+
+    %Denote by $N_{H}\Paren{n,t_1,t_2}$ the number of connected components of size $t_1$ with a neighborhood of size exactly $t_2$ in a graph $H$ with $n$ vertices.
+
+    %\begin{lemma}\label[lemma]{lemma: numsetsneighborhoodsize}
+    %For any graph $H$ the following holds:
+    %\[
+    %N_{H}\Paren{n,t_1,t_2}\le n{t_1+t_2 \choose t_1}\,.
+    %\]
+    %\end{lemma}
+
+    %Several proofs of \cref{lemma: numsetsneighborhoodsize} are known, and one such a proof can be found in~\cite{MR3395121-Krivelevich15}. Let
+    %\[
+    %P_{t_1,t_2}:=\max_{C\subset H,\Abs{C}=t_1,\Abs{N\Paren{C}}=t_2}\Pr\Brac{\text{\ensuremath{C}\,\ is in\,\ensuremath{U}}}\,.
+    %\]
+    
+    \begin{align}
+    \sum_{t_1=\ln n\,}^{\Abs{U}}\sum_{t_2=1}^{d t_1}N_{H}\Paren{n,t_1,t_2}P_{t_1,t_2} & =\sum_{t_1=\ln n\,}^{\Abs{U}}\sum_{t_2= 7k^2t_1 }^{d t_1}N_{G}\Paren{n,t_1,t_2}e^{-\frac{1}{2k} t_2}\label{eq:alpha1}\\
+    & \le\sum_{t_1=\ln n\,}^{\Abs{U}}\sum_{t_2= 7k^2t_1 }^{d t_1}n\binom{t_1+t_2 }{ t_1}e^{-\frac{1}{2k} t_2}\label{eq:alpha2}\\
+    & \le\sum_{t_1=\ln n\,}^{\Abs{U}}\sum_{t_2= 7k^2t_1 }^{d t_1}n\Paren{e\frac{t_1+t_2}{t_1}}^{t_1}e^{-\frac{1}{2k} t_2}\label{eq:alpha3}\\
+    & \le\sum_{t_1=\ln n\,}^{\Abs{U}}ndt_1\max_{7k^2\le x\le d}e^{\Paren{1+\ln(x+1)-\frac{1}{2k} x}t_1}\nonumber \\
+    & \le n^{4}\max_{7k^2\le x\le d}e^{\Paren{1+\ln(x+1)-\frac{1}{2k} x}\ln{n}}\nonumber\\
+    & \le n^{-1}\,.\label{eq:alpha4}
+    \end{align}
+
+    Equality~\ref{eq:alpha1} follows by \cref{lemma: largecoloredneighborhoodprob} and that by \cref{lemma: ssveonesided}
+    if $\lambda_2\le \frac{1}{16k^2}$ then for a set of size $t_1\le\Abs{U}\le\frac{1}{256k^4}n$ it holds that its neighborhood is of size $t_2\ge7k^2t_1$. Inequality~\ref{eq:alpha2} follows by Lemma B.23 of \cite{MR3536556-David16}. Inequality~\ref{eq:alpha3} follows by the binomial identity ${n \choose k}\le\Paren{e\frac{n}{k}}^{k}$. Inequality~\ref{eq:alpha4} follows by $\ln\Paren{7k^2+1}\leq \frac{7k}{2}-6$ which holds for $k\geq 3$. This completes the proof.
+\end{proof}
+
+We are now ready to prove \cref{thm: kcoloringplantedfullrecovery}:
+
+\begin{proof}
+    We want to apply \cref{thm: kcoloringrecoverybottom} to get a large partial coloring that we can complete into a full coloring.
+    The planted setting is somewhat different though, so we first need to show that its preconditions apply. Let $d':=\frac{k-1}{k}d$ and note that $d'=\Theta(d)$. By \cref{lemma: boundedavgdeviation} and \cref{lemma: boundedvariance} we get $\Norm{\nAVG_{d'}}_2=o(d')$ and $\Norm{\VAR}_1=o(d'^2)$ respectively. Taking $\lambda_2(H)\leq \frac{1}{4k^2}d$ and \cref{cor:spectral_small_to_small}, we get that there is a constant $t'$ such that $\lambda_{n-t'}(H)\geq -\frac{1}{1.99k}d$.
+    Hence, by \cref{lemma: threshold_rank_kept}, there is a constant $t$ such that $\lambda_{n-t}(G)\geq -\Paren{\frac{1}{k}-\Omega(1)}d= -\Paren{\frac{1}{k-1}-\Omega(1)}d'$.
+
+    Putting all the above together, by applying \cref{thm: kcoloringrecoverybottom} with $d'$, we get a $\beta^{-O(t)}$-sized list $L$ of $k$-colorings, one of which is a $\frac{n}{\omega_d'(1)}=\frac{n}{\omega_d(1)}$-approximate coloring.
+
+    Then, for $d$ at least a large enough constant compared to $k$, running \cref{alg: uncoloring} on all colorings in $L$, by \cref{lemma: approximatetopartial} it turns the $\frac{n}{\omega_d(1)}$-approximate coloring into a $\frac{n}{\omega_d(1)}$-partial coloring and returns a list of colorings $L'$. \andor{should we remark that we somehow managed to avoid doing iterative recoloring which works only for two-sided expansion?}  
+
+    Then, for $d$ at least a large enough constant compared to $k$, running \cref{alg: saferecoloring} on all colorings in $L'$, \cref{lemma: partialtologncomps} guarantees that for the $\frac{n}{\omega_d(1)}$-partial coloring, all the remaining still uncolored vertices are in connected components of size $O(\ln{n})$ and returns a list of colorings $L''$:
+
+    Hence, we can try a brute force search on each component of those colorings in $L''$ that have component sizes $O(\ln{n})$. By the above, we are guaranteed to find a full coloring on at least one of them. This finishes the proof.
+\end{proof}
+
+\subsection{Deferred proof from \cref{sec: 3coloring}}\label{app: 3coloring}
+
+\begin{lemma}\label[lemma]{lemma: k=3avgspectrum}
+    Let $x_{[3]}$ be non-negative numbers with $\sum_{i\in[3]}x_i=1$. Let $A$ be a $3\times 3$ matrix with $0$ on the diagonals. For $i\neq j\neq k$ assume $A[i, j]=\frac{x_j-x_k}{x_i}$. Then, $\Norm{A}_2=\sqrt{\frac{1-4\Paren{\sum_{i<j\in[3]}x_i x_j}}{\prod_{i\in[3]}x_i}+9}$.
+\end{lemma}
+
+\begin{proof}
+    Using the $3\times 3$ determinant formula, and letting $A':=A-\lambda \Id$, we can directly calculate $\det(A')$:
+    \begin{align*}
+        \det(A')&=A'[1, 1]\Paren{A'[2, 2]A'[3, 3]-A'[2, 3]A'[3, 2]}-A'[1, 2]\Paren{A'[2, 1]A'[3, 3]-A'[2, 3]A'[3, 1]}\\&\qquad+A'[1, 3]\Paren{A'[2, 1]A'[3, 2]-A'[2, 2]A'[3, 1]}\\
+        &=(-\lambda)\Brac{(-\lambda)(-\lambda)
+        -\Paren{\frac{x_2 - x_3}{x_1}}\Paren{\frac{x_3 - x_2}{x_1}}} \\
+        &\qquad -\Paren{\frac{x_2 - x_3}{x_1}}\Brac{\Paren{\frac{x_1 - x_3}{x_2}}(-\lambda)
+        -\Paren{\frac{x_3 - x_1}{x_2}}\Paren{\frac{x_1 - x_2}{x_3}}} \\
+        &\qquad +\Paren{\frac{x_3 - x_2}{x_1}}\Brac{\Paren{\frac{x_1 - x_3}{x_2}}\Paren{\frac{x_2 - x_1}{x_3}}
+        -(-\lambda)\Paren{\frac{x_1 - x_2}{x_3}}}\\
+        &= \lambda\Brac{\frac{(x_3-x_1)(x_2-x_1)}{x_2x_3}+\frac{(x_1-x_2)(x_3-x_2)}{x_3x_1}+\frac{(x_2-x_3)(x_1-x_3)}{x_1x_2}}-\lambda^3\\
+        &=\lambda\Paren{\frac{(x_1+x_2+x_3)^3 - 4(x_1+x_2+x_3)(x_1x_2+x_1x_3+x_2x_3) + 9x_1x_2x_3}{\prod_{i\in[3]}x_i}-\lambda^2}\,.
+    \end{align*}
+
+    Now using $\sum_{i\in[3]}x_i=1$, we can simplify this to $$\lambda\Paren{\frac{1 - 4\Paren{\sum_{i<j\in[3]}x_i x_j}}{\prod_{i\in[3]}x_i}+9-\lambda^2}\,.$$
+
+    Hence, the eigenvalues of $A$ are $0$ and $\pm \sqrt{\frac{1-4\Paren{\sum_{i<j\in[3]}x_i x_j}}{\prod_{i\in[3]}x_i}+9}$, finishing the proof.
+\end{proof}
+
+\subsection{Vertex- versus edge-violation for $3$-coloring}
+
+\begin{lemma}[Informal]\label{lemma: vertexvsedgeviolation}
+    Let $0<\varepsilon, \delta\leq \Omega(1)$. Let $G$ be a $d$-regular graph on $n$ vertices $V$ with $\lambda_2(G)\leq \Omega(d)$ that admits an $\e$-balanced \tcl $f$. Let $g:\; V\to \Set{1, 2, 3}$ be an alternative (not necessarily proper) \tcl with $\text{agree}(f, g)\leq 1-\delta$. Then, $g$ must have at least $\Omega(nd)$ monochromatic edges. 
+\end{lemma}
+
+\begin{proof}[Proof sketch]
+    Let $V_{[3]}\subset V$ be the color classes of $f$. Let the largest agreeing permutation of $g$ be achieved by corresponding color classes $W_1, W_2, W_3\subset V$. Let us further define $V_{ij}:=V_i\cap W_j$.
+
+    First we show that as $f$ and $g$ have low agreement and the permutation was chosen to maximise agreement, we can find colors $a$ and $b$ such that $\Abs{V_b}, \Abs{V_{ab}}, \Abs{V_{bb}}$ have ``reasonably regular'' sizes.
+
+    By \cref{lemma: expansionimpliesvariance}, we have $\VAR{a}{b}$ is small. On the other hand, note that if $\Abs{e(V_{ab}, V_b)}$ was much less than $\AVG{a}{b}$, it would imply that $\VAR{a}{b}$ is large. However, if $g$ had only few monochromatic edges, then $\Abs{e(V_{ab}, V_{bb})}$ must be small, so the only way $\Abs{e(V_{ab}, V_b)}$ could be large enough is if $\Abs{e(V_{ab}, V_b\setminus V_{bb})}$ was very large -- much larger than $\Abs{e(V_{ab}, V_{bb})}$.
+
+    In this case, however, we can construct the following test vector $v$ (orthogonal to $\1$) showcasing that expansion must be bad, which is a contradiction, i.e. $g$ must have many monochromatic edges:
+
+    \begin{itemize}
+        \item for $x\in V_{ab}$, let $v_x:=1$
+        \item for $x\in V_{bb}$, let $v_x:=-\alpha$
+        \item for $x\in V_{b}\setminus V_{bb}$, let $v_x:=\beta$
+        \item otherwise, let $v_x:=0$
+    \end{itemize}
+\end{proof}
+
+
+
+
+
+
+% \section{Almost-$3$-colorable graphs}
+
+% In this section we extend \cref{thm: 3coloringrecovery} to the case when the graph only admits an almost \tcl.
+
+% \begin{theorem}\label[theorem]{thm: almosttclfull}
+%     For $d \geq O(1)$ large enough and $\Omega(1) \leq \e \leq 1/6$, let $G$ be an $n$-vertex $d$-regular graph that admits a $\gamma n$-almost $\e$-balanced \tcl, for $\gamma > 0$ small enough that only depends on $\e$.
+%     Suppose $\lambda_2 \leq c$ for some $c> 0$ small enough that only depends on $\e$.
+%     There exists an algorithm with runtime $n^{O(1/c)}$ that finds an $O\Paren{\frac{\lambda_2 + \gamma}{\e}n}$-almost coloring.
+%     % For $O(1) \leq d \leq n/24$ large enough and $\Omega(1) \leq \e \leq 1/6$, let $G$ be an $n$-vertex $d$-regular graph that admits a $\gamma n$-almost $\e$-balanced \tcl for $\gamma$ sufficiently small.
+%     % Suppose $\lambda_2 \leq c d$ for some small enough $c > 0$ that only depends on $\e$.
+%     % There exists an algorithm with runtime $n^{O(1)}$ that finds an $O\Paren{\frac{\lambda_2}{d\e}n}$-almost coloring.
+% \end{theorem}
+
+% The proof of \cref{thm: almosttclfull} relies on showing that there exists another $n$-vertex $d$-regular graph $G'$ that is fully $3$-colorable and differs in only a few edges from $G$.
+
+% \begin{lemma}\label[lemma]{lemma: rewire3partitedregular}
+%     Let $G$ be a $d$-regular $n$-vertex graph that admits a $\gamma n$-almost $\e$-balanced \tcl, for $\gamma < \min\{1/4, \e/2\}$ and $d \leq n/24$. Then there exists another $d$-regular $n$-vertex graph $G'$ that differs from $G$ in at most $2\gamma d n$ edges and that admits a (full) $\e/2$-balanced \tcl.
+%     Furthermore, $\lambda_2(G') \leq \lambda_2(G) + O()$.
+%     % , rewiring at most $2\gamma dn$ edges, $G$ can be made $3$-colorable while keeping $d$-regularity.\andor{is it worth stating it for $k\geq 3$ more generally even though we would only use it for $k=3$?}
+% \end{lemma}
+% \begin{proof}
+%     Let the color classes of the almost \tcl be $V_1, V_2, V_3$ and let the remaining vertices be $V_r$.
+%     The number of edges not touching a vertex in $V_r$ is at least $(1/2-\gamma)dn$.
+%     Take an arbitrary vertex $x$ in $V_r$, and select $a \neq b \in [3]$ such that $E(V_a, V_b)$ is maximized.
+%     By an averaging argument, we have $E(V_a, V_b) \geq (1/6-\gamma/3)dn$.
+%     For $c \neq a, b$, consider an edge $(x, x')$ with $x' \in V_c$, and select an edge $(y, y')$ that goes between $V_a$ and $V_b$ such that the graph contains no edge $(y, x)$ and $(y', x')$.
+%     Such an edge does not exist only if, for every edge between $V_a$ and $V_b$, both endpoints are connected to one of $x$ or $x'$.
+%     However, each of $x$ and $x'$ can cover at most $d^2/4$ such edges between $V_a$ and $V_b$, so in total there are at least $(1/6-\gamma/3)dn - d^2/2$ edges to choose from.
+%     Then we remove $(x, x')$ and $(y, y')$ and add $(x, y)$ and $(x', y')$, which maintain $d$-regularity and removes one edge from $x$ to $V_c$.
+%     We continue this procedure until there are no more edges from $x$ to $V_c$, at which point we remove $x$ from $V_r$ and add it to $V_c$.
+%     We need to perform this procedure for $x$ at most $d$ times (it has at most $d$ neighbors in $V_c$), and each step removes one edge between $V_a$ and $V_b$, so to ensure there exists an appropriate $(y, y')$ at each step we need $(1/6-\gamma/3)dn - d^2/2 - d \geq 0$, which is true if $d \leq (1/12-\gamma/6)n - 1$.
+%     This is satisfied by the stated assumptions.
+
+%     The size of any color class $|V_1|, |V_2|, |V_3|$ increases by at most $\gamma n$, so they continue to be upper bounded by $(1/2-\e+\gamma)n \leq (1/2-\e/2)n$.
+%     Finally, $\Norm{\tilde{A}(G) - \tilde{A}(G')} \leq $.
+% \end{proof}
+
+% Second, we prove that $\AVGT$ and $\VART$ are close between $G$ and $G'$.
+
+% \begin{lemma}\label[lemma]{lemma: almostcoloringimpactonavg}
+%     Let $G$ and $G'$ be $n$-vertex graphs that differ in at most $c n$ edges. Then, on a $3$-partition $V_{[3]}$ of $V(G)$ satisfying $\min_{i\in[3]}\Abs{V_i}\geq \e n$, the matrices $\AVGT$ and $\AVGT'$ corresponding to $G$ and $G'$ respectively satisfy $\Norm{\AVGT}_2\leq \Norm{\AVGT'}_2 + O\Paren{\frac{c}{d\e}}$.
+% \end{lemma}
+
+% \begin{proof}
+%     Let $a, b\in[3]$ arbitrary. Note that the number of edges between $V_a$ and $V_b$ in $G$ versus in $G'$ differs by at most $2c n$. As the partition is common,
+%     $$\Abs{\AVGT[a,b]-\AVGT'[a, b]}\leq \frac{2cn}{d\Abs{V_a}}\leq \frac{2c}{d\e}\,.$$
+    
+%     Using the inequality between Frobenius and spectral norms, we get $\Norm{\AVGT-\AVGT'}_2\leq \frac{6c}{d\e}$. The conclusion then follows by the triangle inequality.
+% \end{proof}    
+
+% \begin{lemma}\label[lemma]{lemma: almostcoloringimpactonvar}
+%     Let $G$ and $G'$ be $d$-regular $n$-vertex graphs that differ in at most $c n$ edges. Then, on a $3$-partition $V_{[3]}$ of $V(G)$ satisfying $\min_{i\in[3]}\Abs{V_i}\geq \e n$, the matrices $\VART$ and $\VART'$ corresponding to $G$ and $G'$ respectively satisfy $\Norm{\VART}_{\max} \leq \Norm{\VART'}_{\max} + O\Paren{\frac{c}{d\e}}$.
+% \end{lemma}
+
+% \begin{proof}
+%     Let $a, b\in[3]$ arbitrary.
+%     As in the proof of \cref{lemma: almostcoloringimpactonavg}, the number of edges between $V_a$ and $V_b$ in $G$ versus in $G'$ differs in at most $2c n$.
+%     From the proof of \cref{lemma: almostcoloringimpactonavg} we have that $\Abs{\AVGT[a,b]-\AVGT'[a, b]}\leq \frac{2c}{d\e}$.
+    
+%     Then we aim to bound $\Abs{\VART[a,b] - \VART'[a,b]}$. First, we have that 
+%     \begin{align*}
+%         &\Abs{\frac{1}{|V_a|}\sum_{x \in V_a} \left[\Paren{\frac{1}{d} d_{xb} - \AVGT[a,b]}^2 - \Paren{\frac{1}{d} d_{xb} - \AVGT'[a,b]}^2\right]}\\
+%         &= \Abs{\frac{1}{|V_a|}\sum_{x \in V_a} \left[ \frac{2}{d}d_{xb}(\AVGT'[a,b]-\AVGT[a,b]) + \AVGT[a,b]^2 - \AVGT'[a,b]^2 \right]}\\
+%         &\leq \Abs{\frac{1}{|V_a|}\sum_{x \in V_a} \frac{2}{d}d_{xb}(\AVGT'[a,b]-\AVGT[a,b])} + \Abs{\frac{1}{|V_a|}\sum_{x \in V_a} (\AVGT[a,b]^2 - \AVGT'[a,b]^2)}\\
+%         &\leq \frac{1}{|V_a|}\sum_{x \in V_a} \frac{2}{d}d_{xb}\Abs{\AVGT'[a,b]-\AVGT[a,b]} \\
+%         &\quad+ \frac{1}{|V_a|}\sum_{x \in V_a} \Abs{\AVGT[a,b] - \AVGT'[a,b]}\Paren{\AVGT[a,b] + \AVGT'[a,b]}\\
+%         &\leq \frac{4c}{d\e} + \frac{4c}{d\e} = \frac{8c}{d\e}\,.
+%     \end{align*}
+%     Second, we have that 
+%     \begin{align*}
+%         % &\Abs{\VAR[a,b] - \VAR'[a,b]}\\
+%         &\Abs{\frac{1}{|V_a|}\sum_{x \in V_a} \left[\Paren{\frac{1}{d}d_{xb} - \AVGT'[a,b]}^2 - \Paren{\frac{1}{d}d'_{xb} - \AVGT'[a,b]}^2\right]}\\
+%         &= \Abs{\frac{1}{|V_a|}\sum_{x \in V_a} \left[ \frac{2}{d}\AVGT'[a,b](d'_{xb}-d_{xb}) + \frac{1}{d^2}d_{xb}^2 - \frac{1}{d^2}(d_{xb}')^2 \right]}\\
+%         &\leq \Abs{\frac{1}{|V_a|}\sum_{x \in V_a} \frac{2}{d}\AVGT'[a,b](d'_{xb}-d_{xb})} + \Abs{\frac{1}{|V_a|}\sum_{x \in V_a} \frac{1}{d^2} (d_{xb}^2 - \frac{1}{d^2} (d_{xb}')^2)}\\
+%         &\leq \frac{1}{|V_a|}\sum_{x \in V_a} \frac{2}{d}\AVGT'[a,b]\Abs{d'_{xb}-d_{xb}} + \frac{1}{|V_a|}\sum_{x \in V_a} \frac{1}{d^2} \Abs{d_{xb} - d_{xb}'}\Paren{d_{xb} + d_{xb}'}\\
+%         &\leq \frac{4c}{d\e} + \frac{4c}{d\e} = \frac{8c}{d\e}\,,
+%     \end{align*}
+%     where in the last inequality we used that $\frac{1}{|V_a|} \sum_{x \in V_a} \Abs{d_{xb} - d'_{xb}} \leq \frac{2cn}{|V_a|} \leq \frac{2c}{\e}$.
+%     Combining the two inequalities, we get by the triangle inequality that 
+%     \[\Abs{\VART[a,b] - \VART'[a,b]} \leq \frac{16c}{d\e}\,.\]
+% \end{proof}
+
+% Finally, we can prove \cref{thm: almosttclfull}.
+
+% \begin{proof}[Proof of \cref{thm: almosttclfull}]
+%     Let the color classes of the almost \tcl be $V_1, V_2, V_3$ and let the remaining vertices be $V_r$.
+%     Let us distribute the vertices in $V_r$ among $V_{[3]}$ according to the strategy in the proof of \cref{lemma: rewire3partitedregular}.
+%     By \cref{lemma: rewire3partitedregular}, there is a $d$-regular $3$-colorable graph $G'$ that differs from $G$ in at most $O(\gamma dn)$ edges.
+%     By \cref{lemma: almostcoloringimpactonavg} and \cref{lemma: almostcoloringimpactonvar}, we then have $\Norm{\AVGT - \frac{1}{2}\Paren{\Allones-\Id}} \leq \Norm{\AVGT' - \frac{1}{2}\Paren{\Allones-\Id}} + O\Paren{\gamma / \e}$ and $\Norm{\VAR}_1 \leq \Norm{\VAR'}_1 + O\Paren{\gamma / \e}$.
+    
+%     When $\Omega(1) \leq \e \leq 1/6$, as $G'$ is $d$-regular $3$-colorable, we can apply \cref{cor: 3coloringboundednavg} and \cref{lemma: expansionimpliesvariance} to bound $\Norm{\AVGT' - \frac{1}{2}\Paren{\Allones-\Id}} \leq \frac{1}{2} - \Omega(1)$ and $\Norm{\VART'}_{\max} \leq \lambda_2 / \e$ respectively, and as a consequence $\Norm{\AVGT - \frac{1}{2}\Paren{\Allones-\Id}} \leq \frac{1}{2} - \Omega(1) - O\Paren{\gamma / \e}$ and $\Norm{\VART}_{\max} \leq \lambda_2 / \e + O\Paren{\gamma / \e}$. Applying the argument in the proof of \cref{thm: 3coloringrecovery} then achieves the desired guarantee.
+% \end{proof}
+
+
+\begin{comment}
+
+    \subsection{Deferred proofs from \cref{sec: kcoloring}}\label{app: kcoloring}
+    
+    \begin{lemma}\label[lemma]{lemma: negative_second_eigenvalue}
+        All the eigenvalues of $\AVG$ are real.
+        Furthermore, if $\Norm{\nAVG}_2\leq \alpha d$, then $\lambda_2(\AVG)\leq -\Paren{\frac{1}{k-1}-\alpha}d$.
+    \end{lemma}
+    \begin{proof}
+        Let $S$ be the $k\times k$ positive diagonal matrix defined by $S[i, i]=\Abs{V_i}$.
+        Then, $\AVG':=S^{1/2}\AVG\; S^{-1/2}$ is symmetric, because by counting the edges between color classes we have $\AVG{i}{j}\ \Abs{V_i}=\AVG{j}{i}\ \Abs{V_j}$. 
+        Therefore, the spectrum of $\AVG$ is the same as that of $\AVG'$, and in particular, it is real.
+    
+        Splitting $\AVG'$ into $\frac{d}{k-1}S^{1/2}(\mathbf{J}-\mathbf{I})S^{-1/2}$ and $S^{1/2}\nAVG\ S^{-1/2}$ and using Weyl's inequality, we get
+        $$\lambda_2(\AVG')\leq \lambda_2\Paren{\frac{d}{k-1}S^{1/2}(\mathbf{J}-\mathbf{I})S^{-1/2}}+\lambda_1\Paren{S^{1/2}\nAVG\ S^{-1/2}}\,.$$
+    
+        Due to similarity, this upper bound equals
+        $$\lambda_2\Paren{\frac{d}{k-1}(\mathbf{J}-\mathbf{I})}+\lambda_1\Paren{\nAVG}\,.$$
+    
+        Then, using the upper bound $\Norm{\nAVG}_2\leq \alpha d$ and that $\lambda_2\Paren{\mathbf{J}-\mathbf{I}}=-1$, we get the desired result.  
+    \end{proof}
+    
+    
+        \begin{lemma}\label[lemma]{lemma: smalldeviationevecsimilar}
+        Let $B$ be a symmetric matrix with an eigenvalue $\lambda_i$ and corresponding unit eigenvector $v$ and let $\delta = \min_{j\neq i} |\lambda_j - \lambda_i|$ be the spectral gap around it. Let $A:=B+E$ where $\Norm{E}_2 \leq \alpha\delta$. Then, there exists a unit eigenvector $v'$ of $A$ such that $\Norm{v' - v}_2 \leq \frac{2\alpha}{1-2\alpha}$.\andor{we probably don't need this lemma after all}
+    \end{lemma}
+    
+    \begin{proof}
+        Since $B$ is symmetric, it is orthogonally diagonalisable. Hence, by the Bauer-Fike theorem, all eigenvalues of $A$ lie within $\Norm{E}\leq \alpha\delta$ of the eigenvalues of $B$. In particular, the eigenvalue $\lambda_i$ of $B$ is perturbed to an eigenvalue $\lambda'_i$ of $A$ such that $\Abs{\lambda'_i - \lambda_i} \leq \alpha\delta$. Let $v'$ be the unit eigenvector corresponding to $\lambda'_i$ in $A$, and let us write it as $\phi v+w$ for some $w\perp v$. Then,
+        
+        $$Av'=\phi\lambda'_i v + \lambda'_i w\,.$$
+    
+        On the other hand, we have
+    
+        \begin{align*}
+            Av'&=(B+E)(\phi v+w)\\
+            &=\phi Bv + Bw + E(\phi v+w)\\
+            &=\phi \lambda_i v + B w + E(\phi v+w)\\
+        \end{align*}
+    
+        Combining the two equations, we get
+    
+        \begin{equation}
+            (B - \lambda'_i I)w = \phi(\lambda'_i - \lambda_i)v - E(\phi v + w)\,.
+            \label{eq: keyequationperturbation}
+        \end{equation}
+    
+        Note that the eigenvalues of $B-\lambda'_i I$ are exactly $\lambda_j-\lambda'_i$. Hence, by triangle inequality, all these eigenvalues are at least $\Abs{\lambda_j-\lambda_i}-\Abs{\lambda_i-\lambda'_i}\geq \delta-\alpha\delta\geq (1-\alpha)\delta$ in absolute value, so $\Norm{B-\lambda'_i I}_2\geq (1-\alpha)\delta$. Hence, using $\Abs{\lambda'_i - \lambda_i} \leq \alpha\delta$, $\Norm{v}_2=1$, $\Norm{E}_2\leq \alpha\delta$ and triangle inequality on the right-hand side of \cref{eq: keyequationperturbation}, after taking norms of both sides, we get
+    
+        $$(1-\alpha)\delta\Norm{w}_2\geq \Abs{\phi}\alpha\delta + \alpha\delta\Paren{\Abs{\phi}+\Norm{w}_2}\,.$$
+    
+        Dividing by $\delta$ and simplifying we get
+        
+        $$\Norm{w}_2\leq \frac{2\alpha}{1-2\alpha}\Abs{\phi}\,.$$
+    
+        As $v'$ is unit-norm and $v\perp w$, we have $\Abs{\phi}^2+\Norm{w}_2^2=1$, incorporating which leads to
+        
+        $$\Abs{\phi}\geq \frac{1}{\sqrt{1+\Paren{\frac{2\alpha}{1-2\alpha}}^2}}\,.$$
+    
+        Now note that by $v\perp w$, 
+        
+        $$\Norm{v-v'}_2^2=\Norm{v-\Paren{\phi v+w}}_2^2=\Paren{1-\Abs{\phi}}^2+\Norm{w}_2^2=\Paren{1-\Abs{\phi}}^2+\Paren{1-\Abs{\phi}^2}=2(1-\Abs{\phi})\,.$$
+    
+        Using the lower bound on $\Abs{\phi}$ and $\frac{1}{\sqrt{1+x^2}}\geq 1-\frac{x^2}{2}$ the result follows:
+    
+        $$\Norm{v-v'}_2\leq \sqrt{2\Paren{1-\frac{1}{\sqrt{1+\Paren{\frac{2\alpha}{1-2\alpha}}^2}}}}\leq \frac{2\alpha}{1-2\alpha}\,.$$
+    
+    \end{proof}
+    
+    
+    \begin{lemma}\label[lemma]{lemma: regularavgimpliesnosmallcomponents}
+        Let $G$ be a $d$-regular $n$-vertex that admits a \kcl with $\Norm{\nAVG}_2\leq \Paren{\frac{1}{k-1}-\zeta} d$ for some $0\leq\zeta\leq \frac{1}{k-1}$.
+        Then the \kcl is $\frac{\zeta}{k}$-large.
+    \end{lemma}
+    \begin{proof}
+        For the sake of contradiction, assume $|V_1|<\frac{\zeta}{k} n$.
+        Using that $\sum_{i\in[k]}|V_i|=n$, there exists $a \in \Set{2, \ldots, k}$ such that $|V_a|\geq \frac{n}{k}$.
+        Now note that by counting the edges between $V_1$ and $V_a$ in two different ways, we have $|V_1|\AVG{1}{a}=|V_a|\AVG{a}{1}$.
+        Hence, using $d$-regularity to upper bound $\AVG{1}{a}$ by $d$, we get
+        $$\AVG{a}{1}=\frac{\AVG{1}{a}|V_1|}{|V_a|}< \frac{d\ \frac{\zeta}{k} n}{\frac{n}{k}}=\zeta d$$
+    
+        Then $\nAVG{a}{i} <\Paren{\zeta-\frac{1}{k-1}} d$, which implies $\Norm{\nAVG}_2> \Paren{\frac{1}{k-1}-\zeta} d$, a contradiction.
+    \end{proof}
+    
+    \begin{lemma}\label[lemma]{lemma: balancedcompsizesimplydiffevectors}
+        Let $G$ be a $d$-regular $n$-vertex graph that admits an $\e$-large \kcl. Then, there exist eigenvectors $v_i$ of $\AVG$ such that, for all $a\neq b\in [k]$, there is some $i\in\Set{2,\ldots,k}$ satisfying $\Abs{v_i[a]-v_i[b]}\geq 2\sqrt{\frac{\e}{k-1}}\Norm{v_i}_2$.
+    \end{lemma}
+    
+    \begin{proof}
+        Let $S$ be a positive diagonal matrix defined by $S[i, i]=\Abs{V_i}$. Then, $\AVG':=S^{1/2}\AVG\ S^{-1/2}$ is symmetric, so the spectrum of $\AVG$ is the same as that of $\AVG'$.
+        
+        Let $w_{[k]}$ be an orthonormal eigenbasis of $\AVG'$ and let $M'$ be the orthogonal matrix whose columns are $w_{[k]}$. Then, the rows $M'[j, :]$ of $M'$ are also orthonormal. Let $M$ be the corresponding matrix whose rows are the eigenvectors $v_{i}:=S^{-1/2}w_{i}$ of $\AVG$. Note that $M[j, :]=\frac{1}{\sqrt{\Abs{V_j}}}M'[j, :]$, so the rows of $M$ are orthogonal and have $\ell_2$-norm $\frac{1}{\sqrt{\Abs{V_j}}}$. Hence,
+        
+        $$\Norm{M[a,:]-M[b,:]}_2^2=\Norm{M[a,:]}_2^2+\Norm{M[b,:]}_2^2=\frac{1}{\Abs{V_a}}+\frac{1}{\Abs{V_b}}\,.$$
+        
+        Note that due to $d$-regularity, a principal eigenvector of $\AVG$ is $\1$, so $M[a, 1]-M[b, 1]=0$. Hence, using that $\Abs{V_a}+\Abs{V_b}\leq n$, there exists $i\in\Set{2,\ldots,k}$ such that
+        
+        $$\Abs{v_i[a]-v_i[b]}\geq \sqrt{\frac{1}{k-1}\Paren{\frac{1}{\Abs{V_a}}+\frac{1}{\Abs{V_b}}}}\geq \frac{2}{\sqrt{(k-1)n}}\,.$$
+    
+        Finally, using $\e$-largeness, we get
+        $$\Norm{v_i}_2=\Norm{S^{-1/2}v_i}_2\leq \Norm{S^{-1/2}}_2\Norm{w_i}_2\leq \frac{1}{\sqrt{\e n}}\,,$$
+        from which the result follows.
+    \end{proof}
+    
+    %\restatelemma{lemma: spectralclustering}
+    
+    \begin{proof}[Proof of \cref{lemma: spectralclustering}]
+        Define a set of good vertices $\mathrm{Good}:=\Set{x\in V(G)\mid \delta_i(x)^2\leq \frac{\zeta}{12k^3n}\;\forall i}$, i.e., those indices where the vectors $\hat{u}_{\btw{2}{k}}$ we found are close to the vectors $u_{\btw{2}{k}}$.
+        By an averaging argument it holds that $\Abs{\mathrm{Good}}\geq n - k\frac{\eta}{\frac{\zeta}{12k^3n}}=\Paren{1-\frac{12\eta k^4}{\zeta}}n$.
+    
+        Now assume $x,y\in \mathrm{Good}$ such that $f(x)=f(y)$.
+        In that case, $\Paren{\hat{u}_i(x)-u_i(x)}^2=\delta_i(x)^2\leq \frac{\zeta }{12k^3n}$ and $\Paren{\hat{u}_i(y)-u_i(y)}^2=\delta_i(y)^2\leq \frac{1}{12k^3n}$ by goodness, and $u_i(x)=v_i(f(x))=v_i(f(y))=u_i(y)$ by $f(x)=f(y)$.
+        By using that $(a+b+c)^2\leq 3(a^2+b^2+c^2)$, we write $\Paren{\hat{u}_i(x)-\hat{u}_i(y)}^2$ as
+        $$\Paren{\Paren{\hat{u}_i(x)-u_i(x)}+\Paren{u_i(x)-u_i(y)}+\Paren{u_i(y)-\hat{u}_i(y)}}^2$$
+        and put all the above together as
+        $$\Paren{\hat{u}_i(x)-\hat{u}_i(y)}^2\leq \frac{\zeta}{2k^3n}\,.$$
+    
+        Hence, summing up for different $i$s, we get $\sum_{j=2}^k \Paren{\hat{u}_j(x)-\hat{u}_j(y)}^{2}\leq \frac{\zeta }{2k^2n}$, i.e., $x, y$ satisfy the condition in \cref{alg: spectralclustering}.
+        
+        Now let us show the contrapositive, i.e., when $x,y\in \mathrm{Good}$ but $f(x)\neq f(y)$, then they don't satisfy the condition in \cref{alg: spectralclustering}. Let $a$ be the coordinate where $\Abs{v_a(f(x))-v_a(f(y))}$ is maximal. Then, by triangle inequality we get
+        
+        \begin{align*}
+            \sum_{i\in\btw{2}{k}}\Paren{\hat{u}_i(x)-\hat{u}_i(y)}^2&\geq \Paren{\hat{u}_a(x)-\hat{u}_a(y)}^2\\
+            &=\Paren{\Paren{v_a(f(x))-v_a(f(y))}-\Paren{\delta_a(y)-\delta_a(x)}}^2\\
+            &\geq \Paren{\Abs{v_a(f(x))-v_a(f(y))}-\Abs{\delta_a(y)-\delta_a(x)}}^2\,.
+        \end{align*}
+    
+        Now we observe that the first term is much larger than the second one.
+        Combining \cref{lemma: regularavgimpliesnosmallcomponents} and \cref{lemma: balancedcompsizesimplydiffevectors}, we get $\Abs{v_a(f(x))-v_a(f(y))}\geq \frac{2\sqrt{\zeta}}{k\sqrt{n}}$, while $\Abs{\delta_a(y)-\delta_a(x)}\leq \Abs{\delta_a(y)}+\Abs{\delta_a(x)}\leq \frac{\sqrt{\zeta}}{k\sqrt{3kn}}$ due to the goodness of $x$ and $y$.
+        Plugging it back and using $k\geq 3$, we get
+        \[\sum_{i=2}^k\Paren{\hat{u}_i(x)-\hat{u}_i(y)}^2 \geq \Paren{2-\frac{1}{\sqrt{3k}}}^2\frac{\zeta }{k^2n} > \frac{\zeta }{k^2n}\,,\]
+        % \begin{align*}
+        %     &\\
+        %     &\geq \Paren{2-\frac{1}{\sqrt{3k}}}^2\frac{\zeta }{k^2n}\\
+        %     &> \frac{\zeta }{k^2n}\,,
+        % \end{align*}
+        not satisfying the condition in \cref{alg: spectralclustering}.
+        Hence, overall for good vertices $x$ and $y$, $y$ gets put into the same color class as $x$ if and only if $f(x)=f(y)$.
+        Therefore, when $x_{[k]}$ have different colors and they are all in $\mathrm{Good}$, each vertex in $\mathrm{Good}$ will have a unique and correct color class $S_i$ for which the condition in \cref{alg: spectralclustering} is satisfied.
+        Hence, in that case there will no invalid edges within $\mathrm{Good}$, and the returned coloring is a $\frac{12\eta k^4}{\zeta }n$-approximate coloring.
+    
+        The running time is $n^{O(k)}$.
+    \end{proof}
+    \end{comment}    

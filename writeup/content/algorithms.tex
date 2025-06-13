@@ -1,0 +1,636 @@
+\section{Finding colorings and independent sets}
+
+\subsection{Colorable models}
+
+% For a graph on $n$ vertices, we define a $(k, \delta)$-coloring as a list of $k$ disjoint independent sets in $G$ that cover $(1-\delta)n$ of the vertices of $G$.
+% Then we define a tractable model as follows.
+
+% \begin{definition}[$(M, \delta)$-coloring]
+% Let $M \in \R^{k \times k}_{\geq 0}$ be a reversible row stochastic matrix with zeros on the diagonal.
+% For a graph $G(V, E)$, we say that $\chi: V \to [k]$ is a $(M,\delta)$-coloring if $\Norm{M - M(\tilde{A}, \chi)}_{\max} \leq \delta$ and $\chi$ is a $(k, \delta)$-coloring of $G$.
+% \end{definition}
+
+% \begin{definition}[Tractable model]
+%     \label{def:tract-model}
+%     Let $M \in \R^{k \times k}_{\geq 0}$ be a reversible row stochastic matrix with zeros on the diagonal and non-positive second eigenvalue.
+%     We say $M$ is tractable if, for every $\e > 0$, there exist $\delta, \lambda > 0$ and a polynomial-time algorithm $\mathcal{A}$ such that, given an $(M, \delta)$-colorable $\lambda$-one-sided expander $G$, the algorithm $\mathcal{A}$ outputs a $(k, \e)$-coloring for $G$.
+% \end{definition}
+
+Our most general result for $k$-colorings is the following:
+\begin{theorem}[Result for $k$-coloring]
+    \label{thm:kalg-partial}
+    Let $M \in \R^{k \times k}_{\geq 0}$ be a reversible row stochastic matrix with zero on the diagonal and non-positive second eigenvalue, and let $\pi$ be its stationary distribution.
+    Let $S_1, \ldots, S_{k'}$ be a partition of $[k]$ such that, for all $a, b \in S_i$ the rows $M^{(a)}$ and $M^{(b)}$ of $M$ are equal, and for all $a \in S_i, b \in S_j$ with $i \neq j$ the rows $M^{(a)}$ and $M^{(b)}$ of $M$ are distinct.
+    For all $i \in [k']$, let $a_i^* = \argmax_{a \in S_i} \pi(a)$, and let $p_i = \max\Paren{0, \pi(a_i^{*}) - \sum_{\substack{a \neq a_i^{*} \in S_i}} \pi(a)}$.
+    Then, given a $d$-regular $(M, \delta)$-colorable $\lambda$-one-sided expander $G$, where $\delta, \lambda > 0$ are small enough, there exists an algorithm that runs in time $n^{O(1)} \cdot O_{\delta, \lambda, M}(1)$ and outputs a $(k', 1 - \sum_{i \in [k']} p_i + O_M(\sqrt{\delta} + \lambda + \delta/\lambda))$-coloring for $G$.
+\end{theorem}
+
+As a direct corollary, we approach a full coloring in the case when all rows of $M$ are distinct:
+\begin{corollary}[Result for $k$-coloring, distinct rows]
+    \label{thm:kalg}
+    Let $M \in \R^{k \times k}_{\geq 0}$ be a reversible row stochastic matrix with zero on the diagonal, non-positive second eigenvalue, and distinct rows.
+    Then, given a $d$-regular $(M, \delta)$-colorable $\lambda$-one-sided expander $G$, where $\delta, \lambda > 0$ are small enough, there exists an algorithm that runs in time $n^{O(1)} \cdot O_{\delta, \lambda, M}(1)$ and outputs a $(k, O_M(\sqrt{\delta} + \lambda + \delta/\lambda))$-coloring for $G$.
+\end{corollary}
+
+We start by proving two lemmas that we will use in the proof.
+First, we show that the models we consider in \cref{thm:kalg-partial} are well-behaved: they have a unique stationary distribution in which each vertex has non-zero probability.
+
+\begin{lemma}[Model color class size lower bound]
+\label{lemma:model-color-size}
+Let $M \in \R^{k \times k}_{\geq 0}$ be a reversible row stochastic matrix with zeros on the diagonal.
+Then the stationary distribution $\pi$ of $M$ is unique and satisfies $\min_{a \in [k]} \pi_a \geq \Omega_M(1)$.
+Furthermore, for every $A \in \R^{n \times n}$ and every $k$-coloring $\chi : [n] \to [k]$ of $[n]$ such that $\Norm{M - M(A, \chi)} \leq \delta$, then also $\Abs{\frac{1}{n}|\chi^{-1}(a)| - \pi_a} \leq 8\sqrt{\delta}k$ for all $a \in [k]$.
+\end{lemma}
+\begin{proof}
+First, because $M$ has non-positive second eigenvalue, its non-zero entries describe a connected graph.
+Furthermore, for a stationary distribution $\pi$ of $M$, for all $a \neq b \in [k]$ we have $\pi_a M_{ab} = \pi_b M_{ba}$, so if $M_{ab},M_{ba}>0$ also 
+\[\Omega_M(1) \leq \frac{\pi_a}{\pi_b} = \frac{M_{ab}}{M_{ba}} \leq O_M(1)\,.\]
+Then, because the non-zero entries of $M$ describe a connected graph, we can chain inequalities of this form to obtain for all $a \neq b \in [k]$ the ratios $\pi_a/\pi_b$.
+Together with the fact that $\sum_{a \in [k]} \pi_a = 1$, we get that $\pi$ is uniquely determined by $M$ and satisfies $\min_{a \in [k]} \pi_a \geq \Omega_M(1)$.
+
+Second, we have that $M(A, \chi)_{ab}$ is $\delta$-close to $M_{ab}$ for all $a,b\in [k]$. 
+Also, for all $a \neq b \in [k]$ we have $\frac{1}{n}|\chi^{-1}(a)| M(A, \chi)_{ab} = \frac{1}{n}|\chi^{-1}(b)| M(A, \chi)_{ba}$ and $\sum_{a \in [k]} \frac{1}{n}|\chi^{-1}(a)| = 1$.
+Then, if $M_{ab},M_{ba}>0$ and $\delta > 0$ is small enough such that $\delta \leq \sqrt{\delta} M_{ab}, \sqrt{\delta} M_{ba}$, also 
+\[(1-4\sqrt{\delta}) \frac{\pi_a}{\pi_b} \leq \frac{(1-\sqrt{\delta})M_{ab}}{(1+\sqrt{\delta})M_{ba}} \leq \frac{\frac{1}{n}|\chi^{-1}(a)|}{\frac{1}{n}|\chi^{-1}(b)|} = \frac{M(A, \chi)_{ab}}{M(A, \chi)_{ba}} \leq \frac{(1+\sqrt{\delta})M_{ab}}{(1-\sqrt{\delta})M_{ba}} \leq (1+4\sqrt{\delta})\frac{\pi_a}{\pi_b}\,.\]
+This implies that for all $a, b \in[k]$ we have 
+\[(1-8\sqrt{\delta}k) \frac{\pi_a}{\pi_b} \leq (1-4\sqrt{\delta})^{k-1} \frac{\pi_a}{\pi_b} \leq \frac{\frac{1}{n}|\chi^{-1}(a)|}{\frac{1}{n}|\chi^{-1}(b)|} \leq (1+4\sqrt{\delta})^{k-1} \frac{\pi_a}{\pi_b} \leq (1+4\sqrt{\delta}k) \frac{\pi_a}{\pi_b}\,,\]
+so summing over all $a \in [k]$ we get 
+\[(1-8\sqrt{\delta}k)\frac{1}{\pi_b} \leq \frac{1}{\frac{1}{n}|\chi^{-1}(b)|} \leq (1+4\sqrt{\delta}k) \frac{1}{\pi_b}\,,\]
+which finally implies that $\Abs{\frac{1}{n}|\chi^{-1}(b)| - \pi_b} \leq 8\sqrt{\delta}k$ for all $b \in [k]$.
+\end{proof}
+
+Second, we prove that a $k$-colorable graph that has small variance as per \cref{lemma: expansionimpliesvariance} also has $\tilde{A}$ that is close to $W = Z M(\tilde{A}, \chi) B^{-1} Z^\top$ on the indicators of the color classes.
+
+\begin{lemma}[Small variance implies close indicators]
+\label{lem:small-var-to-indic}
+Let $G$ be an $n$-vertex graph with adjacency matrix $A$, and let $\tilde{A} = \frac{1}{d}A$ for some $d>0$.
+Let $\chi: [n] \to [k]$ be a $k$-coloring of its vertices with $\min_{a \in [k]} |\chi^{-1}(a)| \geq c n$, and consider its partition matrices $Z \in \{0,1\}^{n \times k}$ and $B \in \R^{k \times k}$ as per \cref{def:partition_Z}.
+For $x \in [n]$ and $a \in [k]$, let $\D{x}{a} = \sum_{y \in \chi^{-1}(a)} \tilde{A}_{xy}$.
+Suppose that, for any $a, b \in [k]$ and $\bm{x}$ uniformly random in $\chi^{-1}(a)$,
+\[\E_{\bm{x} \sim \chi^{-1}(a)} \Paren{\D{\bm{x}}{b} - \E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b}}^2 \leq \delta\,.\]
+Then, for $W = Z M(\tilde{A}, \chi) B^{-1} Z^\top$ with $M(\tilde{A}, \chi)$ defined as in \cref{def:model} with respect to $\tilde{A}$, it holds for all $a \in [k]$ that
+\[\Norm{\tilde{A} \frac{Z_a}{\Norm{Z_a}} - W  \frac{Z_a}{\Norm{Z_a}}}^2 \leq \frac{\delta}{c}\,.\]
+\end{lemma}
+\begin{proof}
+Note that $W_{xy} = \frac{E(\chi^{-1}(\chi(x)), \chi^{-1}(\chi(y)))}{d \Abs{\chi^{-1}(\chi(x))} \Abs{\chi^{-1}(\chi(y))}}$.
+Then we get 
+\begin{align*}
+    \Norm{\tilde{A} Z_a - W Z_a}^2 
+    &= \sum_{b \in [k]} \sum_{x \in \chi^{-1}(b)} \Paren{\sum_{y \in \chi^{-1}(a)} \tilde{A}_{x,y} - \frac{1}{d} \frac{E(b,a)}{|\chi^{-1}(b)|} }^2\\
+    &= \sum_{b \in [k]} \sum_{x \in \chi^{-1}(b)} \Paren{\D{x}{a} - \E_{\bm{x} \sim \chi^{-1}(b)} \D{\bm{x}}{a}}^2\\
+    &= \sum_{b \in [k]} |\chi^{-1}(b)|\; \E_{\bm{x} \sim \chi^{-1}(b)} \Paren{\D{\bm{x}}{a} - \E_{\bm{x} \sim \chi^{-1}(b)} \D{\bm{x}}{a}}^2\\
+    &\leq \delta n\,,
+\end{align*}
+so using that $cn \leq \Norm{Z_a}^2 \leq n$ we get that $\Norm{\tilde{A} \frac{Z_a}{\Norm{Z_a}} - W \frac{Z_a}{\Norm{Z_a}}}^2 \leq \frac{\delta}{c}$.
+\end{proof}
+
+Let us now prove \cref{thm:kalg-partial}.
+
+\begin{proof}[Proof of \cref{thm:kalg-partial}]
+    We note by \cref{lemma:model-color-size} that $\pi$ is unique and satisfies $\min_{a \in [k]} \pi_a \geq \Omega_M(1)$.
+
+    Denote by $\chi: [n] \to [k]$ the $k$-coloring with respect to which $G$ is $(M, \delta)$-colorable.
+    Let $\phi: [k] \to [k']$ map each $a \in [k]$ to the $i \in [k']$ for which $a \in S_i$, and then define $\chi' : [n] \to [k']$ as $\chi'(x) = \phi(\chi(x))$ for all $x \in [n]$.
+    That is, $\chi'$ is a $k'$-coloring of the graph that starts with the $k$-coloring $\chi$ and then for each $i \in [k']$ contracts all colors in $S_i$ into a single color.
+
+    We aim to apply \cref{thm:part-recovery} with respect to the $k'$-coloring $\chi'$ and approximately recover the partition of the vertices corresponding to $\chi'$.
+    For that, we need to argue that the $k'$-coloring $\chi'$ satisfies the conditions of \cref{thm:part-recovery}.
+    Afterward, a simple rounding step will lead to the desired guarantee.
+
+    Let $A$ be the adjacency matrix of the graph, and let $\tilde{A} = \frac{1}{d}A$.
+    We define the model matrices $M(\tilde{A}, \chi)$ and $M(\tilde{A}, \chi')$ as in \cref{def:model}.
+    We will apply \cref{thm:part-recovery} with matrices $M(\tilde{A}, \chi')$ and $\tilde{A}$ (to play the role of $M$ and $A$ in \cref{thm:part-recovery}, respectively).
+
+    We will use the following two claims about the relation between the models defined with respect to $\chi$ and $\chi'$.
+    First, we relate the entries of $M(\tilde{A}, \chi)$ and $M(\tilde{A}, \chi')$.
+
+    \begin{claim}[Closeness of $M(\tilde{A}, \chi)$ and $M(\tilde{A}, \chi')$]
+    \label{claim:close-entries-M}
+    For any $i, j \in [k']$, we have 
+    \begin{equation*}
+    M(\tilde{A}, \chi')_{ij} = \frac{\sum_{b \in S_j} |\chi^{-1}(b)|}{|\chi^{-1}(b^*_j)|} M(\tilde{A}, \chi)_{a^*_ib^*_{j}} \pm O_M(\delta)\,.
+    \end{equation*}
+    \end{claim}
+    \begin{proof}
+    A calculation shows that, for $i, j \in [k']$,
+    \begin{equation}
+    \label{eq:model-form}
+    M(\tilde{A}, \chi')_{ij} = \sum_{a \in S_i} \frac{|\chi^{-1}(a)|}{\sum_{a' \in S_i} |\chi^{-1}(a')|} \sum_{b \in S_j} M(\tilde{A}, \chi)_{ab}\,.
+    \end{equation}
+    We note that, for any two rows $M^{(a)}$ and $M^{(a')}$ that are identical, we have that\linebreak $\Norm{M(\tilde{A}, \chi)^{(a)} - M(\tilde{A}, \chi)^{(a')}} \leq O_M(\delta)$.
+    Hence, for any $a, a' \in S_i$, we have that $\sum_{b \in S_j} M(\tilde{A}, \chi)_{ab}$ is $O_M(\delta)$-close to $\sum_{b \in S_j} M(\tilde{A}, \chi)_{a'b}$.
+    Denote $b_i^* = a_i^*$ for all $i \in [k']$.
+    Then, by \cref{eq:model-form} and the above,
+    \begin{align*}
+    \begin{split}
+    \label{eq:mchi}
+    M(\tilde{A}, \chi')_{ij}
+    &= \sum_{b \in S_j} M(\tilde{A}, \chi)_{a^*_i b} \pm O_M(\delta)\\
+    &= \frac{1}{|\chi^{-1}(a^*_i)|} \sum_{b \in S_j} |\chi^{-1}(b)| M(\tilde{A}, \chi)_{b a^*_i} \pm O_M(\delta)\\
+    &= \frac{\sum_{b \in S_j} |\chi^{-1}(b)|}{|\chi^{-1}(a^*_i)|} M(\tilde{A}, \chi)_{b^*_{j} a^*_i} \pm O_M(\delta)\\
+    &= \frac{\sum_{b \in S_j} |\chi^{-1}(b)|}{|\chi^{-1}(b^*_j)|} M(\tilde{A}, \chi)_{a^*_ib^*_{j}} \pm O_M(\delta)\,,
+    \end{split}
+    \end{align*}
+    where we used that $|\chi^{-1}(a)| M(\tilde{A},\chi)_{ab} = |\chi^{-1}(b)| M(\tilde{A},\chi)_{ba}$ for all $a, b \in [k]$.
+    \end{proof}
+
+    Second, let $W = Z M(\tilde{A}, \chi) B^{-1} Z^\top$, with the partition matrices $Z, B$ corresponding to the $k$-coloring $\chi$, and let $W' = Z' M(\tilde{A}, \chi') (B')^{-1} (Z')^\top$, with the partition matrices $Z', B'$ corresponding to the $k'$-coloring $\chi'$.
+    Then we also relate the entries of $W$ and $W'$.
+
+    \begin{claim}[Closeness of $W$ and $W'$]
+    \label{claim:close-entries-W}
+    For any $x, y \in [n]$, we have 
+    \begin{equation*}
+    W'_{xy} = W_{xy} \pm O_M(\delta/n)\,.
+    \end{equation*}
+    \end{claim}
+    \begin{proof}
+    A calculation shows that, for $x,y \in [n]$,
+    \[W_{xy} = \frac{M(\tilde{A}, \chi)_{\chi(x)\chi(y)}}{|\chi^{-1}(\chi(y))|}\] 
+    and, by \cref{claim:close-entries-M}, 
+    \begin{align*}
+    W'_{xy}
+    &= \frac{M(\tilde{A}, \chi')_{\chi'(x)\chi'(y)}}{|(\chi')^{-1}(\chi'(y))|}\\
+    &= \frac{ \frac{\sum_{b \in S_{\chi'(y)}} |\chi^{-1}(b)|}{|\chi^{-1}(b_{\chi'(y)})|} M(\tilde{A}, \chi)_{a_{\chi'(x)}b_{\chi'(y)}}}{\sum_{b \in S_{\chi'(y)}} |\chi^{-1}(b)|} \pm O_M(\delta/n)\\
+    &= \frac{ M(\tilde{A}, \chi)_{a_{\chi'(x)}b_{\chi'(y)}}}{|\chi^{-1}(b_{\chi'(y)})|} \pm O_M(\delta/n)\,.
+    \end{align*}
+    In \cref{claim:close-entries-M} $a^*_{\chi'(x)}$ and $b^*_{\chi'(y)}$ could in fact be any arbitrary colors in $S_{\chi'(x)}$ and $S_{\chi'(y)}$, respectively.
+    Then, letting $a_{\chi'(x)} = \chi(x)$ and $b_{\chi'(y)} = \chi(y)$, we get that $W'_{xy} = W_{xy} \pm O_M(\delta/n)$.
+    \end{proof}
+
+    Let us prove now that we satisfy the conditions of \cref{thm:part-recovery} with matrices $M(\tilde{A}, \chi')$ and $\tilde{A}$.
+    First, we have trivially that $(B')^{1/2} M(\tilde{A}, \chi') (B')^{-1/2}$ is symmetric and that $\Norm{M(\tilde{A}, \chi')} = 1$.
+    We also have that $|\chi^{-1}(a)| \geq \Omega_M(n)$ for all $a \in [k]$ by \cref{lemma:model-color-size}.
+    
+    \paragraph{Row separation of $M(\tilde{A}, \chi')$}
+    We prove now that the rows of $M(\tilde{A}, \chi')$ are separated.
+    Consider two rows $M(\tilde{A}, \chi')^{(i)}$ and $M(\tilde{A}, \chi')^{(i')}$ with $i \neq i' \in [k']$.
+    Because $M^{(a^*_i)} \neq M^{(a^*_{i'})}$, we have that $\Norm{M^{(a^*_i)} - M^{(a^*_{i'})}} \geq \Omega_M(1)$, so then by the closeness of $M$ and $M(\tilde{A}, \chi)$ we also have that $\Norm{M(\tilde{A}, \chi)^{(a^*_i)} - M(\tilde{A}, \chi)^{(a^*_{i'})}} \geq \Omega_M(1)$.
+    Therefore, there exists some $b \in [k]$ such that\linebreak $\Abs{M(\tilde{A}, \chi)_{a^*_ib} - M(\tilde{A}, \chi)_{a^*_{i'}b}} \geq \Omega_M(1)$.
+    By \cref{claim:close-entries-M} this implies that, for $j = \phi(b)$, we also have $\Abs{M(\tilde{A}, \chi')_{i j} - M(\tilde{A}, \chi')_{i' j}} \geq \Omega_M(1)$.
+    Hence, $\Norm{M(\tilde{A}, \chi')^{(i)} - M(\tilde{A}, \chi')^{(i')}} \geq \Omega_M(1)$.
+
+    \paragraph{Closeness of $\tilde{A}$ and $W'$}
+    By definition, we only consider $G$ and colorings with respect to which it has a vertex cover of all monochromatic edges of size at most $\delta n$, so the number of monochromatic edges is bounded by $\delta d n$.
+    By \cref{lemma:model-color-size}, the size of each color class is lower bounded by some $\Omega_M(n)$.
+    Then by \cref{lemma: expansionimpliesvariance} and \cref{lem:small-var-to-indic} we have that $\Norm{\tilde{A} \frac{Z_a}{\Norm{Z_a}} - W \frac{Z_a}{\Norm{Z_a}}}^2 \leq O_M\Paren{\lambda + \frac{\delta}{\lambda}}$ for all $a \in [k]$.
+
+    By \cref{claim:close-entries-W}, we have that $\Norm{W'-W} \leq \Norm{W'-W}_F \leq O_M(\delta)$.
+    Then, for each $S_i$, denoting its elements as $S_i = \{a_1, \ldots, a_{\ell}\}$, we are interested in the closeness of $\tilde{A}$ and $W'$ with respect to the indicator $\sum_{j=1}^{\ell} Z_{a_j}$.
+    We have
+    \[\Norm{(\tilde{A} - W') \sum_{j=1}^{\ell} Z_{a_j}} \leq \sum_{j=1}^{\ell} \Norm{(\tilde{A} - W') Z_{a_j}} \leq \sum_{j=1}^{\ell} \Norm{(\tilde{A} - W) Z_{a_j}} + \sum_{j=1}^{\ell}\Norm{(W'-W)Z_{a_j}}\,.\]
+    For the first term on the right-hand side, we have that $\Norm{\tilde{A} \frac{Z_a}{\Norm{Z_a}} - W \frac{Z_a}{\Norm{Z_a}}}^2 \leq O_M\Paren{\lambda + \frac{\delta}{\lambda}}$ for all $a \in [k]$, so using that $\Norm{Z_a} \leq \sqrt{n}$ we can bound
+    \[\sum_{j=1}^{\ell} \Norm{(\tilde{A} - W) Z_{a_j}} \leq \sqrt{n} \cdot O_M\Paren{\sqrt{\lambda + \frac{\delta}{\lambda}}}\,.\]
+    For the second term, we have that
+    \[\sum_{j=1}^{\ell} \Norm{(W'-W)Z_{a_j}} \leq \sum_{j=1}^{\ell} \Norm{W'-W} \Norm{Z_{a_j}} \leq \sqrt{n} \cdot O_M(\delta)\,.\]
+    Then, also using that $\Norm{\sum_{j=1}^{\ell} Z_{a_j}} \geq \Omega_M(\sqrt{n})$, we have
+    \[\Norm{(\tilde{A} - W') \frac{\sum_{j=1}^{\ell} Z_{a_j}}{\Norm{\sum_{j=1}^{\ell} Z_{a_j}}}}^2 \leq O_M \Paren{\lambda + \frac{\delta}{\lambda}}\,,\]
+    so we satisfy the second condition in \cref{thm:part-recovery} with constant $O_M \Paren{\lambda + \frac{\delta}{\lambda}}$.
+
+    \paragraph{Low rank of $\tilde{A}$}
+    Because $\rank_{\geq \lambda}(\tilde{A}) \leq 1$, by applying \cref{cor:spectral_small_to_small} with $\sigma=\lambda$, we get that the bottom threshold rank of $\tilde{A}$ is bounded by $\rank_{\leq -\sqrt{2\lambda}}(\tilde{A}) \leq 1/\lambda^2$.
+    Note that, using that $\lambda \leq 1$, we have that $\lambda \leq \sqrt{2 \lambda}$.
+    Then, for the purposes of \cref{thm:part-recovery}, we apply the theorem with eigenvalue threshold $\lambda' = \max\{\sqrt{2\lambda}, \Omega_M(1)\}$ for some small enough $\Omega_M(1)$ such that the conditions of the theorem are satisfied, and this allows us to take $t = O(1/(\lambda')^2) = O_M(1)$.
+
+    \paragraph{Rounding}
+    Then, by \cref{thm:part-recovery} applied with matrices $M(\tilde{A}, \chi')$ and $\tilde{A}$, we can recover in time $n^{O(1)} \cdot O_{\delta,\lambda,M}(1)$ a list of $O_{\delta,\lambda,M}(1)$ $k'$-colorings $\hat{\chi'}: [n] \to [k']$ such that, for at least one of them, it holds up to a permutation of the color classes that $\mathbb{E}_{\bm{x} \sim \operatorname{Unif}([n])} \1[\hat\chi'(x) \neq \chi'(x)] \leq O_M(\lambda+\delta/\lambda)$.
+    Let $\e = O_M(\lambda + \delta/\lambda)$ be equal to this upper bound.
+    At this point, for each candidate $k'$-coloring, we apply the rounding algorithm in \cref{lemma: generalrounding} on each of its color classes to obtain $k'$ independent sets, and return the set of $k'$ independent sets that cover most vertices of $G$.
+
+    Let us analyze the approximation guarantee.
+    For the best $k'$-coloring, the rounding algorithm in \cref{lemma: generalrounding} will remove at most $2\e n$ vertices due to misclassifications and at most $2\delta n$ vertices due to monochromatic edges with respect to the $k$-coloring $\chi$.
+    The rounding algorithm may also need to remove a significant portion of vertices because we recover $k'$-colorings instead of $k$-colorings --- this is necessary even if the $k'$-coloring $\chi'$ is perfectly recovered.
+    To analyze these removals, let us start by defining $\bar{a}_i^* = \argmax_{a \in S_i} |\chi^{-1}(a)|$ for each $i \in [k']$.
+    Then, for each $i \in [k']$, the rounding algorithm may remove at most $\max\Paren{\sum_{a \in S_i} |\chi^{-1}(a)|, 2\sum_{\substack{a \neq a_i^{*} \in S_i}} |\chi^{-1}(a)|}$ vertices from $(\chi')^{-1}(i)$.
+    Let us define for each $i \in [k']$ the minimum fraction of vertices not removed as $\bar{p}_i = \frac{1}{n} \max\Paren{0, |\chi^{-1}(a_i^*)| - \sum_{\substack{a \neq a_i^{*} \in S_i}} |\chi^{-1}(a)|}$.
+    Then the algorithm returns a $(k', 1 - \sum_{i \in [k']} \bar{p}_i + 2\e)$-coloring for $G$.
+    Finally, by \cref{lemma:model-color-size}, for $\delta > 0$ small enough, $|\chi^{-1}(a)|/n$ and $\pi_a$ are $O(\sqrt{\delta}k)$-close for all $a \in [k]$, so the algorithm also returns a $(k', 1 - \sum_{i \in [k']} p_i + O_M(\sqrt{\delta}) + 2\e)$-coloring for $G$, where $p_i$ is defined as in the statement of the theorem.
+    Recalling that $\e = O_M(\lambda + \delta/\lambda)$ gives the stated result.
+\end{proof}
+
+\subsection{$3$-colorable models}
+
+For the case $k=3$, it turns out that the model has non-positive eigenvalue and distinct rows whenever its stationary distribution is strictly bounded pointwise by $1/2$. 
+
+The first observation is that we can compute explicitly the entries of $M$ in terms of the stationary distribution.
+
+\begin{lemma}[Model entries for $3$-colorings]
+\label[lemma]{lemma: 3coloringfixedaveragedegree}
+Let $M \in \R^{3 \times 3}_{\geq 0}$ be a reversible row stochastic matrix with zeros on the diagonal and stationary distribution $\pi$.
+Then for all $a \neq b \in [3]$ 
+\[M_{ab} = \frac{(2\pi(a)+2\pi(b))-1}{2\pi(a)}.\]
+\end{lemma}
+\begin{proof}
+    For all $a \in [3]$, we have $\sum_{b\in [3]}M_{ab}=1$.
+    Also for all $b\in [3]\setminus\Set{a}$, we have $\pi(a) M_{ab} = \pi(b) M_{ba}$.
+    Hence, taking the off-diagonal entries of the $M$ matrix as unknown, we have $6$ variables and $6$ independent linear equations, so there is a unique solution.
+    Using $\sum_{a\in[3]}\pi(a)=1$, for $a\neq b\neq c\in[3]$ we can express it as
+    $$M_{ab}= \frac{(2\pi(a)+2\pi(b))-1}{2\pi(a)}\,.$$
+\end{proof}
+
+We then use this observation to deduce that, whenever the largest probability of a color class is upper bounded by $1/2-\gamma$, any two distinct rows of $M$ have separation $\gamma$.
+
+\begin{lemma}[Row separation for $3$-colorings]
+\label[lemma]{lemma: 3coloringrowseparation}
+Let $M \in \R^{3 \times 3}_{\geq 0}$ be a reversible row stochastic matrix with zero on the diagonal and stationary distribution $\pi$ that satisfies $\max_{a \in [3]} \pi_a \leq 1/2 - \gamma$.
+Then any two distinct rows $M^{(a)}$ and $M^{(b)}$ of $M$ satisfy $\Norm{M^{(a)} - M^{(b)}} \geq \gamma$.
+\end{lemma}
+\begin{proof}
+It suffices to prove that all non-diagonal entries of $M$ are bounded away from $0$.
+From \cref{lemma: 3coloringfixedaveragedegree}, we get for $a \neq b$ that $M_{ab} = \frac{(2\pi_a+2\pi_b)-1}{2\pi_a}$.
+Because $\max_{a \in [3]} \pi_a \leq 1/2-\gamma$, it follows that $\pi_a+\pi_b \geq 1/2+\gamma$, so $M_{ab} \geq \frac{\gamma}{\pi_a} \geq \gamma$.
+Then the conclusion follows because $\Norm{M^{(a)} - M^{(b)}} \geq M_{ab} - M_{bb} = M_{ab} \geq \gamma$.
+\end{proof}
+
+Finally, we state and prove our result specialized to $3$-colorings.
+
+\begin{theorem}[Result for $3$-coloring]
+\label{thm:3alg}
+Let $G$ be an $n$-vertex $d$-regular graph with adjacency matrix $A$, and let $\tilde{A} = \frac{1}{d}A$.
+Let $\lambda$ be the second largest eigenvalue of $\tilde{A}$.
+Let $\chi: [n] \to [3]$ be a $3$-coloring of its vertices, and suppose that $G$ has a vertex cover of all monochromatic edges of size at most $\delta n$.
+Suppose $\max_{a \in [3]} \frac{1}{n} |\chi^{-1}(a)| \leq 1/2 - \gamma$.
+Then, for $\delta, \gamma, \lambda > 0$ small enough, there exists an algorithm that runs in time $n^{O(1)} \cdot O_{\delta,\gamma,\lambda}(1)$ and outputs a $(3, O(\lambda/\gamma^7+\delta/(\lambda\gamma^7)))$-coloring for $G$.
+% A reversible row stochastic matrix $M \in \R^{3 \times 3}_{\geq 0}$ with zero on the diagonal is tractable if its stationary distribution $\pi$ satisfies $\max_a \pi_a < 1/2$.
+\end{theorem}
+\begin{proof}
+For simplicity of notation, let $M = M(\tilde{A}, \chi)$ be defined as in \cref{def:model} with respect to $\tilde{A}$.
+We aim again to apply \cref{thm:part-recovery} with matrices $M$ and $\tilde{A}$, and we verify that its conditions hold.
+We have by \cref{lemma: 3coloringrowseparation} that any two distinct rows of $M$ have separation $\gamma$.
+Furthermore, the bound $\max_{a \in [3]} \frac{1}{n} |\chi^{-1}(a)| \leq 1/2 - \gamma$ implies that $|\chi^{-1}(a)| \geq 2\gamma n$ for all $a \in [3]$.
+For the rest of the proof, we will largely repeat the analysis in the proof of \cref{thm:kalg-partial}, but using that any two distinct rows of $M$ are separated and taking into account explicitly the parameter $\gamma$.
+
+Let $W = Z M B^{-1} Z^\top$, with the partition matrices $Z, B$ corresponding to the $k$-coloring $\chi$.
+We have trivially that $B^{1/2} M B^{-1/2}$ is symmetric and that $\Norm{M} = 1$.
+We also have that $|\chi^{-1}(a)| \geq 2\gamma n$ for all $a \in [3]$.
+
+In addition, as argued above, we have that any two distinct rows of $M$ have separation $\gamma$.
+For the closeness of $\tilde{A}$ and $W$, we have by \cref{lemma: expansionimpliesvariance} and \cref{lem:small-var-to-indic} that $\Norm{\tilde{A} \frac{Z_a}{\Norm{Z_a}} - W \frac{Z_a}{\Norm{Z_a}}}^2 \leq O\Paren{\lambda/\gamma + \frac{\delta}{\gamma \lambda}}$ for all $a \in [3]$.
+For the low rank of $\tilde{A}$, we have by applying \cref{cor:spectral_small_to_small} with $\sigma=\lambda$ that $\rank_{\leq -\sqrt{2\lambda}}(\tilde{A}) \leq 1/\lambda^2$, and also $\lambda \leq \sqrt{2 \lambda}$. 
+
+Then we apply \cref{thm:part-recovery} with matrices $M$ and $\tilde{A}$ and eigenvalue threshold\linebreak $\lambda' = \max\{\sqrt{2 \lambda}, \Omega(\gamma^{3/2})\}$, such that it satisfies the condition of the theorem, and such that we can take $t = O(1/(\lambda')^2) = O(1/\gamma^3) = O_{\gamma}(1)$.
+Then, we can recover in time $n^{O(1)} \cdot O_{\delta,\gamma,\lambda}(1)$ a list of $O_{\delta,\gamma,\lambda}(1)$ $3$-colorings $\hat{\chi}: [n] \to [3]$ such that, for at least one of them, it holds up to a permutation of the color classes that $\mathbb{E}_{\bm{x} \sim \operatorname{Unif}([n])} \1[\hat\chi(x) \neq \chi(x)] \leq O(\lambda/\gamma^7+\delta/(\lambda\gamma^7))$.
+As in the proof of \cref{thm:kalg-partial}, for each candidate $3$-coloring we apply the rounding algorithm in \cref{lemma: generalrounding} on each of its color classes to obtain $3$ independent sets, and return the set of $3$ independent sets that cover most vertices of $G$.
+The rest of the analysis is identical to that in the proof of \cref{thm:kalg-partial}.
+\end{proof}
+
+\subsection{Random planting}
+
+Instead of a regular $k$-colorable one-sided expander graph, in this section we consider randomly planting a \kcl in a regular one-sided expander graph.
+To aid presentation, let us first define the model and some of the notation that we will use throughout this section.
+
+\begin{definition}[Randomly planted \kcl] \label{def: randomplanted}
+Let $H$ be an $n$-vertex $d$-regular graph. 
+Then we say the graph $G$ is obtained by randomly planting a \kcl in $H$ if it is sampled according to the following procedure:
+\begin{enumerate}
+    \item Sample $\chi: [n] \to [k]$ by sampling $\chi(x) \sim \operatorname{Unif}([k])$ independently for each $x \in [n]$,
+    \item Let $G$ be a copy of $H$, and then remove from $G$ each edge $\{u,v\}$ for which $\chi(u) = \chi(v)$.
+\end{enumerate}
+\end{definition}
+
+% \rares{What to do with these?}
+% Letting $d':=\frac{k-1}{k}d$, we define a normalized adjacency matrix $\tilde{A} := \frac1{d'}A_G$ of $G$. For $x \in [n]$ and $a \in [k]$, let $\D{x}{a} = \sum_{y \in \chi^{-1}(a)} \tilde{A}_{xy}$. Then, we define the model $M \in \R^{k \times k}$ such that for any $a, b \in [k]$, has entries $M_{ab} = \frac{1}{|\chi^{-1}(a)|} \sum_{x \in \chi^{-1}(a)}\D{x}{b}$\andor{is it fine to use $M$ instead of $M(\tilde{A},\chi)$?}.
+% Let $\rank_{\le x}(H):=\rank_{\le x}\Paren{\frac1{d}A_H}$, and $\rank_{\ge x}(H):=\rank_{\ge x}\Paren{\frac1{d}A_H}$.\andor{is using $\rank{\tilde{A}}$ but $\rank(H)$ fine?}
+
+The following is our main recovery result.
+We note that in \cref{thm: random-planting-full}, for the case when the host graph is a one-sided expander, we give an algorithm that recovers a coloring on \emph{all} vertices of the graph.
+
+\begin{theorem}[Result for random planting, partial recovery]
+    \label{thm: random-planting-partial}
+    Let $H$ be an $n$-vertex $d$-regular graph with adjacency matrix $A_H$.
+    Suppose $\rank_{\geq \lambda}(\frac{1}{d}A_H) \leq t$ for some $0 < \lambda < 1$ and $t \in \mathbb{N}$.
+    Let $G$ be the graph obtained by randomly planting a \kcl in $H$, and let $\chi: [n] \to [k]$ be the associated \kcl.
+    Then, for $\lambda > 0$ small enough, there exists an algorithm that runs in time $n^{O(1)} \cdot \Paren{O_{k}(1)}^{t}$ and outputs with high probability a $(k, O_k(1/d^{\Omega(1)}))$-coloring for $G$.
+    %  a list of $\Paren{O_{k}(1)}^{t}$ $k$-colorings $\hat{\chi}: [n] \to [k]$ such that with high probability, for at least one of them, it holds up to a permutation of the color classes that $\mathbb{E}_{\bm{x} \sim \operatorname{Unif}([n])} \1[\hat\chi(\bm{x}) \neq \chi(\bm{x})] \leq O_k(1/d^{\Omega(1)})$.
+    % Let $\Omega(1)\leq\lambda\leq \frac1{O(k^3)}$\andor{this $\Omega(1)$ assumption should ideally be removed}, $t\geq 1$, $d\geq 1$ and $k=O(1)$ be parameters. Let $H$ be an $n$-vertex $d$-regular graph with $\rank_{\ge \lambda}(H)\leq t$, and let $G$ be the graph obtained from $H$ by planting a \kcl in it at random.
+\end{theorem}
+
+To prove \cref{thm: random-planting-partial}, we first prove some properties of the graph $G$ obtained after randomly planting a \kcl in $H$.
+
+\begin{lemma}[Color class concentration in random planting]
+    \label[lemma]{fact: balancedparts}
+    Let $H$ be an $n$-vertex graph.
+    Let $G$ be the graph obtained by randomly planting a \kcl in $H$ for some $k=O(1)$, and let $\chi: [n] \to [k]$ be the associated \kcl.
+    Then, with high probability, $|\chi^{-1}(a)| = \frac{n}{k} \pm O\Paren{\sqrt{n \log n}}$ for all $a \in [k]$.
+\end{lemma}
+\begin{proof}
+    The proof follows straightforwardly from a Hoeffding bound and a union bound.
+\end{proof}
+
+\begin{lemma}[Model entry concentration in random planting]\label{lemma: plantedmodelconcentration}
+    Let $H$ be an $n$-vertex $d$-regular graph.
+    Let $G$ be the graph obtained by randomly planting a \kcl in $H$ for some $k=O(1)$, and let $\chi: [n] \to [k]$ be the associated \kcl.
+    Let $A \in \R^{n \times n}$ be the adjacency matrix of $G$, and let $\tilde{A} = \frac{k}{(k-1)d} A$.
+    Let $M(\tilde{A}, \chi)$ be defined as in \cref{def:model}.
+    Then, with high probability, $M_{ab}=\frac{1}{k-1} \pm o(1)$ for all $a\neq b\in[k]$.
+    % and let $G$ be the graph obtained from $H$ by randomly planting a \kcl in it for some $k=O(1)$. With high probability, the model defined in \cref{def: randomplanted} satisfies $M_{ab}=\frac1{k-1}\pm o(1)$ for any $a\neq b\in[k]$.
+\end{lemma}
+
+\begin{proof}
+    Let $d' = \frac{(k-1)d}{k}$, and for $x \in [n]$ and $a \in [k]$, let $\D{x}{a} = \sum_{y \in \chi^{-1}(a)} \tilde{A}_{xy}$.
+    By linearity of expectation,
+    \[
+    \begin{aligned}
+    \E\Brac{\sum_{x\in \chi^{-1}(a)} \D{x}{b}}
+    &= \frac1{d'}\;\E\Brac{\sum_{x\sim y\in E(H)}
+        \Paren{\1[\chi(x)=a\land\chi(y)=b]
+            +\1[\chi(x)=b\land\chi(y)=a]}} \\[6pt]
+    &= \frac1{d'}\;\frac{nd}{2}\;\frac{2}{k^2}
+    \;=\;\frac{n}{k(k-1)}\,.
+    \end{aligned}
+    \]
+
+    By the $d$-regularity of $H$, changing the color of a single vertex can increase or decrease $\sum_{x\in \chi^{-1}(a)} \D{x}{b}$ by at most $O(1)$. Hence, McDiarmid's inequality gives that $\sum_{x\in \chi^{-1}(a)} \D{x}{b}$ is with probability $O(n^{-2})$ within $O(\sqrt{n\log{n}})$ of its expectation. Using \cref{fact: balancedparts} and putting it all together, we get
+    $$M_{ab}=\frac{\frac{n}{k(k-1)}\pm O(\sqrt{n\log{n}})}{\frac{n}{k}\pm O(\sqrt{n\log{n}})}=\frac1{k-1}\pm O\Paren{\sqrt{\frac{\log n}{n}}}$$
+    with high probability for all $a \neq b \in [k]$.
+\end{proof}
+
+Next, we show that with high probability the graph $G$ has a good variance bound.
+
+\begin{lemma}[Variance of random planting]
+    \label{lemma: randomplantinglowvariance}
+    Let $H$ be an $n$-vertex graph.
+    Let $G$ be the graph obtained by randomly planting a \kcl in $H$ for some $k=O(1)$, and let $\chi: [n] \to [k]$ be the associated \kcl.
+    Let $A \in \R^{n \times n}$ be the adjacency matrix of $G$, and let $\tilde{A} = \frac{k}{(k-1)d} A$.
+    For $x \in [n]$ and $a \in [k]$, let $\D{x}{a} = \sum_{y \in \chi^{-1}(a)} \tilde{A}_{xy}$.
+    Then, with high probability, for any $a, b \in [k]$ and $\bm{x}$ uniformly random in $\chi^{-1}(a)$, 
+    \[\E_{\bm{x} \sim \chi^{-1}(a)} \Paren{\D{\bm{x}}{b} - \E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b}}^2 \leq 1/d^{\Omega(1)}\,.\]
+    % Let $1\leq d < n$ and $k=O(1)$ be parameters. Let $H$ be an $n$-vertex $d$-regular graph and let $G$ be the graph obtained from $H$ by planting a \kcl $\chi$ in it at random.
+    % Then, following the definitions of \cref{def: randomplanted}, \whp over $\chi$, for any $a, b \in [k]$ and $\bm{x}$ uniformly random in $\chi^{-1}(a)$,
+    % \[\E_{\bm{x} \sim \chi^{-1}(a)} \Paren{\D{\bm{x}}{b} - \E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b}}^2 = o_d(1)\,.\]
+\end{lemma}
+
+\begin{proof}
+    If $a=b$, we have $\E_{\bm{x} \sim \chi^{-1}(a)} \Paren{\D{\bm{x}}{b} - \E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b}}^2 = 0$ by construction, so we assume $a\neq b$.
+    
+    Writing $\D{\bm{x}}{b} - \E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b}$ as $\Paren{\D{\bm{x}}{b} - \frac1{k-1}} + \Paren{\frac1{k-1} - \E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b}}$ and using that $(a+b)^2\leq 2(a^2+b^2)$, we get
+    \begin{equation}\label{eq:variance_split}
+        \E_{\bm{x} \sim \chi^{-1}(a)} \Bigl(\D{\bm{x}}{b} - \E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b}\Bigr)^2
+        \;\le\;
+        2\Bigl(\E_{\bm{x} \sim \chi^{-1}(a)} \bigl(\D{\bm{x}}{b} - \tfrac1{k-1}\bigr)^2
+        +\bigl(\tfrac1{k-1}-M_{ab}\bigr)^2\Bigr).
+    \end{equation}
+
+    Let us define $S=\sum_{x \in \chi^{-1}(a)} \Paren{\D{x}{b} - \frac1{k-1}}^2$ to analyze the first term. 
+    Let $d' = \frac{(k-1)d}{k}$.
+    For any $x\in V(G)$, conditioned on $x\in \chi^{-1}(a)$, by $d$-regularity we have $\D{x}{b}\sim \frac1{d'}\mathrm{Bin}(d, \frac1{k})$.
+    Hence, by the law of total probability and linearity of expectation, we get
+    $$\E_{\chi}\Brac{S}=\frac{n}{k}\frac1{d'^2}d\frac1{k}\Paren{1-\frac1{k}}=\frac{n}{(k-1)kd} \leq O(n/d)\,.$$ 
+
+    It is easy to verify that changing the color of a single vertex can increase or decrease $S$ by at most $O(1)$. Therefore, by McDiarmid's inequality,
+    \[
+    \Pr\Brac{\,\bigl|S-\E[S]\bigr|\ge \sqrt{n\log n}}
+    \;\le\;
+    2\exp\!\Paren{-\Omega\!\Paren{\tfrac{n\log n}{n}}}
+    =o(1).
+    \]
+    Hence, with high probability
+    \[
+    S = \E[S]\pm O\Paren{\sqrt{n\log n}}
+    = O(n/d) \pm O\Paren{\sqrt{n\log n}}.
+    \]
+    Then, using \cref{fact: balancedparts}, with high probability
+    \[\E_{\bm{x} \sim \chi^{-1}(a)} \Paren{\D{\bm{x}}{b} - \frac1{k-1}}^2
+    =\frac{S}{|\chi^{-1}(a)|}
+    =O\!\Paren{1/d}\;+\;O\!\Paren{\sqrt{\tfrac{\log n}{n}}}
+    = 1/d^{\Omega(1)}.
+    \]
+    
+    By \cref{lemma: plantedmodelconcentration}, the second term of \cref{eq:variance_split} is also bounded by $\Paren{\frac1{k-1}-M_{ab}}^2 \leq 1/d^{\Omega(1)}$, finishing the proof.
+\end{proof}
+
+The last ingredient to prove \cref{thm: random-planting-partial} is a lemma that shows how low threshold rank is approximately preserved after planting.
+
+\begin{lemma}[Threshold rank kept after planting]\label[lemma]{lemma: threshold_rank_kept}
+    % Let $r_1, r_2\geq 0$, $t_1, t_2\geq 1$, $c>0$ and $k\geq 1$ be parameters.
+    Let $H$ be an $n$-vertex graph with adjacency matrix $A_H$.
+    Let $G$ be the graph obtained by planting a \kcl in $H$ (not necessarily randomly), and let $A_G$ be its adjacency matrix.
+    Let $\bar{A}_H:=\frac1{c}A_H$ and $\bar{A}_G:=\frac1{c}A_G$ be adjacency matrices of $H$ and $G$ respectively normalized by the same parameter $c > 0$.
+    For $r_1, r_2 \geq 0$ and $t_1, t_2 \geq 1$, assuming that
+    \[
+    \rank_{\ge r_1}(\bar{A}_H)\le t_1
+    \quad\text{and}\quad
+    \rank_{\le -r_2}(\bar{A}_H)\le t_2,
+    \]
+    it holds that
+    \[
+    \rank_{\le-(r_1+r_2)}(\bar{A}_G)\;\le\;k\,t_1 + t_2,
+    \quad
+    \rank_{\ge \,r_1+r_2}(\bar{A}_G)\;\le\;t_1 + k\,t_2.
+    \]
+    \end{lemma}
+    
+    \begin{proof}
+    Decompose \(\bar{A}_G=\bar{A}_H - \bar{A}_F\), where \(\bar{A}_F\) is block‐diagonal over the \(k\) color classes.  
+    By Cauchy's interlacing theorem, each block has \(\le t_1\) eigenvalues \(\ge r_1\) and \(\le t_2\) eigenvalues \(\le -r_2\), so \(\rank_{\le -r_1}(-\bar{A}_F)=\rank_{\ge r_1}(\bar{A}_F)\le k\,t_1\) and \(\rank_{\ge r_2}(-\bar{A}_F)=\rank_{\le -r_2}(\bar{A}_F)\le k\,t_2\).
+    Hence, applying Weyl's inequalities
+    \begin{gather*}
+        \rank_{\le -(r_1+r_2)}(\bar{A}_H - \bar{A}_F)\le\rank_{\le -r_2}(\bar{A}_H)+\rank_{\le -r_1}(-\bar{A}_F)\,, \\
+        \rank_{\ge r_1+r_2}(\bar{A}_H - \bar{A}_F)\le\rank_{\ge r_1}(\bar{A}_H)+\rank_{\ge r_2}(-\bar{A}_F)\,,
+    \end{gather*}
+    we get the two claimed bounds.
+    \end{proof}
+        
+We are now ready to prove \cref{thm: random-planting-partial}.
+
+\begin{proof}[Proof of \cref{thm: random-planting-partial}]
+    Let $A \in \R^{n \times n}$ be the adjacency matrix of $G$, and let $\tilde{A} = \frac{k}{(k-1)d} A$.
+    Also let $d' = \frac{(k-1)d}{k}$.
+    Let $M = M(\tilde{A}, \chi)$ be defined as in \cref{def:model}.
+    We aim again to apply \cref{thm:part-recovery} with matrices $M$ and $\tilde{A}$, and we verify that its conditions hold.
+    
+    Let $W = Z M B^{-1} Z^\top$, with the partition matrices $Z, B$ corresponding to the $k$-coloring $\chi$.
+    We have trivially that $B^{1/2} M B^{-1/2}$ is symmetric.
+    By \cref{lemma: plantedmodelconcentration} and the triangle inequality, $\Norm{M}\leq \Norm{\frac1{k-1}\Paren{\Allones-\Id}}+\Norm{M-\frac1{k-1}\Paren{\Allones-\Id}}=1+o(1)$, where $\Allones \in \R^{k \times k}$ is the matrix with all entries equal to $1$.
+    We also have by \cref{fact: balancedparts} that with high probability $|\chi^{-1}(a)| \geq (1/k-o(1))n$ for all $a \in [k]$.
+    
+    In addition, as the diagonal entries of $M$ are zero and by \cref{lemma: plantedmodelconcentration} the off-diagonal entries are $\frac1{k-1}\pm o(1)$, we have $\Norm{M^{(a)} - M^{(b)}} \geq 2/k$ for any two rows $M^{(a)}$ and $M^{(b)}$ of $M$.
+    For the closeness of $\tilde{A}$ and $W$, because of  \cref{fact: balancedparts} and \cref{lemma: randomplantinglowvariance}, we can apply \cref{lem:small-var-to-indic} and get that, for all $a\in [k]$,
+    \[\Norm{\tilde{A} \frac{Z_a}{\Norm{Z_a}} - W  \frac{Z_a}{\Norm{Z_a}}}^2 = \frac{1}{d^{\Omega(1)} \Paren{\frac{1}{k}-o(1)}} \leq O_k\Paren{1/d^{\Omega(1)}}\,.\]
+
+    For the low rank of $\tilde{A}$, we have $\rank_{\geq \lambda}(\frac{1}{d}A_H) \leq t$ by assumption, and as $\Norm{\frac1{d}A_H}\leq 1$ because of $d$-regularity, we can apply \cref{cor:spectral_small_to_small} with $\sigma=\lambda$ to get $\rank_{\leq -\sqrt{2\lambda}}(\frac{1}{d}A_H) \leq t/\lambda^2$ as well. 
+    Note that, using that $\lambda \leq 1$, we have that $\lambda \leq \sqrt{2 \lambda}$.
+    Let $\lambda' = \max\{\sqrt{2\lambda}, \Omega_k(1)\}$ for some small enough $\Omega_k(1)$, such that $\rank_{\geq \lambda'}(\frac{1}{d}A_H)=O_k(t)$ and $\rank_{\leq -\lambda'}(\frac{1}{d}A_H)=O_k(t)$.
+    By applying \cref{lemma: threshold_rank_kept} with normalization parameter $d$, we get $\rank_{\geq 2\lambda'}\Paren{\frac1{d}A_G}=O_k(t)$ and $\rank_{\leq -2\lambda'}\Paren{\frac1{d}A_G}=O_k(t)$.
+    As $k\geq 3$, we have $\frac{d}{d'}2\lambda'\leq 3\lambda'$, so $\rank_{\geq 3\lambda'}(\tilde{A})+\rank_{\leq -3\lambda'}(\tilde{A})=O_k(t)$.
+
+    % \begin{itemize}
+    %     \item By \cref{fact: balancedparts}, $|\chi^{-1}(a)| \geq (1/k-o(1))n$ for all $a \in [k]$.
+    %     \item By construction, $B^{1/2} M B^{-1/2}$ is symmetric.
+    %     \item As the diagonal entries of $M$ are zero and by \cref{lemma: plantedmodelconcentration} the off-diagonal entries are $\frac1{k-1}\pm o(1)$, we have $\Norm{M^{(a)} - M^{(b)}} \geq 2/k$ for any two rows $M^{(a)}$ and $M^{(b)}$ of $M$.
+    %     \item By triangle inequality and \cref{lemma: plantedmodelconcentration}, $\Norm{M}\leq \Norm{\frac1{k-1}\Paren{\Allones-\Id}}+\Norm{M-\frac1{k-1}\Paren{\Allones-\Id}}=1+o(1)$.
+    %     \item We have $\rank_{\geq \lambda}(H) \leq t$ by assumption, and as $\Norm{\frac1{d}A_H}\leq 1$ holds by $d$-regularity, we can apply \cref{cor:spectral_small_to_small} with $\sigma=\lambda$ to get $\rank_{\leq -\sqrt{2\lambda}}(H) \leq t/\lambda^2$ as well. Using that $\lambda \leq 1$, we have $\lambda \leq \sqrt{2 \lambda}$, so by $\lambda=\Omega(1)$\andor{ideally remove this assumption} we get $\rank_{\geq \sqrt{2\lambda}}(H)=O(t)$ and $\rank_{\leq -\sqrt{2\lambda}}(H)=O(t)$. As $k=O(1$), by applying \cref{lemma: threshold_rank_kept} with $c=d$, we get $\rank_{\geq 3\sqrt{\lambda}}\Paren{\frac1{d}A_G}=O(t)$ and $\rank_{\leq -3\sqrt{\lambda}}\Paren{\frac1{d}A_G}=O(t)$. As $k\geq 3$, we have $\frac{d}{d'}3\sqrt{\lambda}\leq 5\sqrt{\lambda}$, so $\rank_{\geq 5\sqrt{\lambda}}(\tilde{A})+\rank_{\leq -5\sqrt{\lambda}}(\tilde{A})=O(t)$.
+    %     \item Combining \cref{lemma: randomplantinglowvariance} and \cref{fact: balancedparts}, we can use \cref{lem:small-var-to-indic} to get that for all $a\in [k]$,
+    %     \[\Norm{\tilde{A} \frac{Z_a}{\Norm{Z_a}} - W  \frac{Z_a}{\Norm{Z_a}}}^2 = o_d(1)/(1/k-o(1)) = o_d(1)\,.\]
+    % \end{itemize}
+
+    % Using the assumed upper bound $\lambda\leq \frac1{101k^3}$, we have $5\sqrt{\lambda}\leq (2/k)\sqrt{1/k-o(1)}/4$.
+    Then, by the above, with high probability we satisfy the conditions necessary to apply \cref{thm:part-recovery} with $1/k-o(1)$, $1+o(1)$, $2/k$, $O_k(1/d^{\Omega(1)})$, $O(t)$ and $O(\lambda')$ in the roles of $c$, $\zeta$, $\alpha$, $\delta$, $t$ and $\lambda$, respectively.
+    Then, we can recover in time $n^{O(1)} \cdot \Paren{O_{k}(1)}^{t}$ a list of $\Paren{O_{k}(1)}^{t}$ $k$-colorings $\hat{\chi}: [n] \to [k]$ such that, for at least one of them, it holds up to a permutation of the color classes that $\mathbb{E}_{\bm{x} \sim \operatorname{Unif}([n])} \1[\hat\chi(x) \neq \chi(x)] \leq O_k(1/d^{\Omega(1)})$.
+    Finally, as in the proof of \cref{thm:kalg-partial}, for each candidate $k$-coloring we apply the rounding algorithm in \cref{lemma: generalrounding} on each of its color classes to obtain $k$ independent sets, and return the set of $k$ independent sets that cover most vertices of $G$.
+    The rest of the analysis is identical to that in the proof of \cref{thm:kalg-partial}.
+\end{proof}
+
+\subsubsection{Rounding to a full coloring}
+\label{sec:full-col}
+
+Next, we show that if $H$ actually is a one-sided expander (instead of having just low top threshold rank), and if the degree $d$ is at least a large enough constant, then we can actually obtain a full \kcl by exploiting the full randomness of the model.
+
+We start from the guarantees of \cref{thm: random-planting-partial-list}, which is a version of \cref{thm: random-planting-partial} that omits the last rounding step: instead, it guarantees the recovery of a \emph{list} of candidate $k$-colorings, such that at least one of them is close to the planted $k$-coloring.
+We remark that \cref{thm: random-planting-partial} itself does not guarantee that the output $k$-coloring is close to the planted $k$-coloring, while our strategy for obtaining a full coloring relies on this property --- hence our use of \cref{thm: random-planting-partial-list}.
+Then, we show how to convert this list of partial colorings to a full coloring.
+Our main result is the following:
+
+\begin{theorem}[Result for random planting, full recovery]
+    \label{thm: random-planting-full}
+    Let $H$ be an $n$-vertex $d$-regular graph with adjacency matrix $A_H$.
+    Let $\lambda$ be the second largest eigenvalue of $\frac{1}{d}A_H$.
+    % Suppose $\rank_{\geq \lambda}(\frac{1}{d}A_H) \leq t$ for some $0 < \lambda < 1$ and $t \in \mathbb{N}$.
+    Let $G$ be the graph obtained by randomly planting a \kcl in $H$, and let $\chi: [n] \to [k]$ be the associated \kcl.
+    Then, for $\lambda > 0$ small enough, there exists an algorithm that runs in time $n^{O(1)} \cdot O_{k}(1)$ and outputs with high probability a $(k, 0)$-coloring for $G$.
+    % Let $\Omega(1)\leq\lambda\leq \frac1{O(k^3)}$\andor{this $\Omega(1)$ assumption should ideally be removed}, $d\geq O(1)$ and $k=O(1)$ be parameters. Let $H$ be an $n$-vertex $d$-regular $\lambda$-one-sided expander graph, and let $G$ be the graph obtained from $H$ by planting a \kcl in it at random.
+    % Then, there exists an algorithm that runs in time $n^{O(1)} \cdot O_{\lambda, k}(1)$ and \whp fully $k$-colors $G$.
+\end{theorem}
+
+The proof and algorithm for \cref{thm: random-planting-full} adapt Theorem B.10 of \cite{MR3536556-David16}. For full details, see \cref{app: plantedcoloring}; below we outline the key modifications.
+
+
+The key difference between our setting and that of \cite{MR3536556-David16} is that they assume two-sided expansion, while we only assume one-sided expansion.
+The two ways in which Theorem B.10 of \cite{MR3536556-David16} uses two-sided expansion are via the Expander Mixing Lemma (EML) (used in Lemma B.17, Lemma B.19, and Lemma B.20 of \cite{MR3536556-David16})
+$$e(S, T)\leq d|S|\Paren{\frac{|T|}{n}+c\sqrt{\frac{|T|}{|S|}}}$$
+and via the vertex expansion lower bound (used in Lemma B.21 of \cite{MR3536556-David16}): for $|S|=\alpha n$, 
+$$\Abs{N(S)\setminus S}\geq \Paren{\frac{1}{(1-\alpha)c^2+\alpha}-1}|S|\,.$$
+
+For the former, we note that Lemmas B.19 and B.20 of \cite{MR3536556-David16} use the EML with $S=T$, and that we can avoid Lemma B.17 of \cite{MR3536556-David16} by assuming a large enough (but still constant) $d$. As the lemma below shows, for $S=T$, the EML holds even under one-sided expansion:
+
+\begin{lemma}[Edge density upper bound]
+    \label[lemma]{lemma: emlonesided}
+    Let $G$ be an $n$-vertex $d$-regular graph with adjacency matrix $A$ satisfying $\lambda_2(\frac{1}{d}A)\leq c$.
+    Then, for any set $S \subseteq [n]$,
+    $$\Abs{E(G_S)}\leq\frac{d|S|}{2}\Paren{\frac{|S|}{n}+c}\,,$$
+    where $E(G_S)$ is the number of edges in the graph induced by $S$.
+\end{lemma}
+
+For the latter use of two-sided expansion, we can show under one-sided expansion a bound that is only slightly weaker, and suffices for our purposes by assuming slightly stronger expansion:
+
+\begin{lemma}[Vertex expansion lower bound]
+    \label[lemma]{lemma: ssveonesided}
+    Let $G$ be an $n$-vertex $d$-regular graph with adjacency matrix $A$ satisfying $\lambda_2(\frac{1}{d}A)\leq c$.
+    Then, for any set $S \subseteq [n]$ with $|S|\leq \alpha n$,
+    $$\Abs{N(S)\setminus S}\geq \Paren{\frac{1}{c+\sqrt{\alpha}}-1}|S|\,,$$
+    where $N(S)$ is the number of vertices outside $S$ adjacent to at least one vertex in $S$.
+\end{lemma}
+
+The proofs of \cref{lemma: emlonesided} and \cref{lemma: ssveonesided} are also in \cref{app: plantedcoloring}.
+
+\subsection{Independent sets}
+
+We state now our result for independent sets.
+
+\begin{theorem}[Independent sets, small bottom rank]
+\label[theorem]{thm:independentsetrecovery}
+    Let $G$ be an $n$-vertex $d$-regular graph with adjacency matrix $A$, and let $\tilde{A} = \frac{1}{d}A$.
+    For $0 < \gamma < 1/4$, suppose $G$ contains an independent set $I \subseteq [n]$ of size $\Paren{\frac{1}{2}-\gamma}n$.
+    Suppose $\rank_{\leq -\lambda}(\tilde{A}) \leq t$ for some $0 < \lambda < 1$ and $t \in \mathbb{N}$.
+    Then there exists an algorithm with runtime $\poly(n) \cdot (\gamma/(1-\lambda))^{-O(t)}$ that returns an independent set of size at least $\Paren{1/2-\gamma - (4+c)\gamma/(1-\lambda)}n$ for any constant $c > 0$.
+\end{theorem}
+    
+By \cref{cor:spectral_small_to_small}, we immediately get a result under the assumption that the top threshold rank is small.
+
+\begin{corollary}[Independent sets, small top rank]
+\label[corollary]{cor:independentsetrecovery}
+    Let $G$ be an $n$-vertex $d$-regular graph with adjacency matrix $A$, and let $\tilde{A} = \frac{1}{d}A$.
+    For $0 < \gamma < 1/4$, suppose $G$ contains an independent set $I \subseteq [n]$ of size $\Paren{\frac{1}{2}-\e}n$.
+    Suppose $\rank_{\geq \lambda}(\tilde{A}) \leq t$ for some $0 < \lambda < 1$ and $t \in \mathbb{N}$.
+    Then there exists an algorithm with runtime $\poly(n) \cdot (\gamma/(1-\lambda))^{-O(t)}$ that returns an independent set of size at least $\Paren{1/2-\gamma - (4+c)\gamma/(1-\sqrt{\lambda})}n$ for any constant $c > 0$.
+\end{corollary}
+\begin{proof}
+    Because $\rank_{\geq \lambda}(\tilde{A}) \leq t$, we get by applying \cref{cor:spectral_small_to_small} with $\sigma = c$ that $\rank_{\leq -\lambda'}(\tilde{A}) \leq t/c^2$ for any constant $c > 0$, where $\lambda' = \sqrt{\lambda(1-c)+c} \geq \sqrt{\lambda}$.
+    The result then follows by \cref{thm:independentsetrecovery}.
+\end{proof}
+
+To prove \cref{thm:independentsetrecovery}, we first prove that the indicator vector of the independent set is close to the subspace spanned by the bottom $t$ eigenvectors of the adjacency matrix:
+
+\begin{lemma}[Closeness to bottom eigenvectors]
+    \label[lemma]{lemma:strongerprojectionargument}
+    In the same setting as \cref{thm:independentsetrecovery}, let $u \in \R^n$ have $u_x = \frac{1}{\sqrt{n}}$ for $x \in I$ and $u_x = -\frac{1}{\sqrt{n}}$ for $x \not\in I$.
+    Then, there exists a vector $\tilde{u} \in \R^n$ with $\norm{\tilde{u}} \leq \norm{u}$ and $||\tilde{u}-u||^2\leq \frac{4\gamma}{1-\lambda}$ such that $\tilde{u}$ is in the span of the bottom $t$ eigenvectors of $\tilde{A}$.
+\end{lemma}
+\begin{proof}
+    First, we have 
+    \[u^\top \tilde{A} u = \frac{2}{nd} \Paren{ E(\bar{I}, \bar{I}) - E(I, \bar{I}) } = \frac{2}{nd} \Paren{\gamma n d - \Paren{\frac{1}{2}-\gamma}nd } = -(1-4\gamma)\,.\]
+    Second, we derive a lower bound on $u^\top \tilde{A} u$.
+    Let $P \in \R^{n \times n}$ be the orthogonal projection to the subspace spanned by the bottom $t$ eigenvectors of $\tilde{A}$.
+    Then, because $\rank_{\leq -\lambda}(\tilde{A}) \leq t$ and all eigenvalues of $\tilde{A}$ lie in $[-1, 1]$, we get
+    \begin{align*}
+    u^\top \tilde{A} u
+    &\geq -\lambda \cdot \Paren{1-\Norm{Pu}^2} + (Pu)^\top \tilde{A} (Pu)\\
+    &\geq -\lambda \cdot \Paren{1-\Norm{Pu}^2} - \Norm{Pu}^2\\
+    &= -\lambda - \gamma \Norm{Pu}^2\,.
+    \end{align*}
+    Then, plugging in $u^\top \tilde{A} u = -(1-4\e)$ and rearranging, we get
+    \[\Norm{Pu}^2 \geq \frac{1-\lambda-4\gamma}{1-\lambda} = 1 - \frac{4\gamma}{1-\lambda}\,.\]
+    In particular, $\Norm{u - Pu}^2 = 1 - \Norm{Pu}^2 \leq \frac{4\gamma}{1-\lambda}$.
+    Letting $\tilde{u} = Pu$ gives the desired conclusion.
+\end{proof}
+
+Furthermore, we can round a vector close to the indicator vector of the independent set:
+\begin{lemma}[Independent set rounding]
+    \label[lemma]{lemma:independentsetrounding}
+    Let $G$ be an $n$-vertex graph with vertex set $V$ that contains an independent set $I \subseteq [n]$.
+    Let $u \in \R^n$ have $u_x = \frac{1}{\sqrt{n}}$ for $x \in I$ and $u_x = -\frac{1}{\sqrt{n}}$ for $x \notin I$.
+    Also let $\hat{u} \in \R^n$ satisfy $\Norm{\hat{u}-u}^2\leq \alpha$ for some $\alpha \geq 0$.
+    Then, given as input $G$ and $\hat{u}$, there exists an algorithm with runtime $\poly(n)$ that returns an independent set of size at least $|I|-\alpha n$.
+\end{lemma}
+\begin{proof}
+    Letting $\hat{I} = \Set{x \in V \mid \hat{u}_x \geq 0}$, by $\Norm{\hat{u}-u}^2\leq \alpha$ we have $\Abs{I\triangle \hat{I}}\Paren{\frac{1}{\sqrt{n}}}^2\leq \alpha$.
+    Noting that $\hat{I}$ is a superset of the independent set $\hat{I}\cap I$, by applying \cref{lemma: generalrounding} on $\hat{I}$, we get an independent set of size at least $\Abs{\hat{I}\cap I} - \Abs{\hat{I}\setminus \Paren{\hat{I}\cap I}}=\Abs{I} - \Abs{I\triangle \hat{I}}\geq \Abs{I} - \alpha n$.
+\end{proof}
+
+Given \cref{lemma:strongerprojectionargument} and \cref{lemma:independentsetrounding}, we prove~\Cref{thm:independentsetrecovery}.
+
+\begin{proof}[Proof of~\Cref{thm:independentsetrecovery}]
+We iterate over a net of the subspace spanned by the bottom $t$ eigenvectors of $\bar{A}$ in order to find a vector close to $u$ as defined in~\Cref{lemma:independentsetrounding}, and then use \cref{lemma:independentsetrounding} to round it to an independent set.
+
+By standard arguments, we can construct a $c \sqrt{\gamma/(1-\lambda)}$-cover of the unit ball in the subspace spanned by the bottom $t$ eigenvectors of $\tilde{A}$ in time $(\gamma/(1-\lambda))^{-O(t)}$, for any constant $c > 0$.
+The cover will have size $O(\sqrt{\gamma/(1-\lambda)})^{-t}$.
+Then, we iterate over all $\hat{u}$ in this cover and for each of them we apply the rounding algorithm in \cref{lemma:independentsetrounding} to construct an independent set.
+We return the largest independent set thus obtained.
+
+For correctness, we note by~\Cref{lemma:strongerprojectionargument} that there exists some $\tilde{u}$ in the span of the bottom $t$ eigenvectors with $\norm{\tilde{u}} \leq \norm{u} \leq 1$ that is $2\sqrt{\gamma/(1-\lambda)}$-close to $u$.
+Then the $c \sqrt{\gamma/(1-\lambda)}$-net that we construct is guaranteed to find some $\hat{u}$ that is $c \sqrt{\gamma/(1-\lambda)}$-close to $\tilde{u}$ and thus $(2+c)\sqrt{\gamma/(1-\lambda)}$-close to $u$.
+Then, by~\Cref{lemma:independentsetrounding}, the returned independent set has size at least $\Paren{1/2-\gamma - (4+c')\gamma/(1-\lambda)}n$. The time complexity is polynomial in $n$ and $(\gamma/(1-\lambda))^{-O(t)}$.
+\end{proof}
+
+\subsection{Rounding tools}
+
+First we state a general rounding algorithm that extracts an independent set from an approximate independent set.
+
+\begin{lemma}[Rounding an approximate independent set]
+    \label[lemma]{lemma: generalrounding}
+    Let $G$ be an $n$-vertex graph and let $I \subseteq [n]$ be an independent set in it.
+    Then, given a set $S\supseteq I$, there is a polynomial-time algorithm that returns an independent set $I'$ such that $|I'| \geq |I| - |S \setminus I|$.
+\end{lemma}
+\begin{proof}
+    Note that $S\setminus I$ is a vertex cover of $G_S$.
+    Hence, using the $2$-approximation algorithm for the minimum vertex cover problem, we can compute a vertex cover $C$ of $G_S$ in polynomial time such that $|C| \leq 2|S \setminus I|$.
+    Then we output $I':=S\setminus C$, which by construction is an independent set with size at least $|S| - 2|S \setminus I|=|I| - |S \setminus I|$, finishing the proof.
+\end{proof}
+
+By applying \cref{lemma: generalrounding} to $k$ color classes, we can extract a coloring from an approximate coloring.
+
+\begin{lemma}[Rounding an approximate $k$-coloring]
+    \label[lemma]{cor: kcoloringrounding}
+    Let $G$ be an $n$-vertex graph and let $\chi: [n] \to [k]$ be a $3$-coloring of its vertices.
+    Suppose that $G$ has a vertex cover of all monochromatic edges of size at most $\e n$.
+    Then, given $\chi^{-1}(1), \ldots, \chi^{-1}(k)$, there is a polynomial-time algorithm that returns a $(k, 2\e)$-coloring of $G$.
+\end{lemma}
+
+\begin{proof}
+    We simply run the algorithm from \cref{lemma: generalrounding} on each set $\chi^{-1}(a)$.
+    For each $\chi^{-1}(a)$, let $I_a$ be the largest independent set in it.
+    Then we obtain an independent set $I'_a$ satisfying $|I'_a| \geq |I_a| - |\chi^{-1}(a) \setminus I_a|$.
+    Then 
+    \[\sum_{a=1}^k |I'_a| \geq \sum_{a=1}^k |I_a| - \sum_{a=1}^k |\chi^{-1}(a) \setminus I_a| \geq (1 - \e)n - \e n = (1-2\e)n\,.\]
+    % Let $S_i$ be the set of vertices assigned color $i$ by $g$ and let $R_i$ be the set of vertices assigned color $i$ by $f$. As $f$ is a proper coloring, $S_i$ is a super set of the independent set $S_i\cap R_i$, so by applying \cref{lemma: generalrounding} to $S_i$ we obtain an independent set $I_i$ such that $|I_i| \geq \Abs{S_i\cap R_i} - \Abs{S_i\setminus \Paren{S_i\cap R_i}}=\Abs{R_i}-\Abs{R_i\triangle S_i}$. Joining the independent sets $I_{[k]}$ and using $\sum_{i=1}^n|R_i|=n$, we obtain a $\Paren{\sum_{i=1}^k |R_i \triangle S_i|}$-almost coloring. As $g$ is a $\gamma$-approximate coloring with respect to $f$, we have that $\sum_{i=1}^k |R_i \triangle S_i| \leq \gamma$, finishing the proof.
+\end{proof}

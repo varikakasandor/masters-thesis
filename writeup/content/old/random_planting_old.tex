@@ -1,0 +1,778 @@
+\section{Recovering randomly planted k-coloring}
+
+In this section, we show that, given a graph $G$ that is produced by randomly planting a $k$-coloring in a regular graph $G^{\circ}$ with small top threshold rank, there exists an algorithm that recovers a large part of the planted coloring. Moreover, it is possible to recover a complete coloring if $G^{\circ}$ is a one-sided spectral expander. This result demonstrates another powerful application of the spectral result \cref{thm:spectral_large_to_large}. We also prove several structural result that are of independent interest.
+
+\subsection{Definitions and notations}
+
+\begin{definition}[Random planted $k$-coloring]
+\label{def:random_planting_model}
+    Given a graph $G^{\circ}$, assign each vertex to a color in $[k]$ independently and uniformly at random, then produce the random planted $k$-coloring graph $G$ by removing all edges between vertices in the same color.
+\end{definition}
+
+We also define two notions of approximate and partial colorings, which are used in the random planting setting to talk about closeness to the planted coloring.
+
+\begin{definition}[Approximate coloring]
+    \label{def: approximatedcoloring}
+    Let $G$ be an $n$-vertex graph that admits a \kcl $f$.
+    A {\em $b$-approximate} coloring w.r.t\ $f$ is a \kcl
+    that is not necessarily proper, but it is identical to $f$ on a set of at least $n-b$ vertices.
+\end{definition}
+
+\begin{definition}[Partial coloring]
+    \label{def: partialcoloring}
+    Let $G$ be an $n$-vertex graph that admits a \kcl $f$.
+    A {\em $b$-partial} coloring w.r.t.\ $f$ is a \kcl of at least $n-b$ vertices that is identical to $f$ on these vertices.
+    The remaining $b$ vertices are left uncolored and are referred to as {\em free}.
+\end{definition}
+
+Without loss of generality, we assume that there are no isolated vertices in the graph $G$ (as we can simply remove them from the graph).
+
+Given graph $G=(V, E)$ that is a random planted $k$-coloring graph with original graph $G^{\circ}$, let $A$ be its adjacency matrix, $D$ be the degree matrix and $\tilde{A}$ be the normalized adjacency matrix $\tilde{A} = D^{-1/2} A D^{-1/2}$ (we analogously define $A^{\circ}$, $D^{\circ}$ and $\tilde{A^{\circ}}$).
+
+\begin{definition}[Partition matrix]
+\label{def:rp_Z_partition}
+    Partition matrix $Z \in \set{0, 1}^{n \times k}$ is a $n \times k$ Boolean matrix such that row $i$ of $Z$ is the indicator vector denoting the partition of vertex $i$. For simplicity, we also abuse notation by letting $Z(i)$ denote the partition of $i$ and letting $Z_a$ be the indicator vector of partition $a \in [k]$, i.e. column $a$ of $Z$.
+\end{definition}
+
+\begin{definition}[Partition edge matrix]
+\label{def:rp_B_partition_edge}
+    Given adjacency matrix $A$ and partition matrix $Z$, we define partition edge matrix as
+    \begin{equation*}
+        B_Z = Z^{\top} A Z \,,
+    \end{equation*}
+    and the normalized partiton edge matrix as
+    \begin{equation*}
+        \tilde{B}_Z = D_Z^{-1/2} B_Z D_Z^{-1/2} \,.
+    \end{equation*}
+    Notice that $B_Z(a, b) = |E(a, b)|$ is equal to the number of edges between partition $a$ and partition $b$, and $\tilde{B}_Z(a, b) = \frac{|E(a, b)|}{\sqrt{D_Z(a) D_Z(b)}}$ is the normalized value.
+\end{definition}
+
+\begin{definition}[Random walk operator]
+\label{def:rp_H_random_walk}
+    Let $G=D^{-1} A$ be the random walk operator of $A$. We define partition random walk operator by
+    \begin{equation*}
+        H_Z = Z D_Z^{-1} B_Z D_Z^{-1} Z^{\top} D \,,
+    \end{equation*}
+    and define the symmetrized partition random walk operator by
+    \begin{equation*}
+        \tilde{H}_Z = D^{1/2} H_Z D^{-1/2} \,.
+    \end{equation*}
+    Notice that
+    \begin{equation*}
+        H_Z(i, j) = \frac{|E(Z(i), Z(j)|)}{D_Z(Z(i)) D_Z(Z(j))} D(j) \,.
+    \end{equation*}
+\end{definition}
+
+\begin{lemma}
+\label{lem:rp_tilde_B_eigenvalues}
+    $|\lambda_a (\tilde{B}_Z)| \leq 1$ for all $i \in [k]$ and $\lambda_1(\tilde{B}_Z) = 1$ with eigenvector $v_1 = D_Z^{1/2} \1$.
+\end{lemma}
+
+\begin{proof}
+    Consider arbitrary vector $v \in \R^k$ such that $\Norm{v} = 1$, it follows that
+    \begin{align*}
+        |\iprod{v, \tilde{B}_Z v}|
+        & = \Abs{\sum_{a, b} \frac{|E(a, b)|}{\sqrt{D_Z(a) D_Z(b)}} v(a) v(b)}
+        \leq \sqrt{\sum_{a, b} \frac{|E(a, b)|}{D_Z(a)} v(a)^2} \cdot \sqrt{\sum_{a, b} \frac{|E(a, b)|}{D_Z(b)} v(b)^2} \\
+        & = \sum_{a, b} \frac{|E(a, b)|}{D_Z(a)} v(a)^2
+        = \sum_{a} \frac{\sum_b |E(a, b)|}{D_Z(a)} v(a)^2
+        = \sum_{a} v(a)^2 = 1 \,.
+    \end{align*}
+    Now, consider $v_1 = D_Z^{1/2} \1$, it follows that
+    \begin{equation*}
+        \tilde{B}_Z v_1 = D_Z^{-1/2} B_Z \1 =  D_Z^{1/2} \1 = v_1 \,,
+    \end{equation*}
+    which implies that $1$ is an eigenvalue of $\tilde{B}_Z$ with eigenvector $v_1 = D_Z^{1/2} \1$.
+\end{proof}
+
+\begin{lemma}
+\label{lem:rp_eigen_equivalence_B_H}
+    If $v$ is an eigenvector of $\tilde{B}_Z$ with eigenvalue $\lambda$, then $u = Z D_Z^{-1/2} v$ is an eigenvector of $H_Z$ with eigenvalue $\lambda$.
+\end{lemma}
+
+\begin{proof}
+    It follows by definition that
+    \begin{align*}
+        H_Z u
+        & = Z D_Z^{-1} B_Z D_Z^{-1} Z^{\top} D Z D_Z^{-1/2} v \\
+        & = Z D_Z^{-1} B_Z D_Z^{-1/2} v
+        = Z D_Z^{-1/2} \tilde{B}_Z v \\
+        & = Z D_Z^{-1/2} \lambda_a v
+        = \lambda_a Z D_Z^{-1/2} v
+        = \lambda_a u \,.
+    \end{align*}
+\end{proof}
+
+\begin{lemma}
+\label{lem:rp_eigen_equivalence_H_tilde_H}
+    If $v$ is an eigenvector of partition random walk operator $H_Z$ with eigenvalue $\lambda$, then $u=D^{1/2} v$ is an eigenvector of the symmetrized partition random walk operator $\tilde{H}_Z = D^{1/2} H_Z D^{- 1/2}$.
+\end{lemma}
+
+\begin{proof}
+    It follows by definition that
+    \begin{equation*}
+        \tilde{H}_Z u
+        = D^{1/2} H_Z D^{-1/2} D^{1/2} v
+        = D^{1/2} H_Z v
+        = \lambda D^{1/2} v
+        = \lambda u \,.
+    \end{equation*}
+\end{proof}
+
+\begin{corollary}
+\label{lem:rp_eigen_equivalence_B_tilde_H}
+    If $v$ is an eigenvector of $\tilde{B}_Z$ with eigenvalue $\lambda$, then $u = D^{1/2} Z D_Z^{-1/2} v$ is an eigenvector of $\tilde{H}_Z$ with eigenvalue $\lambda$.
+\end{corollary}
+
+The proof of \cref{lem:rp_eigen_equivalence_B_tilde_H} follows by \cref{lem:rp_eigen_equivalence_B_H} and \cref{lem:rp_eigen_equivalence_H_tilde_H}.
+
+\subsection{Partition witness implies subspace recovery}
+
+In this section, we will prove a general partition recovery guarantee result that is of independent interest. We will use this result in the recovery guarantee of randomly planted k-coloring. We start by defining the partition witness.
+
+\begin{definition}[Partition witness]
+\label{def:rp_partition_witness}
+    Given graph $G=(V, E)$ with adjacency matrix $A$ and degree matrix $D$, we say $W_Z \in \R^{n \times n}$ is a \emph{$(\delta, \gamma)$-partition witness} of $G$ with respect to partiton matrix $Z$ if $W_Z$ satisfies:
+    \begin{itemize}
+        \item \emph{Partition Spanning}: $W_Z$ is rank $k$ with columns spanned by $\set{Z_a}_{a \in [k]}$ (equivalently, $W_Z$ can be written as $W_Z = Z M$ for some rank $k$ matrix $M \in \R^{k \times n}$).
+        \item \emph{Spectral Separation}: $\lambda_1(W_Z) = 1$ with top eigenvector $v_1=\1$ and $-1 \leq \lambda_k(W_Z) \leq \dots \leq  \lambda_2(W_Z) \leq - \frac{1}{k-1} + \delta$.
+        \item \emph{Subspace Inclusion}: Let $\tilde{W}_Z = D^{1/2} W_Z D^{- 1/2}$ be the symmetrized witness matrix, $\tilde{W}_Z$ satisfies $\Norm{\tilde{A} D^{1/2} Z_a - \tilde{W}_Z  D^{1/2} Z_a} \leq \gamma$ for each $a \in [k]$.
+    \end{itemize}
+\end{definition}
+
+In the remaining of the section, we will prove the following theorem which shows that, if a graph has small bottom threshold rank and there exists a sufficiently good partition witness, then there is a polynomial-time algorithm that recovers the partition structure.
+
+\begin{theorem}[Partition Recovery Theorem (Small Bottom Threshold Rank)]
+\label{thm:rp_partition_recovery_theorem}
+    Given graph $G=(V, E)$ with adjacency matrix $A$ and max degree $d$, if
+    \begin{itemize}
+        \item $\rank_{\leq (1-\Omega(1))(- \frac{1}{k-1} + \delta)}(\tilde{A})  \leq t$,
+        \item at most $n_{\beta}$ vertices have degree strictly less than $\beta d$,
+        \item for all $a\in[k]$ that $\Abs{d_Z(a) - \frac{nd}{k}}\leq \frac{\e nd}{k}$,
+        \item there exists a \emph{$(\delta, \gamma)$-partition witness} $W_Z$ of $G$ with respect to partition matrix $Z$ and,
+    \end{itemize}
+    then we can recover an $n^{O(t)}$-sized list of partitions by subspace enumeration in time $n^{O\Paren{t}}$ such that one of them has error at most
+    $$O \Paren{\frac{\gamma^2 k}{\Paren{\frac{1}{k-1} - \delta}^2 (1-\e) \beta d} + \frac{1}{\beta k n}} + n_{\beta}\,.$$
+\end{theorem}
+
+Combining \cref{thm:rp_partition_recovery_theorem} and the spectral result in \cref{cor:spectral_small_to_small}, we can obtain the following more natural and easy to use corollary that states the result for graphs with small top threshold rank.
+
+\begin{corollary}[Partition Recovery Theorem (Small Top Threshold Rank)]
+\label{cor:rp_partition_recovery_theorem}
+        Given graph $G=(V, E)$ with adjacency matrix $A$ and max degree $d$, if
+        \begin{itemize}
+            \item $\rank_{\geq (1-\Omega(1))(- \frac{1}{k-1} + \delta)^2}(\tilde{A})  \leq t$,
+            \item at most $n_{\beta}$ vertices have degree strictly less than $\beta d$,
+            \item for all $a\in[k]$ that $\Abs{d_Z(a) - \frac{nd}{k}}\leq \frac{\e nd}{k}$,
+            \item there exists a \emph{$(\delta, \gamma)$-partition witness} $W_Z$ of $G$ with respect to partition matrix $Z$ and,
+        \end{itemize}
+        then we can recover an $n^{O(t)}$-sized list of partitions by subspace enumeration in time $n^{O\Paren{t}}$ such that one of them has error at most
+        $$O \Paren{\frac{\gamma^2 k}{\Paren{\frac{1}{k-1} - \delta}^2 (1-\e) \beta d} + \frac{1}{\beta k n}} + n_{\beta}\,.$$
+\end{corollary}
+
+Before proving \cref{thm:rp_partition_recovery_theorem}, we will need the following lemmas.
+
+\begin{lemma}[Eigenspace inclusion]
+\label{lemma:rp_lin-alg-subspace}
+    Let $A, B \in \R^{n \times n}$ be symmetric matrices.
+    Consider any $k$ orthogonal eigenvectors $v_1, \ldots, v_{k} \in \R^n$ of $B$ and their eigenvalues $\lambda_1, \ldots, \lambda_{k}$ with $\lambda = \max\{\lambda_1, \ldots, \lambda_k\}$.
+    Consider any $\ell$ other orthogonal eigenvectors $w_1, \ldots, w_\ell \in \R^n$ of $B$ that are orthogonal to $v_1, \ldots, v_k$ and that are simultaneously eigenvectors of $A$ with the same eigenvalue as for $B$, i.e., $A w_i = B w_i$.
+    Let $P \in \R^{n \times n}$ be the orthogonal projection to the span of the eigenvectors of $A$ that are orthogonal to $w_1, \ldots, w_{\ell}$ and that have eigenvalue at least $\lambda + \eta$ for some $\eta > 0$.
+    Then, for any orthonormal basis $u_1, \ldots, u_{k+\ell} \in \R^n$ of $\operatorname{span}(v_1, \ldots, v_k, w_1, \ldots, w_{\ell})$,
+    \[\sum_{i=1}^{k+\ell} \Norm{P u_i}^2 \leq \frac{1}{\eta^2} \sum_{i=1}^{k+\ell} \Norm{(B-A)u_i}^2\,.\]
+\end{lemma}
+
+\begin{proof}
+First, for the eigenvectors $v_1, \ldots, v_{k}$ of $B$ we have that 
+\begin{equation}
+\label{lemma:rp_lin-alg-subspace-eq1}
+\Norm{(B-A)v_i}^2 = \Norm{\lambda_i v_i - A v_i}^2 = \Norm{(\lambda_i I_n - A) v_i}^2 \geq \Norm{P(\lambda_i I_n - A) v_i}^2\,.
+\end{equation}
+Let now $v_1', \ldots, v_{m}' \in \R^n$ be the eigenvectors of $A$ in $P$ with corresponding eigenvalues $\lambda_1', \ldots, \lambda_{m}' \geq \lambda + \eta$.
+Continuing \cref{lemma:rp_lin-alg-subspace-eq1},
+\begin{equation}
+\label{lemma:rp_lin-alg-subspace-eq2}
+\Norm{(B-A)v_i}^2 \geq \sum_{j=1}^{m} (\lambda_i - \lambda_j')^2 \langle v_j', v_i \rangle^2 \geq \eta^2 \sum_{j=1}^{m} \langle v_j', v_i \rangle^2 = \eta^2 \Norm{Pv_i}^2\,.
+\end{equation}
+Also, $\Norm{(B-A)w_1}^2 = \ldots = \Norm{(B-A)w_\ell}^2 = 0$ and $\Norm{Pw_1}^2 = \ldots = \Norm{Pw_\ell}^2 = 0$.
+
+Second, we claim that $\sum_{i=1}^k \Norm{(B-A)v_i}^2 + \sum_{i=1}^{\ell} \Norm{(B-A)w_i}^2 = \sum_{i=1}^{k+\ell} \Norm{(B-A)u_i}^2$ and $\sum_{i=1}^k \Norm{P v_i}^2 + \sum_{i=1}^{\ell} \Norm{P w_{\ell}} = \sum_{i=1}^{k+\ell} \Norm{P u_i}^2$.
+The proof is simply that, for any matrix $M \in \R^{n \times n}$ and any two orthonormal bases of the same subspace $\{a_i\}$ and $\{b_i\}$,
+\[\sum_{i} \Norm{Ma_i}^2 = \sum_{i} \Tr(M^\top M a_i a_i^\top) = \Tr\Paren{M^\top M \sum_{i} a_i a_i^\top} = \Tr\Paren{M^\top M \sum_{i} b_i b_i^\top}\,,\]
+and by the same sequence of transformations we get back that $\Tr\Paren{M^\top M \sum_{i} b_i b_i^\top} = \sum_{i} \Norm{Ma_i}^2$. 
+Using this fact for the orthonormal bases $\{v_i\} \cup \{w_i\}$ and $\{u_i\}$, we prove the desired fact, and combined with \cref{lemma:rp_lin-alg-subspace-eq2} we complete the proof.
+\end{proof}
+
+\begin{lemma}[Partition rounding]
+    \label{lemma:rp_partition_rounding}
+    Given graph $G = (V, E)$ and partition matrix $Z$, if
+    \begin{itemize}
+        \item there exists $v_1, \ldots, v_k \in \R^n$ such that $\sum_{a=1}^k \Norm{v_a - \frac{D^{1/2} Z_a}{\sqrt{D_Z(a)}}}^2 \leq \alpha$,
+        \item at most $n_{\beta}$ vertices have degree strictly less than $\beta d$,
+        \item the partition degrees are bounded by $D_Z(a) \leq \frac{(1+\e) nd}{k}$ for each $a \in [k]$,
+    \end{itemize}
+    then there exists an algorithm that runs in polynomial time and outputs a partition matrix $\hat{Z} \in \Set{0,1}^{n \times k}$ such that at most $\frac{2 \alpha (1+\e)}{\beta k} n + n_{\beta}$ vertices are wrongly partitioned.
+\end{lemma}
+
+\begin{proof}
+    For each $i \in [n]$, let $\hat{Z}(i) = \argmax_{j \in [k]} v_{j}(i)$. Consider vertex $x$ in partition $a$, if the algorithm assigns $x$ to a wrong partition $b$ (i.e. $\hat{Z}(x) = b \neq a$), then it must hold that $v_a(x) \leq v_b(x)$. Therefore, we can obtain
+    \begin{equation*}
+        \sqrt{\frac{\deg(x)}{d_Z(a)}} \leq \frac{D^{1/2} Z_a(x)}{\sqrt{D_Z(a)}} - v_a(x) + v_b(x) \,.
+    \end{equation*}
+    Square both sides, it follows that
+    \begin{align*}
+        \frac{\deg(x)}{d_Z(a)}
+        & \leq \Paren{\frac{D^{1/2} Z_a(x)}{\sqrt{D_Z(a)}} - v_a(x) + v_b(x)}^2 \\
+        & \leq 2 \Paren{\frac{D^{1/2} Z_a(x)}{\sqrt{D_Z(a)}} - v_a(x)}^2 + 2 \Paren{v_b(x)}^2 \\
+        & = 2 \Paren{\frac{D^{1/2} Z_a(x)}{\sqrt{D_Z(a)}} - v_a(x)}^2 + 2 \Paren{\frac{D^{1/2} Z_b(x)}{\sqrt{D_Z(b)}} - v_b(x)}^2 \,,
+    \end{align*}
+    where the last step is because $\frac{D^{1/2} Z_b(x)}{\sqrt{D_Z(b)}}=0$. Let $S$ be the set of wrongly partitioned vertices, we can sum up both sides over $x \in S$,
+    \begin{align*}
+        \sum_{x \in S} \frac{\deg(x)}{d_Z(a)}
+        & \leq 2 \sum_{a \in [k]} \sum_{x \in S} \Paren{\frac{D^{1/2} Z_a(x)}{\sqrt{D_Z(a)}} - v_a(x)}^2 \\
+        & \leq 2 \sum_{a=1}^k \Norm{v_a - \frac{D^{1/2} Z_a}{\sqrt{D_Z(a)}}}^2 \\
+        & \leq 2 \alpha \,.
+    \end{align*}
+    Now, we consider all vertices in $S$ that have degree at least $\beta d$, denoted by $S_\beta$, it follows that
+    \begin{equation*}
+        \sum_{x \in S} \frac{\deg(x)}{d_Z(a)}
+        \geq |S_{\beta}| \cdot \frac{\beta d}{(1+\e) nd / k}
+        = |S_{\beta}| \frac{\beta k}{(1+\e) n} \,.
+    \end{equation*}
+    Hence, we can get
+    \begin{equation*}
+        |S_{\beta}| \leq \frac{2 \alpha (1+\e)}{\beta k} n \,.
+    \end{equation*}
+    Since there are at most $n_{\beta}$ vertices with degree at most $\beta d$, we can conclude that
+    \begin{equation*}
+        |S| \leq |S_{\beta}| + n_{\beta} \leq \frac{2 \alpha (1+\e)}{\beta k} n + n_{\beta} \,.
+    \end{equation*}
+\end{proof}
+
+Now, we are ready to prove \cref{thm:rp_partition_recovery_theorem} with \cref{lemma:rp_lin-alg-subspace} and \cref{lemma:rp_partition_rounding}.
+
+\begin{proof}[Proof of \cref{thm:rp_partition_recovery_theorem}]
+    Consider the symmetrized witness matrix $\tilde{W}_Z = D^{1/2} W_Z D^{- 1/2}$.
+    By \emph{Partition Spanning} property of partition witness, $\tilde{W}_Z$ is of rank $k$ and has orthonormal basis $\set{\tilde{Z}_a:=\frac{D^{1/2} Z_a}{\sqrt{d_Z(a)}}}_{a \in [k]}$.
+    By \emph{Spectral Separation} property of partition witness and \cref{lem:rp_eigen_equivalence_H_tilde_H}, the top eigenvector of $\tilde{W}_Z$ is equal to $D^{1/2} \1$ with eigenvalue 1 and the bottom $k-1$ eigenvalues of $\tilde{W}_Z$ are upper bounded by $- \frac{1}{k-1} + \delta$.
+    Let $P$ be the orthogonal projection to the eigenvectors of $\tilde{A}$ with eigenvalue at least $(1-\Omega(1))(- \frac{1}{k-1} + \delta)$ and the vector $D^{1/2} \1$, we can apply \cref{lemma:rp_lin-alg-subspace} and the \emph{Subspace Inclusion} property to get
+    \begin{align*}
+        \sum_{a=1}^k \Norm{P \tilde{Z}_a}^2
+        & \leq \frac{1000}{\Paren{\frac{1}{k-1} - \delta}^2} \sum_{a=1}^k \frac{1}{d_Z(a)} \Norm{\tilde{A} D^{1/2} Z_a - \tilde{W}_Z D^{1/2} Z_a}^2 \\
+        & \leq O \Paren{\frac{\gamma^2}{\Paren{\frac{1}{k-1} - \delta}^2} \sum_{a=1}^k \frac{1}{d_Z(a)}}
+        \leq O \Paren{\frac{\gamma^2 k^2}{\Paren{\frac{1}{k-1} - \delta}^2 (1-\e) nd}} \,.
+    \end{align*}
+    Since $\rank_{\leq (1-\Omega(1))(- \frac{1}{k-1} + \delta)}(\tilde{A})  \leq t$ and apply subspace enumeration with $\zeta=\frac{1}{n^2}$ (see \cref{lemma:subspace_enumeration}), in time $n^{O\Paren{t}}$, we can do subspace enumeration and find vectors $v_{[k]}$ that satisfies
+    \begin{equation*}
+        \sum_{a=1}^k \Norm{v_a-\tilde{Z}_a}^2 \leq O \Paren{\frac{\gamma^2 k^2}{\Paren{\frac{1}{k-1} - \delta}^2 (1-\e) nd} + \frac{k^2}{n^2}} \,.
+    \end{equation*}
+    Then, by \cref{lemma:rp_partition_rounding} it follows that we can approximately recover the partitions with error at most
+    \begin{equation*}
+        O \Paren{\Paren{\frac{\gamma^2 k^2}{\Paren{\frac{1}{k-1} - \delta}^2 (1-\e) nd} + \frac{1}{n^2}} \cdot \frac{2}{\beta k} n} + n_{\beta}
+        = O \Paren{\frac{\gamma^2 k}{\Paren{\frac{1}{k-1} - \delta}^2 (1-\e) \beta d} + \frac{1}{\beta k n}} + n_{\beta} \,.
+    \end{equation*}
+\end{proof}
+
+\subsection{Partition witness of random planting}
+
+In this section, we show that graphs with randomly planted $k$-coloring has good partition witnesses.
+
+\begin{lemma}
+\label{lem:random_planting_concentration}
+    For $a, b \in [k]$, we use $V_a$ to denote the number of vertices in partition $a$ and $E(a, b)$ to denote the number of edges between partition $a$ and $b$. Given $G=(V, E)$ that is the graph after randomly planting a $k$-partition $Z$ and assume $k = O(1)$, with probability $1-n^{-\Omega(1)}$,
+    \begin{itemize}
+        \item \emph{Partition size concentration}: For each partition $a \in [k]$, $\Abs{|V_a| - \frac{n}{k}} \leq o(\sqrt{n \log n})$.
+        \item \emph{Cut size concentration}: For each pair of partitions $a, b \in \binom{[k]}{2}$, $\Abs{|E(a, b)| - \frac{nd}{k^2}} \leq o \Paren{d \sqrt{n \log n}}$.
+        \item \emph{Partition degree concentration}: For each partition $a \in [k]$, $\Abs{D_Z(a) - \frac{(k-1)nd}{k^2}} \leq o(d \sqrt{n \log n})$.
+    \end{itemize}
+\end{lemma}
+
+\begin{proof}
+    The \emph{partition size concentration} follows by standard Chernoff bound and union bound argument. The \emph{cut size concentration} follows by noticing that, due to $d$-regularity, the effect of changing the color of a single vertex on $\sum_{x\in V_i} \D{x}{j}$ is $O(d)$. Hence, we can apply McDiarmid's inequality and union bound to show that $\Abs{|E(a, b)| - \frac{nd}{k^2}} \leq o \Paren{d \sqrt{n \log n}}$ is with probability $1-n^{-\Omega(1)}$. The \emph{partition degree concentration} follows by summing up the cut edges of each partition and the \emph{cut size concentration}.
+\end{proof}
+
+\begin{lemma}[Partition Spanning of random planting]
+\label{lem:random_planting_partition_spanning}
+    With probability $1-n^{-\Omega(1)}$, $H_Z$ has rank $k$ and is spanned by $\set{Z_a}_{a \in [k]}$ which is the indicator of partition $a$ in $Z$.
+\end{lemma}
+
+\begin{proof}
+    By \cref{lem:random_planting_concentration}, with probability $1-n^{-\Omega(1)}$, none of the partitions are empty.
+    Therefore, the partition matrix has rank $k$.
+    Consider arbitrary vector $v \in \R^n$, $H_Z v = Z (D_Z^{-1} B_Z D_Z^{-1} Z^{\top} D v)$ is in the column span of $Z$, and the columns of $Z$ are $\set{Z_a}$.
+\end{proof}
+
+\begin{lemma}[Spectral Separation of random planting]
+\label{lem:random_planting_spectral_separation}
+    Given $G=(V, E)$ that is the graph after randomly planting a $k$-partition $Z$ and assume $k = O(1)$, with probability $1-n^{-\Omega(1)}$, the matrix $H_Z$ satisfy \emph{Spectral Separation} property of partition witness with $\delta=o \Paren{\sqrt{\log n/n}}$.
+\end{lemma}
+
+\begin{proof}
+    By \cref{lem:rp_tilde_B_eigenvalues}, $\tilde{B}_Z$ has top eigenvalue $1$ with eigenvector $D_Z^{1/2} \1$. Therefore, by \cref{lem:rp_eigen_equivalence_B_H}, $H_Z$ has top eigenvalue $1$ and eigenvector $\1$ , which satisfies the first condition of \emph{Spectral Separation}.
+    
+    Due to \cref{lem:rp_eigen_equivalence_B_H}, $\tilde{B}_Z$ and $H_Z$ have the same eigenvalues.
+    Therefore, it suffices to show that $\tilde{B}_Z$ satisfies the second condition of \emph{Spectral Separation}.
+    Notice that, by the definition of $\tilde{B}_Z$, it has $0$ on the diagonal and each entry $a, b \in \binom{[k]}{2}$ of $\tilde{B}_Z$ equals
+    \begin{equation*}
+        \tilde{B}_Z(a, b)
+        = \frac{|E(a, b)|}{\sqrt{D_Z(a) D_Z(b)}} \,.
+    \end{equation*}
+    By \cref{lem:random_planting_concentration}, it follows that
+    \begin{equation}
+    \label{eq:random_planting_spectral_separation_1}
+        \tilde{B}_Z(a, b)
+        \leq \frac{\frac{nd}{k^2} + o \Paren{d \sqrt{n \log n}}}{\frac{(k-1)nd}{k^2} - o(d \sqrt{n \log n})}
+        \leq \frac{1}{k-1} + o \Paren{\sqrt{\log n/n}} \,.
+    \end{equation}
+    and,
+    \begin{equation}
+    \label{eq:random_planting_spectral_separation_2}
+        \tilde{B}_Z(a, b)
+        \geq \frac{\frac{nd}{k^2} - o \Paren{d \sqrt{n \log n}}}{\frac{(k-1)nd}{k^2} + o(d \sqrt{n \log n})}
+        \geq \frac{1}{k-1} - o \Paren{\sqrt{\log n/n}} \,.
+    \end{equation}
+    Therefore, we can write $\tilde{B}_Z$ as
+    \begin{equation*}
+        \tilde{B}_Z
+        = \frac{1}{k-1} (\Allones - \Id) + \mathfrak{B_Z} \,,
+    \end{equation*}
+    where $\mathfrak{B_Z}$ is a matrix where each entry is the deviation of $\tilde{B}_Z$ from $\frac{1}{k-1} (\Allones - \Id)$.
+    By \cref{eq:random_planting_spectral_separation_1} and \cref{eq:random_planting_spectral_separation_2}, it follows that $\Abs{\mathfrak{B_Z}(a, b)} \leq o \Paren{\sqrt{\log n/n}}$ for each $a, b \in [k]$, and, therefore, $\Norm{\mathfrak{B_Z}} \leq o \Paren{k^2 \sqrt{\log n/n}} = \Paren{\sqrt{\log n/n}}$.
+    Hence, by Weyl's inequality, it follows that $\lambda_k(\tilde{B}_Z) \leq \dots \leq \lambda_2(\tilde{B}_Z) \leq - \frac{1}{k-1} + o \Paren{\sqrt{\log n/n}}$. By \cref{lem:rp_tilde_B_eigenvalues}, we have $\lambda_2(\tilde{B}_Z) \geq \dots \geq \lambda_k(\tilde{B}_Z) \geq -1$. Combine this with \cref{lem:rp_eigen_equivalence_B_H}, it follows that
+    \begin{equation*}
+        -1 \leq \lambda_k(H_Z) \leq \dots \leq \lambda_2(H_Z) \leq - \frac{1}{k-1} + o \Paren{\sqrt{\log n/n}} \,,
+    \end{equation*}
+    which is the second condition of the \emph{Spectral Separation} with $\delta=o \Paren{\sqrt{\log n/n}}$.
+\end{proof}
+
+\begin{lemma}[Subspace Inclusion of random planting]
+\label{lem:random_planting_subspace_inclusion}
+    Given $G=(V, E)$ that is the graph after randomly planting a $k$-partition $Z$ and assume $k = O(1)$ and $d \geq C_d$ for some large enough universal constant $C_d$, with probability $1-n^{-\Omega(1)}$, for each partition $a \in [k]$, the symmetrized partition random walk matrix $\tilde{H}_Z = D^{1/2} H_Z D^{-1/2}$ satisfies
+    \begin{itemize}
+        \item When $d \geq n^{0.1}$, $\Norm{\tilde{A} D^{1/2} Z_a - \tilde{H}_Z D^{1/2} Z_a} \leq \sqrt{n \sqrt{d}}$.
+        \item When $C_d \leq d \leq n^{0.1}$, $\Norm{\tilde{A} D^{1/2} Z_a - \tilde{H}_Z D^{1/2} Z_a} \leq 2\sqrt{n}$.
+    \end{itemize}
+\end{lemma}
+
+\begin{proof}
+    By the definition of $\tilde{A}$, it follows that entry $i$ of $\tilde{A} D^{1/2} Z_a$ equals
+    \begin{equation}
+        \label{eq:random_planting_subspace_inclusion_1}
+        \Paren{\tilde{A} D^{1/2} Z_a}(i)
+        = \frac{|E(i, V_a)|}{\sqrt{D(i)}} \,.
+    \end{equation}
+    By the definition of $\tilde{H}_Z$, it follows that entry $i$ of $\tilde{H}_Z  D^{1/2} Z_a$ equals
+    \begin{equation*}
+        \Paren{\tilde{H}_Z  D^{1/2} Z_a}(i)
+        = \Paren{D^{1/2} H_Z Z_a}(i)
+        = \sqrt{D(i)} \sum_{j} H_Z(i, j) Z_a(j) \,.
+    \end{equation*}
+    Notice that $Z_a(j) = 1$ if and only if vertex $j$ is in partition $a$. Therefore, it follows that
+    \begin{equation*}
+        \Paren{\tilde{H}_Z  D^{1/2} Z_a}(i)
+        = \sqrt{D(i)} \sum_{j \in V_a} H_Z(i, j) \,.
+    \end{equation*}
+    Since $H_Z(i, j) = \frac{|E(Z(i), Z(j)|)}{D_Z(Z(i)) D_Z(Z(j))} D(j)$ by definition, it follows that
+    \begin{align*}
+        \Paren{\tilde{H}_Z  D^{1/2} Z_a}(i)
+        & = \sqrt{D(i)} \sum_{j \in V_a} \frac{|E(Z(i), Z(j)|)}{D_Z(Z(i)) D_Z(Z(j))} D(j) \\
+        & = \sqrt{D(i)} \sum_{j \in V_a} \frac{|E(Z(i), a)|}{D_Z(Z(i)) D_Z(a)} D(j) \\
+        & = \sqrt{D(i)} \frac{|E(Z(i), a)|}{D_Z(Z(i)) D_Z(a)} \sum_{j \in V_a} D(j) \\
+        & = \sqrt{D(i)} \frac{|E(Z(i), a)|}{D_Z(Z(i))} \,.
+    \end{align*}
+    Since for all $Z(i) = a$, $|E(Z(i), a)| = 0$, we have, for $i \in V_a$,
+    \begin{equation}
+    \label{eq:random_planting_subspace_inclusion_2}
+        \Paren{\tilde{H}_Z  D^{1/2} Z_a}(i) = 0
+    \end{equation}
+    For all $Z(i) \neq a$, by \cref{lem:random_planting_concentration}, with probability $1-n^{-\Omega(1)}$, $\Abs{|E(Z(i), a)| - \frac{nd}{k^2}} \leq o \Paren{d \sqrt{n \log n}}$ and $\Abs{D_Z(a) - \frac{(k-1)nd}{k^2}} \leq o(d \sqrt{n \log n})$. Therefore, using the same argument as in the proof of \cref{lem:random_planting_spectral_separation}, it follows that, for $i \notin V_a$,
+    \begin{equation}
+    \label{eq:random_planting_subspace_inclusion_3}
+        \Paren{\tilde{H}_Z  D^{1/2} Z_a}(i)
+        = \Paren{\frac{1}{k-1} \pm o \Paren{\sqrt{\log n/n}}} \cdot \sqrt{D(i)}
+        = \frac{\sqrt{D(i)}}{k-1} \pm o \Paren{\sqrt{D(i) \log n/n}} \,.
+    \end{equation}
+    Plugging \cref{eq:random_planting_subspace_inclusion_1}, \cref{eq:random_planting_subspace_inclusion_2} and \cref{eq:random_planting_subspace_inclusion_3} into the norm of $\Norm{\tilde{A} D^{1/2} Z_a - \tilde{H}_Z D^{1/2} Z_a}$, we get
+    \begin{align*}
+        \Norm{\tilde{A} D^{1/2} Z_a - \tilde{H}_Z D^{1/2} Z_a}^2
+        & = \sum_{i \in V_a} \Paren{\frac{|E(i, V_a)|}{\sqrt{D(i)}}}^2 + \sum_{i \notin V_a} \Paren{\frac{|E(i, V_a)|}{\sqrt{D(i)}} - \frac{\sqrt{D(i)}}{k-1} \pm o \Paren{\sqrt{D(i) \log n/n}}}^2 \\
+        & = \sum_{i \notin V_a} \Paren{\frac{|E(i, V_a)|}{\sqrt{D(i)}} - \frac{\sqrt{D(i)}}{k-1} \pm o \Paren{\sqrt{D(i) \log n/n}}}^2 \,.
+    \end{align*}
+    For simplicity, we will ignore the $\pm o \Paren{\sqrt{D(i) \log n/n}}$ term from now on (it is easy to check that it does not affect the final result). By re-arranging terms, we get
+    \begin{align*}
+        \Norm{\tilde{A} D^{1/2} Z_a - \tilde{H}_Z D^{1/2} Z_a}^2
+        & = \sum_{i \notin V_a} \Paren{\frac{|E(i, V_a)|}{\sqrt{D(i)}} - \frac{\sqrt{D(i)}}{k-1}}^2 \\
+        & = \sum_{i \notin V_a} \frac{1}{D(i)}\Paren{|E(i, V_a)| - \frac{D(i)}{k-1}}^2 \,.
+    \end{align*}
+    Taking expectation of $\Norm{\tilde{A} D^{1/2} Z_a - \tilde{H}_Z D^{1/2} Z_a}^2$, it follows that
+    \begin{align*}
+        \E \Brac{\Norm{\tilde{A} D^{1/2} Z_a - \tilde{H}_Z D^{1/2} Z_a}^2}
+        & = \sum_{i \notin V_a} \E \Brac{\frac{1}{D(i)}\Paren{|E(i, V_a)| - \frac{D(i)}{k-1}}^2} \\
+        & = \sum_{i \notin V_a} \int_{0}^{\infty} \Pr \Brac{\frac{1}{D(i)}\Paren{|E(i, V_a)| - \frac{D(i)}{k-1}}^2 \geq x} \,d x \\
+        & = \sum_{i \notin V_a} \int_{0}^{\infty} \Pr \Brac{\Paren{|E(i, V_a)| - \frac{D(i)}{k-1}}^2 \geq x D(i)} \,d x \,.
+    \end{align*}
+    Notice that, conditioning on the degree $D(i)=r$, $|E(i, V_a)|$ is the sum of independent Bernoulli random variables that indicate whether each edge of $i$ has its other endpoint in partition $a$ and $\frac{D(i)}{k-1}$ is the expected value of $|E(i, V_a)|$. By Chernoff bound, it follows that
+    \begin{align*}
+        \Pr \Brac{\Paren{|E(i, V_a)| - \frac{D(i)}{k-1}}^2 \geq x D(i)}
+        & = \sum_{r=1}^{d} \Pr \Brac{\Paren{|E(i, V_a)| - \frac{D(i)}{k-1}}^2 \geq x D(i) \Big | D(i)=r} \Pr \Brac{D(i)=r} \\
+        & \leq 2 \exp(- (k-1)x /3) \sum_{r=1}^{d} \Pr \Brac{D(i)=r} \\
+        & = 2 \exp(- (k-1)x /3) \,.
+    \end{align*}
+    Therefore, we get
+    \begin{align*}
+        \E \Brac{\Norm{\tilde{A} D^{1/2} Z_a - \tilde{H}_Z D^{1/2} Z_a}^2}
+        & \leq \sum_{i \notin V_a} \int_{0}^{\infty} 2 \exp(- (k-1)x /3) \,d x \\
+        & = \Paren{n-\Abs{V_a}} \cdot \int_{0}^{\infty} 2 \exp(- (k-1)x /3) \,d x \\
+        & \leq \frac{6 n}{k-1} \,.
+    \end{align*}
+    When $d \geq n^{0.1}$, we can apply Markov's inequality and obtain,
+    \begin{align}
+    \label{eq:random_planting_subspace_inclusion_4}
+    \begin{split}
+        \Pr \Brac{\Norm{\tilde{A} D^{1/2} Z_a - \tilde{H}_Z D^{1/2} Z_a}^2 \geq n \sqrt{d}}
+        & \leq \frac{\E \Brac{\Norm{\tilde{A} D^{1/2} Z_a - \tilde{H}_Z D^{1/2} Z_a}^2}}{n \sqrt{d}} \\
+        & \leq \frac{6}{k-1} \cdot \frac{n}{n \sqrt{d}} \\
+        & \leq n^{-\Omega(1)} \,,
+    \end{split}
+    \end{align}
+    When $d < n^{0.1}$, observe that, if the partition of a single vertex is changed, at most $d$ summands of $\Norm{\tilde{A} D^{1/2} Z_a - \tilde{H}_Z D^{1/2} Z_a}^2 = \sum_{i \notin V_a} \frac{1}{D(i)}\Paren{|E(i, V_a)| - \frac{D(i)}{k-1}}^2$ are affected, and each summand takes value between $[0, d^2]$. Therefore, the value of $\Norm{\tilde{A} D^{1/2} Z_a - \tilde{H}_Z D^{1/2} Z_a}^2$ changes by at most $d^3$. Hence, we can apply McDiarmid's inequality and obtain
+    \begin{align}
+    \label{eq:random_planting_subspace_inclusion_5}
+    \begin{split}
+        \Pr & \Brac{\Norm{\tilde{A} D^{1/2} Z_a - \tilde{H}_Z D^{1/2} Z_a}^2 - \E \Brac{\Norm{\tilde{A} D^{1/2} Z_a - \tilde{H}_Z D^{1/2} Z_a}^2} \geq 10 \sqrt{d^3 n \log n}} \\
+        & \leq \exp \Paren{- \frac{200d^3 n \log n}{d^3 n}}
+        = n^{- \Omega(1)} \,,
+    \end{split}
+    \end{align}
+    which implies that, with probability $1 - n^{- \Omega(1)}$,
+    \begin{align*}
+        \Norm{\tilde{A} D^{1/2} Z_a - \tilde{H}_Z D^{1/2} Z_a}^2
+        & \leq \E \Brac{\Norm{\tilde{A} D^{1/2} Z_a - \tilde{H}_Z D^{1/2} Z_a}^2} + 10 \sqrt{d^3 n \log n} \\
+        & \leq \frac{6 n}{k-1} + 10 \sqrt{d^3 n \log n} \\
+        & \leq 3 n\,.
+    \end{align*}
+    Combining \cref{eq:random_planting_subspace_inclusion_4} and \cref{eq:random_planting_subspace_inclusion_5}, by union bound over all $a \in [k]$ and all other failure probabilities, it follows that, with probability $1-n^{-\Omega(1)}$, for each partition $a \in [k]$, the symmetrized partition random walk matrix $\tilde{H}_Z$ satisfies
+    \begin{itemize}
+        \item When $d \geq n^{0.1}$, $\Norm{\tilde{A} D^{1/2} Z_a - \tilde{H}_Z D^{1/2} Z_a} \leq \sqrt{n \sqrt{d}}$.
+        \item When $C_d \leq d \leq n^{0.1}$, $\Norm{\tilde{A} D^{1/2} Z_a - \tilde{H}_Z D^{1/2} Z_a} \leq 2 \sqrt{n}$.
+    \end{itemize}
+\end{proof}
+
+\subsection{Almost recovery in random planting}
+
+In this section, we prove the following theorem for almost recovery of the coloring in the random planting setting when $G^{\circ}$ is sufficiently dense.
+
+\begin{theorem}
+\label{thm:rp_partial_recovery}
+    Given a graph $G=(V, E)$ that is generated by planting a random k-coloring in $G^{\circ}$ that is $d$-regular and $d \geq O(\log(n))$. Suppose
+    \begin{itemize}
+        \item $\rank_{\geq (1-\Omega(1)) \Paren{\frac{1}{k-1}}^{100}}(\tilde{A^{\circ}}) \leq t$ where $\tilde{A^{\circ}}$ is the normalized adjacency matrix of $G^{\circ}$,
+        \item at most $n_{\beta}$ vertices of $G$ have degree strictly less than $\beta d$,
+        \item for all $a\in[k]$ that $\Abs{D_Z(a) - \frac{nd}{k}}\leq \frac{\e nd}{k}$,
+    \end{itemize}
+    Then there exists an algorithm that runs in time $n^{O(t)}$ and returns an $n^{O(t)}$-sized list of $k$-colorings one of which is a $o_d(n)$-approximate coloring.
+\end{theorem}
+
+Before proving \cref{thm:rp_partial_recovery}, we need the following lemma that connects the spectrum of $G^{\circ}$ and $G$.
+
+\begin{lemma}[Planting k-coloring vs Bottom Threshold Rank]
+    \label[lemma]{lem:rp_threshold_rank_kept}
+        Let $G^{\circ}$ be an $n$-vertex graph with $\rank_{\geq \alpha_1}(G^{\circ}) < t_1$ and $\rank_{\leq -\alpha_2}(G^{\circ}) \leq t_2$, for some $\alpha_1, \alpha_2 >0$ and $t_1,t_2\in [n]$.
+        Then, after planting a $k$-coloring in $G^{\circ}$, the resulting graph $G$ has $\rank_{\leq -(\alpha_1+\alpha_2)}(G) \leq k(t_1-1)+t_2$.
+    \end{lemma}
+    
+    \begin{proof}
+        Let $F:= G^{\circ} - G$.
+        Observe that $F$ consists of the $k$ disconnected parts $\set{F_{i}}_{i \in [k]}$ corresponding to the $k$ color classes, and therefore the spectrum $\sigma(F)$ is the concatenation of the spectra $\set{\sigma\Paren{F_{i}}}_{i \in [k]}$.
+        For all $i\in [k]$, $F_i$ is a principal submatrix of $G^{\circ}$, and hence Cauchy's interlacing theorem gives $\lambda_{t_1}(F_i) \leq \lambda_{t_1}(G^{\circ}) \leq \alpha_1$. Hence, $\lambda_{k(t_1-1)+1}(F)\leq \alpha_1$.
+        Now, we can apply Weyl's inequality to combine the spectral guarantees on $F$ and $G^{\circ}$ into the spectral guarantee of $G$,
+        \begin{align*}
+            \lambda_{n-k(t_1-1)-t_2}(G)
+            &=\lambda_{(n-t_2)+\Paren{n-k(t_1-1)}-n}(G^{\circ}+(-F))\\
+            &\geq \lambda_{n-t_2}(G^{\circ})+\lambda_{n-k(t_1-1)}(-F)\\
+            &= \lambda_{n-t_2}(G^{\circ})-\lambda_{k(t_1-1)+1}(F)\\
+            &\geq -(\alpha_1+\alpha_2)\,.
+        \end{align*}
+    \end{proof}
+
+Since $G$ has a sufficiently good partition witness, we can now apply \cref{thm:rp_partition_recovery_theorem} to prove the following almost recovery result.
+
+\begin{proof}[Proof of \cref{thm:rp_partial_recovery}]
+    By \cref{lem:random_planting_concentration}, $\e = o(1)$. By \cref{lem:random_planting_partition_spanning}, \cref{lem:random_planting_spectral_separation} and \cref{lem:random_planting_subspace_inclusion}, the partition random walk operator $H$ is a $(\sqrt{\log n/n}, \sqrt{n \sqrt{d}})$-witness when $d \geq n^{0.1}$ and a $(\sqrt{\log n/n}, \sqrt{n})$-witness when $C_d \leq d \leq n^{0.1}$.
+
+    Now, we discuss the two degree regimes separately to bound $n_{\beta}$ and derive the recovery guarantees.
+
+    \paragraph{Dense Regime ($d \geq n^{0.1}$)}
+    By \cref{thm:rp_partition_recovery_theorem}, it allows us to get a $n^{O\Paren{t}}$-time recovery algorithm with error at most
+    \begin{equation*}
+        O \Paren{\frac{\gamma^2 k}{\Paren{\frac{1}{k-1} - \delta}^2 (1-\e) \beta d} + \frac{1}{\beta k n}} + n_{\beta}
+        = O \Paren{\frac{k^3 n}{\beta \sqrt{d}} + \frac{1}{\beta k n}} + n_{\beta} \,.
+    \end{equation*}
+    Let $\beta = \frac{k-1}{2k}$, by standard Chernoff argument, it follows that with probability at least $1-n^{-\Omega(1)}$, all vertices has degree at least $\beta d$.
+    Hence, with probability at least $1-n^{-\Omega(1)}$, the error bound is
+    \begin{equation*}
+        O \Paren{\frac{4 k^3 n}{\sqrt{d}} + \frac{2}{(k-1) n}}
+        = o(n) \,.
+    \end{equation*}
+
+    \paragraph{Sparse Regime ($C_d \leq d \leq n^{0.1}$)}
+    \cref{thm:rp_partition_recovery_theorem}, it allows us to get a $n^{O\Paren{t}}$-time recovery algorithm with error at most
+    \begin{equation*}
+        O \Paren{\frac{\gamma^2 k}{\Paren{\frac{1}{k-1} - \delta}^2 (1-\e) \beta d} + \frac{1}{\beta k n}} + n_{\beta}
+        = O \Paren{\frac{k^3 n}{\beta d} + \frac{1}{\beta k n}} + n_{\beta} \,.
+    \end{equation*}
+    Now, let $\beta=\frac{1}{\sqrt{d}}$, consider the number of vertices $n_{\beta}$ that has degree strictly less than $\beta d = \sqrt{d}$.
+    Let $X_i$ be the indicator random variable for whether vertex $i$ has degree strictly less than $\sqrt{d}$ and let $X = \sum_i X_i$. Notice that,
+    \begin{align*}
+        \Pr \Brac{X_i = 1}
+        & = \Pr \Brac{D(i) < \sqrt{d}} \\
+        & \leq \sum_{t=1}^{\sqrt{d}} \binom{d}{t} \Paren{\frac{1}{k}}^{d-t} \Paren{1-\frac{1}{k}}^{t} \\
+        & \leq \sqrt{d} \cdot \binom{d}{\sqrt{d}} \cdot \Paren{\frac{1}{k}}^{d-\sqrt{d}} \\
+        & \leq \sqrt{d} \cdot (e \sqrt{d})^{\sqrt{d}} \cdot \exp(- d \log k) \\
+        & = \exp \Paren{\Paren{-\log k + \frac{\log d}{\sqrt{d}} + \frac{1}{\sqrt{d}} + \frac{\log d}{2 d}} d} \,.
+    \end{align*}
+    Since $k \geq 3$ and $d \geq C_d$ for some constant $C_d$ that is large enough, it follows that
+    \begin{equation*}
+        \Pr \Brac{X_i = 1} \leq \exp(- d) \,.
+    \end{equation*}
+    Therefore, it follows that
+    \begin{equation*}
+        \E \Brac{X} = \E \Brac{\sum_i X_i} \leq \exp(-d) n \,.
+    \end{equation*}
+    Notice that, since each vertex has degree at most $d$, by changing the partition of a single vertex, the value $X$ is changed by at most $d+1$. Therefore, we can apply McDiarmid's inequality and obtain
+    \begin{equation*}
+        \Pr \Brac{X - \E \Brac{X} \geq n^{0.8}}
+        \leq \exp \Paren{- \frac{2 n^{1.6}}{n (d+1)^2}}
+        \leq n^{-\Omega(1)} \,,
+    \end{equation*}
+    where the last inequality is due to $d \leq n^{0.1}$.
+    Hence, when $\beta=\frac{1}{\sqrt{d}}$, we have, with probability at least $1 - n^{-\Omega(1)}$,
+    \begin{equation*}
+        O \Paren{\frac{k^3 n}{\beta d} + \frac{1}{\beta k n}} + n_{\beta}
+        \leq O \Paren{\frac{k^3 n}{\sqrt{d}} + \frac{\sqrt{d}}{k n}} + \exp(-d) n + n^{0.8}
+        = o_d(n) \,.
+    \end{equation*}
+
+    \paragraph{Time Complexity}
+    By \cref{cor:spectral_small_to_small} and $\rank_{\geq (1-\Omega(1)) \Paren{\frac{1}{k-1}}^{100}}(\tilde{A}^{\circ}) \leq t$, the bottom threshold rank of $\tilde{A}^{\circ}$ is bounded by
+    \begin{equation*}
+        \rank_{\leq - (1-\Omega(1))(\frac{1}{k-1})^{50}}(\tilde{A}^{\circ}) \leq O \Paren{t} \,.
+    \end{equation*}
+    By \cref{lem:rp_threshold_rank_kept}, we can obtain the following bound on the adjacency marix $A$ of $G$
+    \begin{equation*}
+        \rank_{\leq - (1-\Omega(1))(\frac{1}{k-1})^{50}} \Paren{A/d} \leq O \Paren{t} \,.
+    \end{equation*}
+    Since $d \geq O(\log(n))$, it follows that, with probability $1-o(1)$, all vertices of $A$ has degree $(1 \pm \Omega(1)) \Paren{1-1/k} d$. Therefore,
+    \begin{equation*}
+        \Norm{\tilde{A} - \frac{k}{(k-1)d} A}
+        = \Norm{D^{-1/2} A D^{-1/2} - \frac{k}{(k-1)d} A}
+        = \Omega(1) \cdot \Norm{\frac{k}{(k-1)d} A}
+        = \Omega(1) \,.
+    \end{equation*}
+    By Weyl's inequality, it follows that
+    \begin{equation*}
+        \Abs{\lambda_k (\tilde{A}) - \lambda_k \Paren{\frac{k}{(k-1)d} A}}
+        \leq \Norm{\tilde{A} - \frac{k}{(k-1)d} A}
+        \leq \Omega(1) \,.
+    \end{equation*}
+    Hence,
+    \begin{equation*}
+        \rank_{\leq - (1-\Omega(1))(\frac{1}{k-1})^{40}} \Paren{\tilde{A}} \leq O \Paren{t} \,.
+    \end{equation*}
+    Thus, with probability $1-o(1)$, the subspace enumeration takes time $n^{O(t)}$.
+\end{proof}
+
+\subsection{Complete coloring in random planting}
+
+For randomly planted $k$-colorings in one-sided expanders, we give an algorithm that \whp recovers a complete \kcl.
+
+\begin{theorem}\label[theorem]{thm: kcoloringplantedfullrecovery}
+    Let $3\leq k=O(1)$ and let $d$ be at least a large enough constant.
+    Let $G^{\circ}$ be an $n$-vertex $d$-regular graph with $\lambda_2(G^{\circ})$ at most a small enough constant. 
+    Let $G$ be the graph obtained from $G^{\circ}$ by randomly planting a \kcl in it.
+    There is an algorithm with runtime $\poly(n)$ that \whp returns a complete $k$-coloring of $G$.
+\end{theorem}
+
+To be able to get a complete coloring, we need to strengthen the low top threshold rank assumption to one-sided expansion, and use the full randomness of the planted model instead of only pseudo-randomness.
+The algorithm and the proof for converting an approximate coloring into a complete coloring is similar to Theorem B.10 of \cite{MR3536556-David16}, but they assume \textit{two}-sided expansion (i.e. $\lambda_n(G^{\circ})\geq -c$ too), while we assume \textit{one}-sided expansion only.
+
+The two ways in which Theorem B.10 of \cite{MR3536556-David16} uses two-sided expansion are via the Expander Mixing Lemma (EML) (used in Lemma B.17, Lemma B.19 and Lemma B.20):
+$$e(S, T)\leq d|S|\Paren{\frac{|T|}{n}+c\sqrt{\frac{|T|}{|S|}}}$$
+and via the vertex-expansion lower bound (used in Lemma B.21): for $|S|=\alpha n$, 
+$$\Abs{N(S)\setminus S}\geq \Paren{\frac{1}{(1-\alpha)c^2+\alpha}-1}|S|\,.$$
+
+For the former, note that Lemmata B.19 and B.20 use EML with $S=T$, and Lemma B.17 (i.e. the iterative recoloring phase) we can avoid by assuming that $d$ is at least a large enough constant. As the below lemma shows, for $S=T$, EML holds even under \textit{one}-sided expansion:
+
+\begin{lemma}[Edge density upper bound]
+    \label[lemma]{lem:rp_emlonesided}
+    Let $G^{\circ}$ be a $d$-regular graph on $n$ vertices with $\lambda_2(G^{\circ})\leq c$.
+    Then, for any set $S \subseteq V$,
+    $$\Abs{E(G_S^{\circ})}\leq\frac{d|S|}{2}\Paren{\frac{|S|}{n}+c}\,.$$
+\end{lemma}
+
+\begin{proof}
+    Let $\phi \in \{0,1\}^n$ be the indicator vector of $S$ and write $\phi$ in the orthonormal eigenbasis $e_{[n]}$ of $A^{\circ}$:
+    $$\phi = \sum_{i=1}^n \alpha_i e_i\,.$$
+
+    Hence, by orthonormality, we can write
+
+    \begin{align*}
+        &\Abs{E(G_S^{\circ})}\\
+        &=\frac{1}{2} \phi^\top A^{\circ} \phi\\
+        &=\frac{d}{2} \Paren{\sum_{i=1}^n \alpha_i e_i^\top } \Paren{\sum_{i=1}^n \lambda_i e_i e_i^\top } \Paren{\sum_{i=1}^n \alpha_i e_i}\\
+        &=\frac{d}{2} \sum_{i=1}^n \lambda_i \alpha_i^2
+    \end{align*}
+
+    Using $d$-regularity, we have $\lambda_1=1$.
+    Then, as $e_1=\frac{1}{\sqrt{n}}\1$, we get $\alpha_1=\Iprod{e_1, \phi }=\frac{|S|}{\sqrt{n}}$, so $\lambda_1 \alpha_1^2=\frac{|S|^2}{n}$.
+    For the terms with $i>1$, as $\alpha_i^2\geq 0$, we can upper bound $\lambda_i \alpha_i^2$ by $\lambda_2 \alpha_i^2\leq c\alpha_i^2$.
+    Plugging these back we get
+    $$\Abs{E(G_S^{\circ})}\leq \frac{d}{2}\Paren{\frac{|S|^2}{n} + c\sum_{i=2}^n \alpha_i^2}\,.$$
+
+    Then, using $\sum_{i=2}^n \alpha_i^2\leq \sum_{i=1}^n \alpha_i^2=\Norm{\phi}_2^2=|S|$ gives the desired bound.
+\end{proof}
+
+For the latter, under one-sided expansion we can show a bound that is only slightly weaker, and that suffices under a somewhat stronger expansion assumption:
+
+\begin{lemma}[Vertex expansion lower bound]
+    \label[lemma]{lem:rp_ssveonesided}
+    Let $G^{\circ}$ be a $d$-regular graph on $n$ vertices with $\lambda_2(G^{\circ})\leq c$.
+    Then, for any set $S$ with $|S|\leq \alpha n$,
+    $$\Abs{N(S)\setminus S}\geq \Paren{\frac{1}{c+\sqrt{\alpha}}-1}|S|\,.$$
+\end{lemma}
+
+\begin{proof}
+    Let $T:=N(S)\cup S$.
+    Then, as all edges touching $S$ are in $E(G_T^{\circ})$, we have
+    $$e(G_T^{\circ})\geq \frac{1}{2}|S|d\,.$$ 
+
+    On the other hand, by \cref{lem:rp_emlonesided}, writing $|T|=x|S|$ and using $|S|\leq \alpha n$, we get
+    $$e(G_T^{\circ})\leq \frac{d|T|}{2}\Paren{\frac{|T|}{n}+c}=\frac{1}{2}x\Paren{c+\alpha x}|S|d\,.$$
+
+    Comparing the two bounds, and solving the resulting quadratic inequality, we get 
+    $$x\leq \frac{\sqrt{c^2 + 4\alpha}-c}{2\alpha}=\frac{2}{c+\sqrt{c^2+4\alpha}}\,.$$
+
+    By using Jensen's inequality on $\sqrt{c^2+4\alpha}$ and that $\Abs{N(S)\setminus S}\geq \Abs{N(S)}-|S|$ we get the desired result.
+\end{proof}
+
+Before we prove \cref{thm: kcoloringplantedfullrecovery}, we prove adaptations of some lemmata from \cite{MR3536556-David16} that we will use in the proof. First is an uncoloring algorithm that converts an approximate coloring to a partial coloring.
+
+\begin{algorithm}[H]
+    As long as there is a vertex $x$ that has color $c_1$, and a color $c_2\neq c_1$ such that $x$ has less than $\frac{1}{6k}d$ neighbors with color $c_2$, uncolor $x$.
+    \protect\caption{\label{alg:rp_uncoloring}Uncoloring Algorithm (Adaptation of Algorithm 5 of \cite{MR3536556-David16})}
+\end{algorithm}
+
+
+\begin{lemma}[Adaptation of Lemma B.20 of \cite{MR3536556-David16}]\label[lemma]{lem:rp_approximatetopartial}
+    Let $\alpha\leq\frac{1}{24k}$ be a parameter. Let $G^{\circ}$ be a $d\geq O(1)$-regular $n$-vertex  graph with $\lambda_2\leq \frac{1}{9k}$. 
+    Let $G$ be the graph obtained from $G^{\circ}$ by randomly planting a \kcl $f$ in it. Given an $\alpha n$-approximate \kcl $g$ of $G$, \cref{alg:rp_uncoloring} \whp returns an $\Paren{1-4\alpha}n$-partial \kcl of $G$.
+\end{lemma}
+
+To prove \cref{lem:rp_approximatetopartial} we need a definition and two helper lemmata.
+
+\begin{lemma}[Adaptation of Lemma B.19 of \cite{MR3536556-David16}]\label[lemma]{lemma: highmindegreesubgraph}
+    Let $0<\alpha, c<1$ be parameters. Let $G^{\circ}$ be a $d$-regular $n$-vertex graph with $\lambda_2(G^{\circ})\leq c$. For any $S\subseteq V$ with $\Abs{S}<\alpha n$, there exists $R\subseteq V\setminus S$ such that $\Abs{R}\geq \Paren{1-2\alpha}n$ and the minimum degree in $G_R^{\circ}$ is at least $(1-2\alpha-c)d$.
+\end{lemma}
+
+\begin{proof}
+    Let $\e:=2\alpha + c$. Consider the following iterative procedure. Repeatedly remove a vertex $v_t$ from $V\setminus \Paren{S \cup \bigcup_{i=1}^{t-1} v_i}$ if $v_t$ has more than $\e d$ neighbors in $S_t := S \cup \bigcup_{i=1}^{t-1} v_i$. Assume towards a contradiction that this process stops after more than $t:=\Abs{S}$ steps. Then, by using the vertices in $S_t\setminus S$, we can lower bound the number of edges in $G_{S_t}^{\circ}$:
+
+    $$e(G_{S_t}^{\circ})\geq \Abs{S_t\setminus S} \e d= \frac{1}{2}\Abs{S_t}\e d\,.$$
+
+    On the other hand, by \cref{lem:rp_emlonesided},
+
+    $$e(G_{S_t}^{\circ})\leq \frac{\Abs{S_t}d}{2}\Paren{\frac{\Abs{S_t}}{n} + c}\,.$$
+
+    Comparing the two and using $\Abs{S}=\frac{1}{2}\Abs{S_t}$ we get
+
+    $$\Abs{S}\geq\frac{1}{2}\Paren{\e-c}n=\alpha n$$
+
+    which contradicts upper bound assumption on $\Abs{S}$. Hence, letting $R:=V\setminus S_t$ it must hold that $\Abs{R}\geq n-2\Abs{S}\geq \Paren{1-2\alpha}n$ and the minimum degree in $G_R^{\circ}$ is at least $(1-\e)d=(1-2\alpha-c)d$ by construction.
+\end{proof}
+
+\begin{definition}[Adaptation of Definition B.13 of \cite{MR3536556-David16}]\label{def:rp_statisticallybad}
+    In a $d$-regular $n$-vertex graph $G$ that admits a \kcl $f$, we call a vertex $x$ \textit{statistically bad}, if there is a color $c\neq f(x)$ such that $x$ has less than $\frac{1}{2k}d$ neighbors $y$ with $f(y)=c$. We denote the set of statistically bad vertices by $SB(G)$, writing $SB$ when it is clear from context which graph we are referring to.
+\end{definition}
+
+\begin{lemma}[Adaptation of Lemma B.14 of \cite{MR3536556-David16}]\label[lemma]{lemma:rp_sbupperbound}
+   Let $G^{\circ}$ be a $d\geq O(1)$-regular $n$-vertex graph. Let $G$ be the graph obtained from $G^{\circ}$ by randomly planting a \kcl in it. It holds that $\Abs{SB(G)}\leq n2^{-\Omega(d)}$ \whp.
+\end{lemma}
+
+The proof of \cref{lemma:rp_sbupperbound} is exactly as in \cite{MR3536556-David16}. We are now ready to prove \cref{lem:rp_approximatetopartial}.
+
+\begin{proof}[Proof of \cref{lem:rp_approximatetopartial}]
+    Let $c:=\frac{1}{9k}$. When $d$ is at least a large enough constant, $2^{-\Omega(d)}\leq \alpha$ holds. Let $B:=\Set{x\in V\mid f(x)\neq g(x)}$ denote the set of vertices wrongly colored by $g$. Note that $\Abs{B}\leq \alpha n$ by assumption, and $\Abs{SB(G)}\leq 2^{-\Omega(d)}\leq \alpha n$ by \cref{lemma:rp_sbupperbound}. Hence, applying \cref{lemma: highmindegreesubgraph} on $G^{\circ}$ to $B\cup SB$ we get a set $R$ with $|R|=(1-4\alpha)n$ such that the minimum degree in $G_R^{\circ}$ is at least $\Paren{1-4\alpha-c}d$. Using $R\cap SB=\emptyset$, for any $x\in R$ and $c\neq f(x)$ we get that $x$ has degree at least $\Paren{\frac{1}{2k}-4\alpha-c}d\geq \frac{1}{6k}d$ into $\Set{y\in R\mid f(y)=c}$, i.e. into the vertices in $R$ colored with $c$. It follows by induction that no vertices in $R$ will be uncolored at any step of \cref{alg:rp_uncoloring}. Hence, the coloring returned has size at least $|R|=(1-4\alpha)n$. It only remains to show that the coloring returned is proper. In fact, we will show that all vertices in $B$ will get uncolored, from which the statement follows.
+
+    For the sake of contradiction, assume there exist vertices $B_2\subseteq B$ that remain colored by the end of the process. Let $x\in B_2$ be any such vertex. As $x$ has never been uncolored, at the end of the process it has at least $\frac{1}{6k}d$ neighbors $y$ with $g(y)=c\neq g(x)$. In particular, choosing $c=f(x)$, let $Q$ denote those neighbors $y$ of $x$ with $g(y)=f(x)$. As $x$ and $y$ are neighbors in $G$, we have $f(x)\neq f(y)$, so $g(y)\neq f(y)$, which implies $Q\subseteq B_2$. Summarizing, any vertex in $G_{B_2}$ has degree at least $\frac{1}{3k}d$. Therefore, $$e(G_{B_2})\geq \frac{\frac{1}{6k}d|B_2|}{2}= \frac{d|B_2|}{12k}\,.$$
+
+    On the other hand, by \cref{lem:rp_emlonesided}, $$e(G_{B_2})\leq e(G_{B_2}^{\circ})\leq \frac{d\Abs{B_2}}{2}\Paren{\frac{\Abs{B_2}}{n}+c}\,.$$
+    
+    Using $\Abs{B_2}>0$ and the bounds on $\alpha$ and $c$, we can combine and simplify the above two inequalities to get $$\Abs{B_2}\geq \Paren{\frac{1}{6k}-c}n> \alpha n\,.$$
+
+    However, as $\Abs{B_2}\leq \Abs{B}\leq \alpha n$ by assumption, we get a contradiction, so $\Abs{B_2}=0$ finishing the proof.
+\end{proof}
+
+Now we provide an adaptation of a safe recoloring algorithm that can improve on a partial coloring such that the remaining free vertices split into $O(\ln{n})$-sized connected components.
+
+\begin{algorithm}[H]
+    As long as there is an uncolored vertex $x$ that has neighbors in every color except for some color $c$, color $x$ using $c$. 
+    \protect\caption{\label{alg:rp_saferecoloring} Safe Recoloring Algorithm (Adaptation of Algorithm 6 of \cite{MR3536556-David16})}
+\end{algorithm}
+
+\begin{lemma}[Adaptation of Lemma B.21 of \cite{MR3536556-David16}]\label[lemma]{lem:rp_partialtologncomps}
+    Let $G^{\circ}$ be a $d$-regular $n$-vertex  graph with $\lambda_2\leq \frac{1}{16k^2}$. 
+    Let $G$ be the graph obtained from $G^{\circ}$ by randomly planting a \kcl $f$ in it. Starting from a $\frac{1}{256k^4}n$-partial \kcl $g$ of $G$, let $U$ be the set of vertices left uncolored by \cref{alg:rp_saferecoloring}. Then, \whp each component in $G_U$ has size at most $\ln{n}$.
+\end{lemma}
+
+To prove \cref{lem:rp_partialtologncomps} we need a helper lemma that bounds the probability that a set of free vertices have a large neighbourhood among the colored vertices.
+
+\begin{lemma}\label[lemma]{lem:rp_largecoloredneighborhoodprob}
+    Let $G^{\circ}$ be an $n$-vertex graph and let $G$ be a graph obtained from $G^{\circ}$ by randomly planting a \kcl in it. Starting from a partial \kcl of $G$, let $U$ be the set of vertices left uncolored by \cref{alg:rp_saferecoloring}.
+    Let $C$ be any set of vertices of size $t_1$, let $D:=N_{G^{\circ}}\Paren{C}\setminus C$ and let $t_2:=\Abs{D}$. If $t_2\ge 2k^2t_1$ then $C\subseteq U$ and $D\subseteq V\setminus U$ with probability at most $e^{-\frac{1}{2k}t_2}$.
+\end{lemma}
+\begin{proof}
+    Partition the vertices of $D$ to disjoint subsets $\Set{D_{v}}$, where $v\in C$ and $D_{v}\subseteq N_{G^{\circ}}\Paren{v}$. Consider some $D_{v}$ and assume that $v$ is colored by $1$. If both $v\in U$ and $D_{v}\subseteq V\setminus U$ then the set of colors that vertices in $D_{v}$ are using must be contained in exactly one
+    of the sets $[k]\setminus {c}$ for some $c\neq 1$ (otherwise \cref{alg:rp_saferecoloring} would color $v$).
+    Therefore the probability that both $v\in U$ and $D_{v}\subseteq V\setminus U$
+    is at most $(k-1)\Paren{\frac{k-1}{k}}^{\Abs{D_{v}}}$. Hence, the probability that both $C$ is in $U$ and $D\subseteq V\setminus U$ is at most
+    \begin{align*}
+        \prod_{D_{v}\in\Set{ D_{v}} }(k-1)\Paren{\frac{k-1}{k}}^{\Abs{D_{v}}} & =(k-1)^{\Abs{\Set{ D_{v}} }}\Paren{\frac{k-1}{k}}^{t_2}\\
+        & \le(k-1)^{t_1}\Paren{\frac{k-1}{k}}^{t_2}\\
+        %& =(k-1)^{t_1+t_2}k^{-t_2}\\
+        & =e^{(t_1+t_2)\ln(k-1)-t_2\ln{k}}\\
+        & \le e^{-\frac{1}{2k}t_2}
+    \end{align*}
+    using $t_2\ge 2k^2t_1$ and $\ln{k}-\ln(k-1)\geq \frac{1}{k}$ on the last line.
+\end{proof}
+
+We are now ready to prove \cref{lem:rp_partialtologncomps}.
+
+\begin{proof}[Proof of \cref{lem:rp_partialtologncomps}]
+The proof closely follows that of Lemma B.21 of \cite{MR3536556-David16}, so we only provide the parts that are changed. Let us first prove a helper lemma similar to Claim B.22 of \cite{MR3536556-David16}:
+
+Letting $N_{G^{\circ}}\Paren{n,t_1,t_2}$ denote the number of connected components of size $t_1$ with a neighborhood of size exactly $t_2$ and letting $P_{t_1,t_2}:=\max_{C\subset V(G^{\circ}),\Abs{C}=t_1,\Abs{N\Paren{C}}=t_2}\Pr\Brac{\text{\ensuremath{C}\,\ is in\,\ensuremath{U}}}$, we get by union bound that the probability that there exists a connected component in $G_{U}$ of size $\Omega(\ln n)$ is at most
+
+    \begin{align}
+        \sum_{t_1=\ln n\,}^{\Abs{U}}\sum_{t_2=1}^{d t_1}N_{G^{\circ}}\Paren{n,t_1,t_2}P_{t_1,t_2} & =\sum_{t_1=\ln n\,}^{\Abs{U}}\sum_{t_2= 7k^2t_1 }^{d t_1}N_{G}\Paren{n,t_1,t_2}e^{-\frac{1}{2k} t_2}\label{eq:rp_alpha1}\\
+        & \le\sum_{t_1=\ln n\,}^{\Abs{U}}\sum_{t_2= 7k^2t_1 }^{d t_1}n\binom{t_1+t_2 }{ t_1}e^{-\frac{1}{2k} t_2}\label{eq:rp_alpha2}\\
+        & \le\sum_{t_1=\ln n\,}^{\Abs{U}}\sum_{t_2= 7k^2t_1 }^{d t_1}n\Paren{e\frac{t_1+t_2}{t_1}}^{t_1}e^{-\frac{1}{2k} t_2}\label{eq:rp_alpha3}\\
+        & \le\sum_{t_1=\ln n\,}^{\Abs{U}}ndt_1\max_{7k^2\le x\le d}e^{\Paren{1+\ln(x+1)-\frac{1}{2k} x}t_1}\nonumber \\
+        & \le n^{4}\max_{7k^2\le x\le d}e^{\Paren{1+\ln(x+1)-\frac{1}{2k} x}\ln{n}}\nonumber\\
+        & \le n^{-1}\,.\label{eq:rp_alpha4}
+    \end{align}
+
+    \cref{eq:rp_alpha1} follows by \cref{lem:rp_largecoloredneighborhoodprob} and that by \cref{lem:rp_ssveonesided} if $\lambda_2\le \frac{1}{16k^2}$ then for a set of size $t_1\le\Abs{U}\le\frac{1}{256k^4}n$ it holds that its neighborhood is of size $t_2\ge7k^2t_1$.
+    \cref{eq:rp_alpha2} follows by Lemma B.23 of \cite{MR3536556-David16}.
+    \cref{eq:rp_alpha3} follows by the binomial identity ${n \choose k}\le\Paren{e\frac{n}{k}}^{k}$.
+    \cref{eq:rp_alpha4} follows by $\ln\Paren{7k^2+1}\leq \frac{7k}{2}-6$ which holds for $k\geq 3$.
+\end{proof}
+
+Using \cref{thm:rp_partial_recovery}, \cref{lem:rp_approximatetopartial} and \cref{lem:rp_partialtologncomps}, we are finally ready to prove \cref{thm: kcoloringplantedfullrecovery}.
+
+\begin{proof}
+    By \cref{thm:rp_partial_recovery}, we get a list $L$ of colorings, one of which is a $\frac{n}{\omega_d(1)}$-approximate coloring.
+    Then, for $d$ at least a large enough constant, by \cref{lem:rp_approximatetopartial}, running \cref{alg:rp_uncoloring} on all colorings in $L$ we get a list $L'$ of colorings, one of which is a $\frac{n}{\omega_d(1)}$-partial coloring. 
+    Then, for $d$ at least a large enough constant, by \cref{lem:rp_partialtologncomps}, running \cref{alg:rp_saferecoloring} on all colorings in $L'$ we get a list $L''$ of $\frac{n}{\omega_d(1)}$-partial colorings, one of which satisfies that all the free vertices are in connected components of size $O(\ln{n})$.
+    Hence, we can try a brute force search on each component of those colorings in $L''$ that have component sizes $O(\ln{n})$ and we are guaranteed to find a complete coloring on at least one of them.
+    All algorithms used have runtime $\poly(n)$ and all lists generated have size $\poly(n)$, so the total runtime is $\poly(n)$.
+    \end{proof}

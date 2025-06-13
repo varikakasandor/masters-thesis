@@ -1,0 +1,57 @@
+\section{Definitions and notation}
+
+% Let $d$ be a positive degree parameter. Given a graph $G$, let $A$ be its adjacency matrix and let $\tilde{A}_d:=\frac1{d}A$ be its adjacency matrix normalized by $d$. When $d$ is clear from the context, we will simply write $\tilde{A}$ instead of $\tilde{A}_d$.
+%Let $\rank_{\le x}(\tilde{A}):=\rank_{\le dx}(A)$ and $\rank_{\ge x}(\tilde{A}):=\rank_{\ge dx}(A)$.
+
+We say an $n$-vertex $d$-regular graph $G$ with adjacency matrix $A$ is a $\lambda$-one-sided expander if $\lambda_2(\frac{1}{d} A) \leq \lambda$.
+We say a matrix $A \in \R_{\geq 0}^{n \times n}$ is \emph{row stochastic} if the sum of its entries on every row is $1$: for all $x \in [n]$, $\sum_{y=1}^n A_{xy} = 1$.
+We say a matrix $A \in \R_{\geq 0}^{n \times n}$ is \emph{reversible row stochastic} if it is row stochastic and if there exists $\pi \in \R_{\geq 0}^{n}$ such that, for all $x, y \in [n]$, $\pi_x A_{xy} = \pi_y A_{yx}$.
+
+Our main results will be stated in terms of $(k,\delta)$-colorings.
+
+\begin{definition}[$(k,\delta)$-coloring]
+    \label{def:kdelta}
+    Let $G$ be an $n$-vertex graph.
+    A $(k, \delta)$-coloring of $G$ is a list of $k$ disjoint independent sets in $G$ that cover $(1-\delta)n$ of the vertices of $G$.
+\end{definition}
+
+We define now the partition matrices and the model of a graph, which are defined with respect to a $k$-coloring $\chi: [n] \to [k]$ of its vertices.
+
+\begin{definition}[Partition matrices of a coloring]
+\label{def:partition_Z}
+Let $\chi: [n] \to [k]$ be a $k$-coloring of $[n]$.
+Then we define the following matrices:
+\begin{itemize}
+    \item The partition matrix $Z \in \set{0, 1}^{n \times k}$ has $Z_{x\chi(x)} = 1$ for all $x \in [n]$ and $0$ elsewhere.
+    \item The partition size matrix $B \in \R^{k \times k}$ is the diagonal matrix $B = Z^\top Z$. Note that $B_{aa} = |\chi^{-1}(a)|$ for all $a \in [k]$.
+\end{itemize}
+\end{definition}
+
+\begin{definition}[Model of a coloring]
+    \label{def:model}
+Let $A \in \R^{n \times n}$, and let $\chi: [n] \to [k]$ be a $k$-coloring of $[n]$.
+For $x \in [n]$ and $a \in [k]$, let $\D{x}{a} = \sum_{y \in \chi^{-1}(a)} A_{xy}$.
+We define the \emph{model} $M(A, \chi) \in \R^{k \times k}$ to be the matrix that, for any $a, b \in [k]$, has entries $M(A,\chi)_{ab} = \frac{1}{|\chi^{-1}(a)|} \sum_{x \in \chi^{-1}(a)}\D{x}{b}$.
+\end{definition}
+
+\begin{remark}
+Using the definitions in \cref{def:partition_Z}, we have equivalently that $M(A, \chi) = B^{-1} Z^\top A Z$.
+\end{remark}
+
+For a reversible row stochastic matrix $M \in \R_{\geq 0}^{k \times k}$, we define an $(M, \delta)$-coloring, which is a coloring with model close to $M$:
+
+\begin{definition}[$(M, \delta)$-coloring]
+    \label{def:model-coloring}
+    Let $M \in \R^{k \times k}_{\geq 0}$ be a reversible row stochastic matrix with zeros on the diagonal.
+    Let $G$ be an $n$-vertex $d$-regular graph with adjacency matrix $A$, and let $\tilde{A} = \frac{1}{d}A$.
+    We say that a $k$-coloring $\chi: [n] \to [k]$ is an $(M,\delta)$-coloring of $G$ if $\Norm{M - M(\tilde{A}, \chi)}_{\max} \leq \delta$ and $\chi$ is a $(k, \delta)$-coloring of $G$.
+\end{definition}
+
+% \begin{definition}[Tractable model]
+%     \label{def:tract-model}
+%     Let $M \in \R^{k \times k}_{\geq 0}$ be a reversible row stochastic matrix with zeros on the diagonal and non-positive second eigenvalue.
+%     We say $M$ is tractable if, for every $\e > 0$, there exist $\delta, \lambda > 0$ and a polynomial-time algorithm $\mathcal{A}$ such that, given an $(M, \delta)$-colorable $\lambda$-one-sided expander $G$, the algorithm $\mathcal{A}$ outputs a $(k, \e)$-coloring for $G$.
+% \end{definition}
+
+% \subsection{Notation}
+% \andor{what is this?}

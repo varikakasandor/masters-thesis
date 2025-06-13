@@ -1,0 +1,31 @@
+We establish new algorithmic guarantees with matching hardness results for coloring and independent set problems in one-sided expanders and related classes of graphs.
+For example, given a \(3\)-colorable one-sided expander, we compute in polynomial time either an independent set of relative size at least \(\tfrac 12 - o(1)\)
+or a proper \(3\)-coloring for all but an \(o(1)\) fraction of the vertices,
+where \(o(1)\) stands for a function that tends to \(0\) with the second largest eigenvalue of the normalized adjacency matrix.
+This result improves on recent seminal work of Bafna, Hsieh, and Kothari (STOC 2025) developing an algorithm that efficiently finds independent sets of relative size at least \(0.01\) in such graphs.
+We also obtain an efficient \(1.6667\)-factor approximation algorithm for VERTEX COVER in sufficiently strong one-sided expanders, improving over a previous \((2-\e)\)-factor approximation in such graphs for an unspecified positive constant \(\e>0\).
+
+We propose a new stratification of k-COLORING in terms of \(k\)-by-\(k\) matrices akin to predicate sets for constraint satisfaction problems.
+We prove that whenever this matrix has repeated rows, the corresponding coloring problem is NP-hard for one-sided expanders under the Unique Games Conjecture.
+On the other hand, if this matrix has no repeated rows, our algorithms can solve the corresponding coloring problem on one-sided expanders in polynomial time.
+
+As starting point for our algorithmic results, we show a property of graph spectra that, to the best of our knowledge, has not been observed before:
+The number of negative eigenvalues smaller than \(-\tau\) is at most \(O(1/\tau^{2})\) times the number of eigenvalues larger than \(\tau^{2}/2\).
+
+While this result allows us to bound the number of eigenvalues bounded away from \(0\) in one-sided spectral expanders, this property alone turns out to be insufficient for our algorithmic results.
+For example, given a one-sided expander with a balanced 3-coloring, we can efficiently find a 3-coloring for all but a \(o(1)\) fraction of vertices.
+At the same time, if we only know that the graph has a balanced 3-coloring and a bounded number of significant eigenvalues, it is NP-hard under the Unique Games Conjecture to find a 3-coloring for all but a \(0.1\) fraction of vertices.
+
+% We give new algorithms for approximately coloring regular graphs that are one-sided expanders ($\lambda_2$ is bounded away from $1$).
+% Recently, Bafna, Hsieh, and Kothari~\cite{bafna-hsieh-kothari} (STOC 2025) gave the first algorithms for finding independent sets in such graphs.
+% Specifically, if the input graph is a one-sided expander, they find a size-$0.01n$ independent set whenever (1) the graph is $3$-colorable, or (2) the graph contains a size-$(1/2-\e)n$ independent set.
+% We significantly improve these guarantees: in setting (1) we find a $3$-coloring on $0.99n$ of the graph vertices, and in setting (2) we find a size-$0.49n$ independent set.
+
+% Our results are a consequence of a novel property of the spectrum of regular graphs: We prove that, if a regular graph has $t$ eigenvalues smaller than $-\lambda$, then the graph also has $\Omega(\lambda^2 t)$ eigenvalues greater than $\Omega(\lambda^2)$.
+% This implies that one-sided expanders have small bottom threshold rank, and hence we can iterate efficiently over a net of their bottom eigenvectors.
+
+% In general, we show that the bottom eigenvectors of a graph suffice to approximately identify a $k$-coloring in it, as long as the graph admits a \emph{pseudo-random} $k$-coloring.
+% This result implies that we can $k$-color one-sided expanders in which a $k$-coloring is planted at random, generalizing a result of David and Feige~\cite{MR3536556-David16} (STOC 2016).
+% Finally, for $k=3$, we prove that arbitrary $3$-colorings in fact satisfy our "pseudo-random" condition, and thus obtain our main result.
+% This cannot be true for general $k > 3$, as evidenced by hardness reductions in~\cite{bafna-hsieh-kothari}.
+

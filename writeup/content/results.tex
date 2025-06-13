@@ -1,0 +1,196 @@
+\subsection*{Results}
+
+Our results concern the computational tractability of the coloring and independent-set problems in one-sided expanders and related graphs.
+While many combinatorial problems are computationally easy on expander graphs (e.g. \cite{arora-khot-kolla-steurer-tulsiani-vishnoi}),
+the complexity landscape on these graphs reveals unexpected diversity.
+
+For this high-level discussion of our results, we will restrict our discussion to regular graphs unless explicitly stated otherwise.
+Many of our results extend in a straightforward way to non-regular graphs as well by measuring the sizes of sets in terms of the sum of vertex degrees.
+(See the discussion in \cref{sec:techniques}).
+
+\paragraph{Algorithms for independent sets and vertex covers in one-sided expanders and related graphs.}
+
+For \(\lambda\ge 0\), we say that a graph \(G\) is a \(\lambda\)-one-side-expander if the second largest (nonnegative) eigenvalue of its normalized adjacency matrix is at most \(\lambda\).
+For the coloring and independent set problems, it is important to leave the negative part of the spectrum of the adjacency matrix unrestricted.
+Graphs on \(n\) vertices can have independent sets of size at least \(\alpha n\) only if they have at least one eigenvalue at most \(-\tfrac{\alpha}{1-\alpha}\).
+
+\begin{theorem}[Large independent sets in one-sided expanders]
+  For every \(\lambda>0\), there exists a polynomial-time algorithm that given a \(n\)-vertex \(\lambda\)-one-sided regular expander containing an independent set of size at least \((\tfrac 1 2 - \gamma) \cdot n\) for \(\gamma\in [0,\tfrac 1 {10}]\),
+  outputs an independent set of size at least \(\Paren{\tfrac 12-(5+o_{\lambda\to 0}(1))\cdot \gamma}\cdot n\).
+\end{theorem}
+
+In the above theorem, we use \(o_{\lambda\to 0}(1)\) as a placeholder for an absolute function in \(\lambda\) that tends to \(0\) as \(\lambda\to 0\).
+See \cref{cor:independentsetrecovery} for an explict form of this function.
+
+For sufficiently small \(\lambda\), we can simplify the lower bound on the independent set size found by the algorithm to \((\tfrac 12 -6\gamma)\cdot n\).
+In particular, the fraction of vertices in the independent set tends to \(\tfrac 12\) for \(\gamma\to 0\).
+Even in this setting, previous algorithms for large independent sets in one-sided expander only guarantee finding sets of size at least \(C\cdot n\) for some absolute constant \(C\) \cite{bafna-hsieh-kothari}.\footnote{The explict bound is \(C\approx \tfrac 14 \cdot (\frac 1 {12}-\tfrac 1 {16})\approx 0.005\) \cite{bafna-hsieh-kothari}.}
+
+Since the complement of independent sets are vertex covers, a direct corollary of the above theorem is a better-than-$2$ approximation algorithm for \textsc{vertex cover} in one-sided spectral expanders.
+
+\begin{corollary}[Vertex cover approximation in one-sided expanders]
+  There exist \(\lambda_{0}>0\) and a polynomial-time algorithm for \textsc{vertex cover} that on all regular \(\lambda_{0}\)-one-sided-expanders achieves an approximation ratio at most \(1.6667\).
+\end{corollary}
+
+We remark that previous algorithms also imply a better-than-$2$ approximation ratio for \textsc{vertex cover} on one-sided spectral expanders but with an approximation ratio much closer to \(2\).
+
+Furthermore, we remark that the above algorithms for independent sets and vertex covers in one-sided expanders extend to graphs with \emph{bounded threshold rank}.
+These graphs may have more than one eigenvalue larger than \(1\) but we require their number to be bounded by a constant independent of the size of the graph.
+
+\paragraph{Coloring algorithms for one-sided expanders.}
+
+The following theorem resolves one of the main questions left open by previous works on algorithms for 3-colorable one-sided expanders \cite{bafna-hsieh-kothari}.
+For one-sided spectral expanders that have a balanced proper 3-coloring, we can find such a coloring for all but a tiny fraction of the vertices.
+
+\begin{theorem}[Finding balanced 3-colorings in one-sided expanders]
+  For every \(\lambda>0\), there exists a polynomial-time algorithm that given an \(n\)-vertex \(\lambda\)-one-sided expander that admits a proper \(3\)-coloring with all color classes of size at most \((\tfrac 12 -o_{\lambda\to 0}(1))\cdot n\), outputs three independent sets that cover all but a \(o_{\lambda\to 0}(1)\) fraction of vertices.
+\end{theorem}
+
+As we will discuss in the next paragraph, the restriction on the sizes of the color classes is necessary assuming the Unique Games Conjecture:
+Any algorithm that could solve the above problem when all of the color classes have size at most \(n/2\) could also solve problems shown to be NP-hard under the Unique Games Conjecture.
+
+Since the above algorithm fails for \(3\)-colorable one-sided expanders only if one of the color classes contains almost half of the vertices, we can combine the above result with the previously discussed algorithm for finding independent sets that contain almost half of the vertices in one-sided expanders.
+
+\begin{corollary}[Independent sets for 3-colorable one-sided expanders]
+  For every \(\lambda>0\), there exists a polynomial-time algorithm given a \(3\)-colorable \(n\)-vertex \(\lambda\)-one-sided expander, outputs either one independent set of size at least \((\tfrac 1 2-o_{\lambda\to 0}(1))\cdot n\) or three independent sets that cover all but \(o_{\lambda\to 0}(1)\cdot n\) vertices.
+\end{corollary}
+
+Previous work on 3-colorable one-sided expanders are only guaranteed to find an independent set of size at least \(C\cdot n\) for a small absolute constant \(C>0\) even when the color classes have perfectly balanced sizes \cite{bafna-hsieh-kothari}.
+
+
+\paragraph{Hardness results for coloring one-sided expanders and related graphs.}
+
+As mentioned above, we obtain the following hardness result that matches the guarantees of our algorithms on one-sided expanders.
+Our hardness results are formulated for almost 3-colorable graphs, which is a well-known artifact of \textsc{unique games} hardness reductions.
+We expect these problems to remain intractable even for exactly 3-colorable graphs.
+Moreover, we prove all of our algorithmic results for 3-colorable one-sided expanders also for the almost 3-colorable case.
+
+\begin{theorem}[Hardness for almost 3-colorable one-sided expanders]
+  For every \(\e>0\), the following problem is NP-hard assuming the Unique Games Conjecture:
+  Given an \(\e\)-one-sided expander with three independent sets that cover a \(1-\e\) fraction of its vertices,
+  it is NP-hard to find a 3 independent sets that cover at least a \(\tfrac 12 +\e\) fraction of its vertices.
+\end{theorem}
+
+One might also expect that our algorithmic result for 3-colorable one-sided expanders extends to graphs that have a bounded number of significant eigenvalues.
+However, this expectation is wrong in the sense that such algorithms would also refute the Unique Games Conjecture.
+
+\begin{theorem}[Hardness for almost 3-colorable graphs with few significant eigenvalues]
+  For every \(\e>0\), there exists a constant \(R\ge 1\) such that the following problem is NP-hard assuming the Unique Games Conjecture:
+  Given a graph \(G\) with the following properties,
+  \begin{enumerate}
+  \item \(G\) has a balanced 3-coloring for all but an \(\e\) fraction of vertices, i.e., three disjoint independent sets of size at least \((1/3-\e)\cdot n\) each,
+  \item \(G\) has at most \emph{two} (positive) eigenvalues larger than \(\e\),
+  \item \(G\) has at most \(R\) eigenvalues larger than \(\e\) in absolute value,
+  \end{enumerate}
+  find three independent sets that cover at least a \(0.9\) fraction of the vertices.
+\end{theorem}
+
+The above theorem shows that even a single additional positive eigenvalue changes completely the tractability of graphs with (balanced) 3-colorings.
+
+The above hardness result also refutes a prediction in previous work that hard coloring instances must have a large (super-constant) number of significant eigenvalues \cite{bafna-hsieh-kothari}.
+
+\paragraph{Threshold-ranks of graphs.}
+
+While the above hardness result shows that a small number of significant eigenvalues does not guarantee the tractability of finding good coloring,
+our algorithmic results for one-sided expanders do rely on bounds on the number of these eigenvalues.
+Indeed, we show the perhaps unexpected fact that one-sided expanders always have bounded number of significant (negative) eigenvalues.
+More, generally we show the following relationship between the positive and negative spectrum of graphs.
+
+\begin{theorem}
+  For all thresholds \(\tau>0\) and \(\tau'<\tau^{2}\) and every graph \(G\), the bottom-threshold rank of \(G\) at \(\tau\) is bounded by the top-threshold rank of \(G\) at \(\tau'\) as follows,
+  \begin{equation}    
+    \Card{ \sigma(G)\cap (-\infty,-\tau)
+    %  \Set{i \Mid \lambda_{i}(G)\le -\tau}
+    }
+    \le
+    \Paren{
+      \tfrac{\tau^{2}-\tau'}{1-\tau'}}
+    \cdot \Card{
+    %  \Set{i \Mid \lambda_{i}(G)\ge \tau'}
+\sigma(G)\cap (\tau',\infty)
+    }
+    \mper
+  \end{equation}
+  Here, \(\sigma(G)\) denotes the spectrum of the normalized adjacency matrix of \(G\) as a multiset of reals, taking into account the algebraic multiplicity of eigenvalues.
+\end{theorem}
+
+To the best of our knowledge, this basic result for spectra of graphs is new.
+
+\paragraph{Algorithmic meta-theorem and dichotomy for coloring one-sided expanders}
+
+Prior work showed that \(3\) colors is the end of the line:
+Already in balanced-\(4\)-colorable one-sided expanders, it is NP-hard under the Unique Games Conjecture to find independent with a constant fraction of vertices \cite{bafna-hsieh-kothari}.
+
+Nevertheless, we generalize our results for \(3\)-colorable one-sided expanders to more than \(3\) colors by stratifying coloring instances in a particular way.
+This stratification is akin to those for constraint satisfaction problems in terms of the set of allowed predicates, where every finite set of predicates defines a computational problem in its own right and we aim to characterize their computational complexity depending on the choice of predicates.
+
+Our stratification of coloring problems on graphs \(G=(V,E)\) is in terms of \(k\)-by-\(k\) matrices \(M\).
+Concretely, a reversible,\footnote{Here, \(M\) being reversible means that there exists a diagonal matrix \(D\) such that \(D M\) is a symmetric matrix.} row stochastic matrix \(M\in \R_{\ge 0}^{k\times k}\) with all zeroes on the diagonal and \(\delta>0\), we say that \(\chi\from V\to [k]\) is a \emph{\((M,\delta)\)-coloring} for \(G\) if \(\chi\) is proper for all but a \(\delta\) fraction of vertices and for all pairs of colors \(a,b\in [k]\),
+\begin{equation}
+  \Abs{M_{ab} - \Pr_{\bm x\bm y \sim G}\Set{\chi(\bm y)=b\Mid \chi(\bm x)=a}}
+  \le \delta\mper
+\end{equation}
+Here, \(\bm x\bm y\sim G\) denotes a uniformly random edge such that \(\bm x\) and \(\bm y\) have the same marginal distribution.
+We say that \(G\) is \((M,\delta)\)-\emph{colorable} if there exists a \((M,\delta)\)-coloring for \(G\).
+
+Now we ask: given an \((M,\delta)\)-colorable one-sided expander for sufficiently small \(\delta\), can we efficiently find a proper \(k\) coloring for a large fraction of vertices?
+
+Formally, we define an algorithm \(\cA\) to solve \(M\)-\textsc{expander-coloring} if for every \(\e>0\), there exists a \(\delta>0\) such that given an \((M,\delta)\)-colorable \(\delta\)-one-sided-expander \(G\), the algorithm \(\cA\) outputs a proper \(k\)-coloring for all but an \(\e\) fraction of vertices of \(G\).
+In order for this problem to be non-trivial, we need the matrix \(M\) to have second largest eigenvalue at most \(0\).
+In this way, \((M,\delta)\)-colorable \(\delta\)-one-sided-expanders exist for every \(\delta>0\).
+In particular, a stochastic block model graph with large enough degree parameter (as a function of \(\delta\)) and suitable block probabilities (as a function of \(M\)) has the desired properties with high probability.
+
+We show that, assuming the Unique Games Conjecture, \(M\)-\textsc{expander-coloring} admits a polynomial-time algorithm in the sense above if and only if \(M\) has no repeated rows.
+
+\begin{theorem}[Algorithmic meta-theorem for coloring one-sided expanders]
+  For every reversible, row stochastic matrix \(M\) with zeros on the diagonal and second largest eigenvalue at most \(0\),
+  \begin{enumerate}
+  \item if \(M\) has no repeated rows, then there exists a polynomial-time for \(M\)-\textsc{expander-coloring}, and
+  \item if \(M\) has repeated rows, then \(M\)-\textsc{expander-coloring} is NP-hard under the Unique Games Conjecture.
+  \end{enumerate}
+\end{theorem}
+
+Indeed, the above meta-theorem provides a satisfying explanation of why the sizes of color classes matter for \(3\)-colorable one-sided expanders in terms of what is possible algorithmically.
+For example, the following choice of \(M\) corresponds to perfectly balanced \(3\)-colorings in regular graphs,
+\begin{equation}
+\begin{bmatrix}
+0 & \frac{1}{2} & \frac{1}{2} \\
+\frac{1}{2} & 0 & \frac{1}{2} \\
+\frac{1}{2} & \frac{1}{2} & 0
+\end{bmatrix}
+\mper
+\end{equation}
+Now, if we increase the size of the first color class while keeping the sizes of the other color classes the same, we obtain the following matrices for every \(\gamma\in [0,\tfrac 12]\),
+\begin{equation}
+\begin{bmatrix}
+0 & \frac{1}{2} & \frac{1}{2} \\
+\frac{1}{2}+\gamma & 0 & \frac{1}{2}-\gamma \\
+\frac{1}{2}+\gamma & \frac{1}{2}-\gamma & 0
+\end{bmatrix}
+\mper
+\end{equation}
+The above matrix has three non-positive eigenvalues \(1,-\tfrac 12 +\gamma,-\tfrac 12 -\gamma\).
+We can make this matrix symmetric by multiplying from the left the diagonal matrix with entries \(1,\tfrac{1/2}{1/2+\gamma},\tfrac{1/2}{1/2+\gamma}\).
+Thus, the relative sizes of the color classes are \(\tfrac{1+2\gamma}{3+2\gamma},\frac1{3+2\gamma},\frac1{3+2\gamma}\).
+Hence, for \(\gamma=\tfrac12\), we obtain relative color class sizes \(\tfrac 12,\tfrac 14,\tfrac 14\), but the matrix \(M\) degenerates and the two last rows are identical,
+\begin{equation}
+\begin{bmatrix}
+0 & \frac{1}{2} & \frac{1}{2} \\
+1 & 0 & 0 \\
+1 & 0 & 0
+\end{bmatrix}
+\mper
+\end{equation}
+This matrix even provides an explanation of why it is possible to find an independent set with almost half of the vertices:
+The first color class has relative size \(1/2\) and the corresponding row is not repeated.
+In general, our algorithms allow us to approximately recover all color classes in \(M\)-colorable one-sided expanders such that the corresponding rows in \(M\) are not repeated.
+
+
+%\paragraph{Finding randomly planted colorings in low-threshold rank graphs}
+
+
+
+%%% Local Variables:
+%%% mode: LaTeX
+%%% TeX-master: "../main"
+%%% End:

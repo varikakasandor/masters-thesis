@@ -1,0 +1,89 @@
+\section{Recovering large independent sets}
+
+We first state our result for independent sets under the assumption that the bottom threshold rank of the graph is small.
+
+% \begin{theorem}[Independent sets, small bottom rank]
+% \label[theorem]{thm:independentsetrecovery}
+%     For $0 < \e < 1/4$, let $G$ be an $n$-vertex $d$-regular graph that contains an independent set $S \subseteq [n]$ of size $\Paren{\frac{1}{2}-\e}n$.
+%     Suppose its normalized adjacency matrix $\bar{A}$ satisfies $\rank_{\leq -(1-\gamma)}(\bar{A}) \leq t$ for some $0 < \gamma < 1$ and $t \in \mathbb{N}$.
+%     There exists an algorithm with runtime $\poly(n) \cdot (\e/\gamma)^{-O(t)}$ that returns an independent set of size at least $\Paren{1/2-O(\e/\gamma)}n$.
+% \end{theorem}
+
+% Then, by \cref{cor:spectral_small_to_small}, we immediately get a result under the assumption that the bottom threshold rank is small.
+
+% \begin{corollary}[Independent sets, small top rank]
+% \label[corollary]{cor:independentsetrecovery}
+%     For $0 < \e < 1/4$, let $G$ be an $n$-vertex $d$-regular graph that contains an independent set $S \subseteq [n]$ of size $\Paren{\frac{1}{2}-\e}n$.
+%     Suppose its normalized adjacency matrix $\bar{A}$ satisfies $\rank_{\geq (1-\gamma)}(\bar{A}) \leq t$ for some $0 < \gamma < 1$ and $t \leq \Omega(\sqrt{n})$.
+%     There exists an algorithm with runtime $\poly(n) \cdot (\e/\gamma)^{-O(t)}$ that returns an independent set of size at least $\Paren{1/2-O(\e/\gamma)}n$.
+% \end{corollary}
+% \begin{proof}
+%     Because $\rank_{\geq (1-\gamma)}(\bar{A}) \leq t$, we get by applying \cref{cor:spectral_small_to_small} with $\sigma = 1/2$ that\linebreak $\rank_{\leq -(1-\gamma/4)}(\bar{A}) \leq 4t$.
+%     The result then follows by \cref{thm:independentsetrecovery}.
+% \end{proof}
+
+To prove \cref{thm:independentsetrecovery}, we first prove that the indicator vector of the independent set is close to the subspace spanned by the $t$ bottom eigenvectors of the adjacency matrix.
+
+\begin{lemma}[Closeness to bottom eigenvectors]
+    \label[lemma]{lemma:strongerprojectionargument}
+    In the same setting as \cref{thm:independentsetrecovery}, let $u \in \R^n$ have $u_x = \frac{1}{\sqrt{n}}$ for $x \in S$ and $u_x = -\frac{1}{\sqrt{n}}$ for $x \not\in S$.
+    Then, there exists a vector $\tilde{u} \in \R^n$ with $\norm{\tilde{u}} \leq \norm{u}$ and $||\tilde{u}-u||^2\leq \frac{4\e}{\gamma}$ such that $\tilde{u}$ is in the span of the $t$ bottom eigenvectors of $\bar{A}$.
+\end{lemma}
+
+\begin{proof}
+    First, we have 
+    \[u^\top \bar{A} u = \frac{2}{nd} \Paren{ e(\bar{S}, \bar{S}) - e(S, \bar{S}) } = \frac{2}{nd} \Paren{\e n d - \Paren{\frac{1}{2}-\e}nd } = -(1-4\e)\,.\]
+    Second, we derive a lower bound on $u^\top \bar{A} u$.
+    Let $P \in \R^{n \times n}$ be the orthogonal projection to the subspace spanned by the $t$ bottom eigenvectors of $\bar{A}$.
+    Then, because $\rank_{\leq -(1-\gamma)}(\bar{A}) \leq t$ and all eigenvalues of $\bar{A}$ lie in $[-1, 1]$, we get
+    \begin{align*}
+    u^\top \bar{A} u
+    &\geq -(1-\gamma) \cdot \Paren{1-\Norm{Pu}^2} + (Pu)^\top \bar{A} (Pu)\\
+    &\geq -(1-\gamma) \cdot \Paren{1-\Norm{Pu}^2} - \Norm{Pu}^2\\
+    &= -(1-\gamma) - \gamma \Norm{Pu}^2\,.
+    \end{align*}
+    Then, plugging in $u^\top \bar{A} u = -(1-4\e)$ and rearranging, we get
+    \[\Norm{Pu}^2 \geq \frac{\gamma-4\e}{\gamma} = 1 - \frac{4\e}{\gamma}\,.\]
+    In particular, $\Norm{u - Pu}^2 = 1 - \Norm{Pu}^2 \leq \frac{4\e}{\gamma}$.
+    Letting $\tilde{u} = Pu$ gives the desired conclusion.
+\end{proof}
+
+Then, we show that, given a vector close to the indicator vector of the independent set, we can round it in polynomial time to an independent set of large size.
+
+\begin{lemma}[Independent set rounding]
+    \label[lemma]{lemma:independentsetrounding}
+    Let $G$ be an $n$-vertex graph that contains an independent set $S \subseteq [n]$.
+    Let $u \in \R^n$ have $u_x = \frac{1}{\sqrt{n}}$ for $x \in S$ and $u_x = -\frac{1}{\sqrt{n}}$ for $x \not\in S$.
+    Also let $\tilde{u} \in \R^n$ satisfy $\Norm{\tilde{u}-u}^2\leq \e$ for some $\e \geq 0$.
+    Then, given as input the graph and $\tilde{u}$, there exists an algorithm with runtime $\poly(n)$ that returns an independent set of size at least $|S|-3\e n$.
+    %Then $\tilde{S} = \Set{x \in [n] \mid \tilde{u}_x \geq 0}$ satisfies $|S \setminus \tilde{S}| \leq \e n$ and $|\tilde{S} \setminus S| \leq \e n$.
+\end{lemma}
+\begin{proof}
+    Let $\tilde{S} = \Set{x \in [n] \mid \tilde{u}_x \geq 0}$.
+    First, we prove that $|S \setminus \tilde{S}| \leq \e n$ and $|\tilde{S} \setminus S| \leq \e n$.
+    For the first inequality, because $\Norm{\tilde{u}-u}^2\leq \e$ and $u_x = \frac{1}{\sqrt{n}}$ for all $x \in [n]$, we have that the maximum number of vertices $x \in S$ for which $\tilde{u}_x < 0$ is at most $\e n$.
+    Similarly, for the second inequality, we have that the maximum number of vertices $x \not\in S$ for which $\tilde{u}_x \geq 0$ is also at most $\e n$.
+
+    Then, consider the algorithm that computes $\tilde{S}$, and then rounds it to an independent set by computing a $2$-approximation to the minimum vertex cover in the graph induced by $\tilde{S}$ and removing all vertices in this vertex cover from $\tilde{S}$.
+    Because $|\tilde{S} \setminus S| \leq \e n$, the minimum vertex cover in the graph induced by $\tilde{S}$ has size at most $\e n$, so the algorithm removes at most $2\e n$ vertices from $\tilde{S}$.
+    Therefore, the size of the independent set that the algorithm returns is at least $|\tilde{S}| - 2\e n \geq |S| - 3 \e n$.
+\end{proof}
+
+Given \cref{lemma:strongerprojectionargument} and \cref{lemma:independentsetrounding}, we are ready to prove~\Cref{thm:independentsetrecovery}.
+
+\begin{proof}[Proof of~\Cref{thm:independentsetrecovery}]
+The idea of the algorithm is to iterate over a net of the subspace spanned by the $t$ bottom eigenvectors of $\bar{A}$ in order to find a vector close to $u$ as defined in~\Cref{lemma:independentsetrounding}, and then use \cref{lemma:independentsetrounding} to round it to an independent set.
+
+Denote the $t$ bottom eigenvectors of $\bar{A}$ by $v_{n-t+1}, \ldots, v_n$.
+We start by constructing an $\sqrt{\e/\gamma}$-cover of the unit ball in the subspace spanned by $v_{n-t+1}, \ldots, v_n$.
+% To do this, we can simply construct an $\sqrt{\e/\gamma}$-cover of the unit ball in $\R^t$, and then for each $t$-dimensional vector $\hat{u}'$ in this cover we construct the $n$-dimensional vector $\hat{u} = \sum_{i=1}^t \hat{u}'_i v_{n-i+1}$.
+By standard arguments (see Example 5.8 in~\cite{MR3967104-Wainwright19}), we can construct such a cover of size $O(\sqrt{\e/\gamma})^t$, in time polynomial in the size of the cover.
+
+Then, consider the algorithm that iterates over all $\hat{u}$ in the $\sqrt{\e/\gamma}$-cover of the unit ball in the span of $v_{n-t+1}, \ldots, v_n$, and for each vector in this cover applies the rounding algorithm in \cref{lemma:independentsetrounding} to construct an independent set.
+The algorithm returns the largest independent set thus obtained.
+
+For correctness, we note by~\Cref{lemma:strongerprojectionargument} that there exists some $\tilde{u}$ in the span of $v_{n-t+1}, \ldots, v_n$ with $\norm{\tilde{u}} \leq \norm{u} \leq 1$ that is $2\sqrt{\e/\gamma}$-close to $u$.
+Then the $\sqrt{\e/\gamma}$-net that we construct is guaranteed to find some $\hat{u}$ that is $\sqrt{\e/\gamma}$-close to $\tilde{u}$ and thus $O(\sqrt{\e/\gamma})$-close to $u$.
+Then, by~\Cref{lemma:independentsetrounding}, the returned independent set has size at least $|S| - O(\e/\gamma) n = \Paren{1/2-\e - O\Paren{\frac{\e}{\gamma}}}n$.
+The time complexity is polynomial in $n$ and in the size of the cover $O(\sqrt{\e/\gamma})^t$.
+\end{proof}

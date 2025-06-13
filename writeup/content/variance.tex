@@ -1,0 +1,157 @@
+\section{Variance of colorings in expander graphs}\label{sec: 3coloring}
+
+In this section we prove a structural result for colorable expander graphs concerning the variance of the connections between any two color classes.
+
+\begin{lemma}[Variance of $k$-colorings in expanders]
+\label{lemma: expansionimpliesvariance}
+Let $G$ be an $n$-vertex $d$-regular graph with adjacency matrix $A$, and let $\tilde{A} = \frac{1}{d}A$.
+Let $\lambda_2$ be the second largest eigenvalue of $\tilde{A}$.
+Let $\chi: [n] \to [k]$ be a $k$-coloring of its vertices with $\min_{a \in [k]} |\chi^{-1}(a)| \geq c n$.
+Suppose that $G$ has at most $\delta d n$ monochromatic edges.
+For $x \in [n]$ and $a \in [k]$, let $\D{x}{a} = \sum_{y \in \chi^{-1}(a)} \tilde{A}_{xy}$.
+Then, for any $a, b \in [k]$ and $\bm{x}$ uniformly random in $\chi^{-1}(a)$,
+\[\E_{\bm{x} \sim \chi^{-1}(a)} \Paren{\D{\bm{x}}{b} - \E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b}}^2 \leq O\Paren{\frac{\lambda_2}{c} + \frac{\delta}{\lambda_2 c }}\,.\]
+\end{lemma}
+\begin{proof}
+    Fix some $a, b \in [k]$.
+    For simplicity, we denote $\sigma^2 = \E_{\bm{x} \sim \chi^{-1}(a)} \Paren{\D{\bm{x}}{b}-\E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b}}^2$.
+
+    If $a = b$, we have 
+    \begin{align*}
+        \sigma^2
+        \leq \E_{\bm{x} \sim \chi^{-1}(a)} \Paren{\D{\bm{x}}{a}}^2
+        \leq \E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{a}
+        \leq \frac{2 \delta n}{|\chi^{-1}(a)|}
+        \leq \frac{2\delta}{c}\,.
+    \end{align*}
+
+    We focus now on the case $a \neq b$.
+    By regularity, $\lambda_1=1$ corresponds to eigenvector $\1$.
+    Let $\beta \in [0, 1]$ be some parameter to be chosen later.
+    We define $v \in \R^n$ as follows:
+    \begin{itemize}
+        \item $v_x:=\frac{1}{\sqrt{|\chi^{-1}(a)|}}\Paren{\D{x}{b}-\E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b}}$ for $x\in \chi^{-1}(a)$\,,
+        \item $v_x:=\frac{1}{\sqrt{|\chi^{-1}(a)|}}\beta$ for $x\in \chi^{-1}(b)$\,,
+        \item $v_x:=0$ otherwise\,.
+    \end{itemize}
+
+    Let us calculate $v^\top \tilde{A}v$.
+    Let $\tilde{A}_{(a)} \in \R^{|\chi^{-1}(a)| \times |\chi^{-1}(a)|}$ be the restriction of $\tilde{A}$ to rows and columns in $\chi^{-1}(a)$, and let $v_{(a)} \in \R^{|\chi^{-1}(a)|}$ be the restriction of $v$ to entries in $\chi^{-1}(a)$.
+    Then
+    \begin{align}
+    \begin{split}
+    \label{eq:3_col_num}
+    v^\top \tilde{A}v
+        &= v_{(a)}^\top \tilde{A}_{(a)} v_{(a)} + v_{(b)}^\top \tilde{A}_{(b)} v_{(b)} + 2 \beta \frac{1}{|\chi^{-1}(a)|} \sum_{x \in \chi^{-1}(a)} \sum_{\substack{y \in \chi^{-1}(b)\\y \sim x}} \Paren{\D{x}{b}-\E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b}}\\
+        &= v_{(a)}^\top \tilde{A}_{(a)} v_{(a)} + v_{(b)}^\top \tilde{A}_{(b)} v_{(b)} + 2 \beta \E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b} \Paren{\D{\bm{x}}{b}-\E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b}}\,.
+    \end{split}
+    \end{align}
+
+    For the first two terms, we have 
+    \[v_{(a)}^\top \tilde{A}_{(a)} v_{(a)} \geq - \Paren{\sum_{x, y \in \chi^{-1}(a)} \tilde{A}_{xy}} \cdot \Norm{v_{(a)}}^2_\infty \geq - \frac{2\delta n}{|\chi^{-1}(a)|} \geq - \frac{2\delta}{c}\]
+    and 
+    \[v_{(b)}^\top \tilde{A}_{(b)} v_{(b)} \geq - \Paren{\sum_{x, y \in \chi^{-1}(b)} \tilde{A}_{xy}} \cdot \Norm{v_{(b)}}^2_\infty \geq - \frac{2\delta n}{|\chi^{-1}(a)|} \geq - \frac{2\delta}{c}\,.\]
+
+    For the cross-term, we use that
+    \begin{align*}
+    &2 \beta \E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b} \Paren{\D{\bm{x}}{b}-\E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b}}\\
+    &= 2 \beta \E_{\bm{x} \sim \chi^{-1}(a)} \Paren{\D{\bm{x}}{b}-\E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b}}^2 + 2 \beta \E_{\bm{x} \sim \chi^{-1}(a)} \Paren{\E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b}} \Paren{\D{\bm{x}}{b}-\E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b}}\\
+    &= 2 \beta \E_{\bm{x} \sim \chi^{-1}(a)} \Paren{\D{\bm{x}}{b}-\E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b}}^2\\
+    &= 2\beta \sigma^2\,.
+    \end{align*}
+    Then, plugging these bounds back into \cref{eq:3_col_num}, we get 
+    \begin{align*}
+    v^\top \tilde{A}v
+    \geq 2 \beta \sigma^2 - 4 \delta/c\,.
+    \end{align*}
+    We also note that $\norm{v}^2 = \sigma^2 + \frac{|\chi^{-1}(b)|}{|\chi^{-1}(a)|} \beta^2 \leq \sigma^2 + \beta^2/c$ and $\langle v, \frac{\1}{\sqrt{n}}\rangle^2 = \frac{|\chi^{-1}(b)|^2}{|\chi^{-1}(a)| n}\beta^2 \leq \beta^2 / c$, so
+    \[v^\top \tilde{A} v \leq \frac{1}{n} \langle v, \1\rangle^2 + \lambda_2 \Paren{\norm{v}^2 - \frac{1}{n} \langle v, \1\rangle^2} \leq \lambda_2 \sigma^2 + \beta^2/c\,.\]
+    Putting everything together,
+    \begin{align*}
+        2 \beta \sigma^2 - 4 \delta/c \leq v^\top \tilde{A} v \leq \lambda_2 \sigma^2 + \beta^2/c\,,
+    \end{align*}
+    and taking $\beta=\lambda_2$ we get
+    \[\sigma^2 \leq \lambda_2/c + \frac{4\delta }{\lambda_2c} \leq O\Paren{\frac{\lambda_2}{c} + \frac{\delta}{\lambda_2 c }}\,.\]
+\end{proof}
+
+% Our second result concerns the \rares{model matrix}.
+
+% \begin{lemma}
+% \label[lemma]{cor: 3coloringboundednavg}
+% Let $G$ be an $n$-vertex $d$-regular graph with vertices partitioned into $3$ color classes $V_1, V_2, V_3$ with $\max_a |V_a| \leq (1/2-\e) n$.
+% Suppose that $G$ has a vertex cover of all monochromatic edges of size at most $\gamma n$.
+% For $x \in [n]$ and $a \in [3]$, let $\D{x}{a} = \sum_{y \in V_a} \tilde{A}_{xy}$.
+% Let $M \in \R^{3 \times 3}$ be the matrix that, for any $a, b \in [3]$ and $\bm{x}$ uniformly random in $V_a$, has entries $M[a, b] = \E_{\bm{x} \sim V_a}\D{\bm{x}}{b}$.
+% Then
+% \[
+% \Norm{M - \frac{1}{2}\Paren{\Allones-\Id}} \leq \frac{1}{2} - 2\e + O(\gamma/\e)\,.
+% \]
+% \end{lemma}
+
+% To prove \cref{cor: 3coloringboundednavg}, we start with the simple observation that for $3$-colorings the entries of $M$ can be bounded based on only the sizes of the color classes and the size of the vertex cover of the monochromatic edges.
+
+% \begin{lemma}[Degrees for $3$-colorings]
+% \label[lemma]{lemma: 3coloringfixedaveragedegree}
+%     In the setting of \cref{cor: 3coloringboundednavg}, we have for all $a \in [3]$ that $\Abs{M[a,a]} \leq \frac{2 \gamma n}{|V_a|}$ and for all $a \neq b \in [3]$ that
+%     \[\Abs{M[a,b] - \frac{2\Paren{\Abs{V_a}+\Abs{V_b}}-n}{2\Abs{V_a}} } \leq \frac{2 \gamma n}{\Abs{V_a}}\,.\]
+%     \end{lemma}
+%     \begin{proof}
+%         For all $a\in [3]$ we have that $\phi_a = \Abs{V_a} M[a, a] \leq 2\gamma n$, so $M[a, a] \leq \frac{2\gamma n}{\Abs{V_a}}$.
+%         By regularity it also holds that $\sum_{b\in [3]}M[a, b]=1$. Finally, for any $b\in [3]\setminus\Set{a}$, counting the edges between $V_a$ and $V_b$ from both sides gives $\Abs{V_a} M[a, b] = \Abs{V_b} M[b, a]$.
+        
+%         Hence, taking the off-diagonal entries of $M$ matrix as unknown, we have $6$ variables and $6$ independent linear equations, so there is a unique solution.
+%         Using $\sum_{i\in[3]}|V_i|=n$, for $a\neq b\neq c\in[3]$ we can express it as
+%         $$M[a,b]=\frac{2\Paren{\Abs{V_a}+\Abs{V_b}}-n+\Paren{\phi_i+\phi_j-\phi_k}}{2\Abs{V_a}}\,.$$
+
+%         As $0\leq\phi_a\leq 2\gamma n$ for all $a\in[3]$, we get $-2\gamma n\leq\phi_i+\phi_j-\phi_k\leq 4\gamma n$, from which the final bound follows.
+% \end{proof}
+
+% Let us now prove \cref{cor: 3coloringboundednavg}:
+
+% \begin{proof}[Proof of \cref{cor: 3coloringboundednavg}]
+%     Note that, because $\max_a \Abs{V_a} \leq (1/2-\e) n$, we have also $\min_a \Abs{V_a} \geq 2\e n$.
+%     Let us consider the matrix $M' \in \R^{k \times k}$ with entries $M'[a, b] = \frac{2(\Abs{V_a}+\Abs{V_b})- n}{2\Abs{V_a}}$.
+%     By \cref{lemma: 3coloringfixedaveragedegree} we have for all $a, b\in [3]$ that $\Abs{M[a,b]-M'[a,b]} \leq \frac{2\gamma n }{|V_a|} \leq \gamma / \e$.
+
+%     Let us bound now $\Norm{M' - \frac{1}{2}\Paren{\Allones-\Id}}$.
+%     Define $\Delta = M' - \frac{1}{2}\Paren{\Allones-\Id}$.
+%     Then we have $\Delta[a,b]=\frac{\Abs{V_b}-{\Abs{V_c}}}{2{\Abs{V_a}}}$, with $0$ on the diagonal. 
+%     Then, by \cref{lemma: k=3avgspectrum}, we get
+%     $$\Norm{\Delta}_2=\frac{1}{2}\sqrt{\frac{1-4\Paren{\sum_{a<b\in[3]}{\frac{|V_a|}{n}}\;{\frac{|V_b|}{n}}}}{\prod_{a\in[3]}{\frac{\Abs{V_a}}{n}}}+9}\,.$$
+    
+%     Using Lagrange multipliers, we get that the maximum is attained at the boundary --- i.e., by the $\e$-balancedness condition, at ${\Abs{V_a}}={\Abs{V_b}}=\Paren{\frac{1}{2}-\e}n,\ {\Abs{V_c}}=2\e n$. Hence, plugging these values in we get the final bound
+%     $$\Norm{\Delta}_2\leq \sqrt{\frac{9}{4}-\frac{2\left(1-3\e\right)}{\left(1-2\e\right)^{2}}} \leq \frac{1}{2} - 2\e\,.$$
+
+%     Then by the triangle inequality
+%     \[\Norm{M - \frac{1}{2}\Paren{\Allones-\Id}} \leq  \Norm{M' - \frac{1}{2}\Paren{\Allones-\Id}} + \Norm{M - M'} \leq \frac{1}{2} - 2\e + O(\gamma/\e)\,.\]
+% \end{proof}
+
+% \rares{This does not work for $k \geq 4$, to give counterexample}
+
+
+
+% \begin{lemma}[Model for $3$-colorings]
+% \label[lemma]{lemma: 3coloringfixedaveragedegree}
+% Let $G$ be an $n$-vertex regular graph and let $\chi: [n] \to [3]$ be a $3$-coloring of its vertices.
+% Suppose that $G$ has a vertex cover of all monochromatic edges of size at most $\gamma n$.
+% Let $M = M(G,\chi)$.
+% Then for all $a \neq b \in [3]$ 
+% \[\Abs{M_{a,b} - \frac{2\Paren{\Abs{\chi^{-1}(a)}+\Abs{\chi^{-1}(b)}}-n}{2\Abs{\chi^{-1}(a)}} } \leq \frac{2 \gamma n}{\Abs{\chi^{-1}(a)}}\,.\]
+% \end{lemma}
+% \begin{proof}
+%     For all $a\in [3]$ we have that $\phi_a = \Abs{\chi^{-1}(a)} M_{aa} \leq 2\gamma n$, so $M_{aa} \leq \frac{2\gamma n}{\Abs{\chi^{-1}(a)}}$.
+%     It also holds that $\sum_{b\in [3]}M_{ab}=1$.
+%     Finally, for any $b\in [3]\setminus\Set{a}$, counting the edges between $\chi^{-1}(a)$ and $\chi^{-1}(b)$ from both sides gives $\Abs{\chi^{-1}(a)} M_{ab} = \Abs{\chi^{-1}(b)} M_{ba}$.
+    
+%     Hence, taking the off-diagonal entries of the $M$ matrix as unknown, we have $6$ variables and $6$ independent linear equations, so there is a unique solution.
+%     Using $\sum_{a\in[3]}|\chi^{-1}(a)|=n$, for $a\neq b\neq c\in[3]$ we can express it as
+%     $$M_{a,b}=\frac{2\Paren{\Abs{\chi^{-1}(a)}+\Abs{\chi^{-1}(b)}}-n+\Paren{\phi_i+\phi_j-\phi_k}}{2\Abs{\chi^{-1}(a)}}\,.$$
+
+%     As $0\leq\phi_a\leq 2\gamma n$ for all $a\in[3]$, we get $-2\gamma n\leq\phi_i+\phi_j-\phi_k\leq 4\gamma n$, from which the final bound follows.
+% \end{proof}
+
+
+%%% Local Variables:
+%%% mode: LaTeX
+%%% TeX-master: "../main.tex"
+%%% End:

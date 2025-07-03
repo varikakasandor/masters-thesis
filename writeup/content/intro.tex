@@ -1,5 +1,37 @@
 \section{Introduction}
 
+\subsection{Motivation and Related Work}
+
+\begin{itemize}
+    \item Graph colouring is a fundamental problem in computer science, NP-hard for \(k\ge 3\) \cite{MR4679190-Karp72}.
+    \item \whp random recovery is easy for \(k\)-colorings in random graphs \cite{MR1344544-Blum95, MR1484153-Alon97} though
+    \item Key idea is to use the spectrum of the graph, and recover the colouring from the extreme eigenvectors. For this we need to guarantee they don't ``hide'' in the spectrum.
+    \item Goal is pushing random as far as possible remove as many assumptions as possible.
+    \item Semi-random setting: David and Feige~\cite{MR3536556-David16}, then derandomised by Kumar, Louis, and Tulsiani~\cite{kumar2018finding}.
+    \item Related setting where one large independet set is to be found: Bafna, Hsieh, and Kothari~\cite{bafna-hsieh-kothari}. Mention the $k=3$ vs $k>3$ difference
+    \item Explain Sum of Squares idea briefly and how it relates to recovery problems in general
+    \item Another line of work is to use as few colours as possible (we don't consider this here).
+\end{itemize}
+
+\subsection{Results}
+
+
+\begin{itemize}
+    \item
+\end{itemize}
+
+\subsection{Techniques}
+
+\begin{itemize}
+    \item As demonstration give the simple example of linear degree semi-random
+\end{itemize}
+
+\subsection{EXTRA RESULTS TO ADD}
+
+\begin{itemize}
+    \item For $k=3$ we can use SoS to get low edge violation and show that it implies low vertex violation.
+\end{itemize}
+
 % [Introduction to coloring. Coloring random graphs: Blum and Spencer~\cite{MR1344544-Blum95}, Alon and Kahale~\cite{MR1484153-Alon97}.]
 
 Finding proper \(k\)-colorings in graphs for \(k\ge 3\) is among the first computational problems shown to be NP-hard \cite{MR4679190-Karp72}.

@@ -130,6 +130,7 @@ Finally, we prove \cref{thm:partition_recovery_theorem2}.
     We have $\Norm{A \frac{Z_a}{\Norm{Z_a}} - W \frac{Z_a}{\Norm{Z_a}}}^2 \leq \delta$ for all $a \in [k]$, so $\sum_{a=1}^k \Norm{\Paren{A - W}\frac{Z_a}{\Norm{Z_a}}}^2 \leq \delta k$.
     Because $\frac{Z_a}{\Norm{Z_a}}$ are orthonormal, for any orthonormal $u_1, \ldots, u_k$ that span the same subspace we also have $\sum_{i=1}^k \Norm{\Paren{A -W}u_i}^2
     \leq \delta k$.
+    Also recall that $W$ has column span in the span of $\{Z_a\}_{a \in [k]}$, so all of its eigenvectors with non-zero eigenvalues lie in the span of $\{u_1, \ldots, u_k\}$.
     Let $P$ be the orthogonal projection to the eigenvectors of $A$ with eigenvalue smaller than $\lambda$ in absolute value.
     Then by \cref{lemma:lin-alg-subspace} we get for any orthonormal vectors $u_1, \ldots, u_r$ that span the eigenspace of $W$ with eigenvalues larger than $\lambda+\eta$ in absolute value, for any $\eta >0$, that $\sum_{i=1}^r \Norm{P u_i}^2 \leq \delta k / \eta^2$.
     Hence, $\Norm{P u_i}^2 \leq \delta k / \eta^2$ for all $i \in [r]$, so each $u_i$ is $O(\sqrt{\delta k / \eta^2})$-close to the subspace corresponding to $P^{\bot} = I_n - P$.

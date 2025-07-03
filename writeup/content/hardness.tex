@@ -48,21 +48,21 @@ Technically, this result is captured by \cref{thm: finegrainedrowshard} by notic
     Assuming the Unique Games Conjectures, given an $n$-vertex regular graph with $\lambda_2=o(1)$ that admits a $(3, \e)$-coloring, it is NP-hard to find a $(3, 1/2-\gamma)$-coloring.
 \end{corollary}
 
-The second corollary of \cref{thm: finegrainedrowshard} is a generalization of Proposition A.2 in \cite{bafna-hsieh-kothari} to composite $k$. We show that, given an almost-$k$-colorable graph with balanced color classes, assuming the UGC, it is NP-hard to find a linear-sized independent set in the graph.
+The second corollary of \cref{thm: finegrainedrowshard} is a generalization of Proposition A.2 in \cite{bafna-hsieh-kothari} to any composite $k$. We show that, given an almost-$k$-colorable graph with identical color class sizes, assuming the UGC, it is NP-hard to find a linear-sized independent set in the graph.\footnote{It is easy to extend the lower bound to all $k \geq 4$ (not only composite $k$) if, instead of requiring the color class sizes to be identical, we merely require them to be lower bounded by $\Omega(1/k)$.}
 
 \begin{corollary}[Generalization of Proposition A.2 in \cite{bafna-hsieh-kothari}]\label{thm: kgeq4hard}
     Let $\e, \gamma > 0$ be any small enough constants and let $k$ be composite.
-    Assuming the Unique Games Conjecture, given an $n$-vertex regular graph with $\lambda_2=o(1)$ that admits a balanced $(k,\e)$-coloring, it is NP-hard to find a $(k, 1-\gamma)$-coloring.
+    Assuming the Unique Games Conjecture, given an $n$-vertex regular graph with $\lambda_2=o(1)$ that admits a $(k,\e)$-coloring with identical color class sizes, it is NP-hard to find a $(k, 1-\gamma)$-coloring.
 \end{corollary}
 
 
-In our final hardness result, we prove that if we only assume small $\lambda_3$, as opposed to small $\lambda_2$, then assuming the UGC, given a balanced almost-$3$-colorable one-sided expander graph, it is NP-hard to find a proper coloring on most of the vertices.
+In our final hardness result, we prove that if we only assume small $\lambda_3$, as opposed to small $\lambda_2$, then assuming the UGC, given an almost-$3$-colorable one-sided expander graph with identical color class sizes, it is NP-hard to find a proper coloring on most of the vertices.
 
-\begin{proposition}[Hardness of balanced $3$-coloring with small $\lambda_3$]
+\begin{theorem}[Hardness of balanced $3$-coloring with small $\lambda_3$]
 \label{thm: lowtopthresholdrankhard}
     Let $\e, \gamma > 0$ be any small enough constants.
-    Assuming the Unique Games Conjectures, given an $n$-vertex regular graph with $\lambda_3=o(1)$ that admits a balanced $(3, \e)$-coloring, it is NP-hard to find a $(3, 2/9-\gamma)$-coloring.
-\end{proposition}
+    Assuming the Unique Games Conjectures, given an $n$-vertex regular graph with $\lambda_3=o(1)$ that admits a $(3, \e)$-coloring with identical color class sizes, it is NP-hard to find a $(3, 2/9-\gamma)$-coloring.
+\end{theorem}
 
 We now turn to the proofs of our hardness results. To prove \cref{thm: finegrainedrowshard}, we first give a helper lemma showing that suitable blow-up graphs are expanding.
 
@@ -124,7 +124,7 @@ We now prove \cref{thm: finegrainedrowshard}.
     
     Let $\tilde{A}^*$ be the normalized adjacency matrix of $G^*$. Let us show that $\Norm{M(\tilde{A}^*, \allowbreak\chi)-M}_{\max}\leq \e$. Let $x\in S_i$ and $y\in S_j$ be arbitrary such that $f(i)=a$ and $f(j)=b$. By the expander mixing lemma,  we have $M(\tilde{A}^*, \chi)_{xy}=\widehat{M}_{ab}\pm o(1)$. On the other hand, using $\Norm{\hat{\pi} - \pi}_{\infty}\leq \frac{\e}{2} \min_{i\in [k]}\pi_i$ it follows that $\Abs{\widehat{M}_{ab}-M_{ab}}=\Abs{\frac{\hat{\pi}_b}{\pi_b}M_{ab} - M_{ab}}\leq \frac{\e}{2} M_{ab}\leq \e/2$. Combining the two by triangle inequality and using $M_{xy}=M_{ab}$ we get $\Abs{M(\tilde{A}^*, \chi)_{xy}-M_{xy}}\leq \e$ as desired.
 
-    Hence, in this case $G^*$ would admit an $(M, \e)$-coloring. Furthermore, as the maximum degree within each $V_{S_j}$ is $o(d)$ and the subgraphs between the $V_{S_j}$s are biregular Ramanujan, we can apply \cref{lem: blowupexpanding} to get $\lambda_2(G^*)=o(1)$. Overall we can conclude that the preconditions of $\ALG$ would be satisfied, and by assumption it would return a $(k, 1 - \sum_{i \in [k']} p_i - \gamma)$-coloring of $G^*$.
+    Hence, in this case $G^*$ would admit an $(M, \e)$-coloring. Furthermore, as the maximum degree within each $G_{S_j}$ is $o(d)$ and the subgraphs between the $G_{S_j}$s are biregular Ramanujan, we can apply \cref{lem: blowupexpanding} to get $\lambda_2(G^*)=o(1)$. Overall we can conclude that the preconditions of $\ALG$ would be satisfied, and by assumption it would return a $(k, 1 - \sum_{i \in [k']} p_i - \gamma)$-coloring of $G^*$.
 
     Now for the contrary, assume a $(k, 1 - \sum_{i \in [k']} p_i - \gamma)$-coloring of $G^*$. For $j\in[k']$, let
     
@@ -203,7 +203,7 @@ We finish this section with the proof of \cref{thm: lowtopthresholdrankhard}.
     Using $d_{\avg}=o(n)$ we have $|S| = \Omega(n)$, so $\lambda_2(A_{G'}) = o(|S|)$. Then, decomposing $A_{G^*}=A_{G'}+A_{G''}$ and using that $\lambda_2(A_{G''})=o(|S|)$ by construction, we finally get by Weyl's inequality that
     \[\lambda_3(A_{G^*}) \leq \lambda_2(A_{G'})+\lambda_2(A_{G''}) =o(|S|)\,.\]
 
-    If $G$ has two disjoint independent sets of size $\Paren{\frac{1}{2}-\e}n$, then $G^*$ admits a balanced \tcl on all but $2\e n \leq \e |V(G^*)|$ vertices.
+    If $G$ has two disjoint independent sets of size $\Paren{\frac{1}{2}-\e}n$, then $G^*$ admits a \tcl with identical color class sizes on all but $2\e n \leq \e |V(G^*)|$ vertices.
     Hence, using the $|S|$-regularity of both $G'$ and $G''$ and that $\lambda_3(G^*)=o(1)$, $\ALG$ returns a $\Paren{3, \frac{2}{9}-\gamma}$-coloring of $G^*$.
 
     However, we show that if $G^*$ admits a $\Paren{3, \frac{2}{9}-\gamma}$-coloring of $G^*$, then $G$ has an independent set of size $\frac{3}{2}\gamma n$, and $\ALG$ is a distinguisher.

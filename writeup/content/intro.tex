@@ -2,16 +2,18 @@
 
 \subsection{Motivation and Related Work}
 
-\begin{itemize}
-    \item Graph colouring is a fundamental problem in computer science, NP-hard for \(k\ge 3\) \cite{MR4679190-Karp72}.
-    \item \whp random recovery is easy for \(k\)-colorings in random graphs \cite{MR1344544-Blum95, MR1484153-Alon97} though
-    \item Key idea is to use the spectrum of the graph, and recover the colouring from the extreme eigenvectors. For this we need to guarantee they don't ``hide'' in the spectrum.
-    \item Goal is pushing random as far as possible remove as many assumptions as possible.
-    \item Semi-random setting: David and Feige~\cite{MR3536556-David16}, then derandomised by Kumar, Louis, and Tulsiani~\cite{kumar2018finding}.
-    \item Related setting where one large independet set is to be found: Bafna, Hsieh, and Kothari~\cite{bafna-hsieh-kothari}. Mention the $k=3$ vs $k>3$ difference
-    \item Explain Sum of Squares idea briefly and how it relates to recovery problems in general
-    \item Another line of work is to use as few colours as possible (we don't consider this here).
-\end{itemize}
+Graph colouring is a fundamental problem in computer science. We are given a graph and we would like to colour the vertices using as few colour overall as possible such that no two adjacent vertices get the same colour. Deciding if a graph can be coloured using $k=2$ colours is easy, as it is equivalent to deciding if the graph is bipartite. However, for \(k\ge 3\), it has been known for a long time that deciding whether \(k\) colours suffices is NP-hard \cite{MR4679190-Karp72}.
+
+Contrasting this worst-case hardness result, there has been a lot of work on average-case setting, e.g. ~\cite{MR1344544-Blum95}. In these settings, the input contains randomness, a colouring is guaranteed to exist, and we aim to recover one with high probability. For the full random case -- when the initial graph is \Erdos-\Renyi and a $k$-colouring is randomly \textit{planted} in it by assigning colours at random and emoving edges in-between the colour classes -- ~\cite{MR1484153-Alon97} provided an efficient algorithm.
+
+The key question then is what happens between worst-case and average-case -- how much can the full-randomness assumptions of \cite{MR1484153-Alon97} be relaxed? Towards this goal, ~\cite{MR3536556-David16} looked at semi-random models where either the initial graph or the planted colouring is random. Under the crucial assumption that the initial graph is always a two-sided expander -- the second largest and smallest eigenvalues of its normalized adjacency matrix are bounded away from \(1\) in absolute value -- the authors provided a coarse-grained characterisation of when there is an efficient algorithm and when it is NP-hard. Then, ~\cite{kumar2018finding} derandomized this result, pinpointing deterministic pseudorandom conditions.
+
+The algorithms in all the aforementioned papers are based on the observation that there is an encoding of a colouring that roughly corresponds to a eigenvector with a very negative eigenvalue. Therefore, when the adjacency matrix has only few very negative eigenvalues, an approximate colouring can be decoded after some search in the corresponding eigenspace.
+
+The case of \text{one}-sided expansion -- when only the second largest eigenvalue is guaranteed to be bounded away from \(1\) -- is therefore much more challenging, and it is also less studied. In a recent paper, \cite{bafna-hsieh-kothari} showed that for $k=3$ specifically, a small linear-sized independent set can be recovered -- very far away from a full-colouring. Their algorithm is based on showing in the sum-of-squares proof system \cite{barak-raghavendra-steurer} that under one-sided expansion -- unless the graph is almost-bipartite -- any two $3$-colourings must be sufficiently similar.
+
+
+For completeness, note that graph colouring can be studied from other perspectives as well. For example, given a $3$-colourable graph, instead of finding assumptions under which a $3$-colouring can be recovered, \cite{MR4764817-24} provide a more general algorithm that uses $\tilde{O}(n^{0.19747})$ colours.
 
 \subsection{Results}
 
@@ -30,6 +32,7 @@
 
 \begin{itemize}
     \item For $k=3$ we can use SoS to get low edge violation and show that it implies low vertex violation.
+    \item Corollary for $k=2$
 \end{itemize}
 
 % [Introduction to coloring. Coloring random graphs: Blum and Spencer~\cite{MR1344544-Blum95}, Alon and Kahale~\cite{MR1484153-Alon97}.]

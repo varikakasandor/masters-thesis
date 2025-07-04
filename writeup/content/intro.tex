@@ -20,14 +20,11 @@ In this work, we provide an almost full characterisation of recovering $k$-colou
 
 Key to our results is the concept of the model matrix of a graph that contains the average degrees between the colour classes. In \cref{thm:kalg}, we provide an algorithm that given a one-sided expander graph whose model matrix has no repeated rows, outputs an almost complete colouring. The more general \cref{thm:kalg-partial} recovers a \textit{partial} colouring of size dependent on the relative sizes of the colour classes corresponding to repeated rows in the model matrix.
 
-As corollaries, we show in \cref{thm:2alg} that the two sides of an \textit{almost} bipartite one-sided expander graph can be almost completely recovered. Also, for $k=3$ we prove in \cref{thm:3alg} that 
+As corollaries, we show in \cref{thm:2alg} that the two sides of an \textit{almost} bipartite one-sided expander graph can be almost completely recovered. Then, for $k=3$ we prove in \cref{thm:3alg} that when the colour classes are not very unbalanced, an almost complete colouring can be recovered. Then, we show in \cref{thm: random-planting-full} that for any $k=O(1)$, when a random colouring is planted in a one-sided expander graph, a \textit{complete} colouring can be recovered.
 
-\begin{itemize}
-    \item complete characterisation of one-Sided, including how much partial possible
-    \item derive corollaries for almost-bipartite, $k=3$ and random
-    \item as side result recovery of large independent set improve on Pravesh
-    \item we provide corresponding hardness results
-\end{itemize}
+As a side result, we show in \cref{cor:independentsetrecovery} that in a one-sided expander that contains an independet set with almost half of the vertices, an independent set in size close to that can be recovered -- this improves on the result of \cite{bafna-hsieh-kothari} that can only recover a small linear independent set.
+
+Finally, in \cref{sec: hardness} we provide hardness results corresponding to most of our aforementioned results, showing that the assumptions on the model matrix, one-sided expansion, and balancedness are indeed necessary.
 
 \subsection{Techniques}
 

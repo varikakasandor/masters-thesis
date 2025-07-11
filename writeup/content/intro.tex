@@ -8,7 +8,7 @@ Contrasting this worst-case hardness result, there has been a lot of work on ave
 
 The key question then is what happens between worst-case and average-case -- how much can the full-randomness assumptions of \cite{MR1484153-Alon97} be relaxed? Towards this goal, ~\cite{MR3536556-David16} looked at semi-random models where either the initial graph or the planted colouring is random. Under the crucial assumption that the initial graph is always a two-sided expander -- the second largest and smallest eigenvalues of its normalized adjacency matrix are bounded away from \(1\) in absolute value -- the authors provided a coarse-grained characterisation of when there is an efficient algorithm and when it is NP-hard. Then, ~\cite{kumar2018finding} derandomized this result, pinpointing deterministic pseudorandom conditions.
 
-The algorithms in all the aforementioned papers are based on the observation that there is an encoding of a colouring that roughly corresponds to a eigenvector with a very negative eigenvalue. Therefore, when the adjacency matrix has only few very negative eigenvalues, an approximate colouring can be decoded after some search in the corresponding eigenspace.
+The algorithms in all the aforementioned papers are based on the observation that there is an encoding of a colouring that is roughly a linear combination of eigenvectors with a very negative eigenvalue. Therefore, when the adjacency matrix has only few very negative eigenvalues, an approximate colouring can be decoded after subspace enumeration \cite{kumar2018finding}.
 
 The case of \text{one}-sided expansion -- when only the second largest eigenvalue is guaranteed to be bounded away from \(1\) -- is therefore much more challenging, and it is also less studied. In a recent paper, \cite{bafna-hsieh-kothari} showed that for $k=3$ specifically, a small linear-sized independent set can be recovered -- very far away from a complete colouring. Their algorithm is based on showing in the sum-of-squares proof system \cite{barak-raghavendra-steurer} that under one-sided expansion -- unless the graph is almost-bipartite -- any two $3$-colourings must be sufficiently similar.
 
@@ -22,23 +22,30 @@ Key to our results is the concept of the model matrix of a graph that contains t
 
 As corollaries, we show in \cref{thm:2alg} that the two sides of an \textit{almost} bipartite one-sided expander graph can be almost completely recovered. Then, for $k=3$ we prove in \cref{thm:3alg} that when the colour classes are not very unbalanced, an almost complete colouring can be recovered. Then, we show in \cref{thm: random-planting-full} that for any $k=O(1)$, when a random colouring is planted in a one-sided expander graph, a \textit{complete} colouring can be recovered.
 
-As a side result, we show in \cref{cor:independentsetrecovery} that in a one-sided expander that contains an independet set with almost half of the vertices, an independent set in size close to that can be recovered -- this improves on the result of \cite{bafna-hsieh-kothari} that can only recover a small linear independent set.
+As a side result, we show in \cref{cor:independentsetrecovery} that in a one-sided expander that contains an independent set with almost half of the vertices, an independent set in size close to that can be recovered -- this improves on the result of \cite{bafna-hsieh-kothari} that can only recover a small linear-sized independent set.
 
 Finally, in \cref{sec: hardness} we provide hardness results corresponding to most of our aforementioned results, showing that the assumptions on the model matrix, one-sided expansion, and balancedness are indeed necessary.
 
 \subsection{Techniques}
 
-\begin{itemize}
-    \item we show that subspace enumeration is applicable more generally than was previously known
-    \item key spectral result bridging the gap between two-sided and one-sided expansion
-    \item we can recover roughly all eigenvectors of the model matrix with non-zero eigenvalues, and they are enough to distinguish every pair of vertices
-    \item the reason why the actual recovered eigenvector will be close to the one of the model matrix is the variance result, that holds generally for any $k$ due to expansion
-    \item these are all put into a generic result DODO
-    \item for $k=3$, we show that the model matrix is essentially fixed by regularity and colour class sizes
-    \item for random planting to get complete colouring we adapt Feige by showing that expander mixing lemma and vertex expansion hold for one-sided too 
-    \item for independent set, we show that the model matrix is essentially fixed by regularity and the size of the independent set
-    \item the hardness results build on TODO
-\end{itemize}
+Let $\lambda_1, \ldots, \lambda_k$ and $v_1, \ldots, v_k$ represent the $k$ eigenvalues and eigenvectors respectively of the model matrix $M$ associated with the colour classes of the $k$-colourable graph. Define $u_1, \ldots, u_k$ as the corresponding $n$-dimensional vectors, where vertices sharing the same colour correspond to identical entries in the respective $v$. Then, the core idea behind \cref{thm:kalg} -- which is the basis of most of our results -- is the following:
+
+\begin{enumerate}
+    \item In \cref{lem: eigenvectorsdistinguish} we show that if all rows of $M$ are (sufficiently) distinct, then for any two indices $1\leq x<y\leq k$, there is an eigenvector $v_i$ corresponding to a \textit{non-zero} eigenvalue that distinguishes them (i.e. $v_i[x]\neq v_i[y]$). This means that if we can (approximately) recover the vectors $u_i$ corresponding to eigenvectors of $M$ with non-zero eigenvalues, we can (approximately) recover the $k$-colouring by a simple clustering algorithm.
+    \item To be able recover the aforementioned vectors $u_i$, we first show in \cref{lemma: expansionimpliesvariance} that they are \textit{almost} eigenvectors of the adjacency matrix $A$ of the graph with eigenvalues $\lambda_i$ bounded away from zero (i.e. $Au_i\approx \lambda_i u_i$). This result is based on a surprising connection: if the graph is a one-sided expander, then the the variance of the degrees between any two colour classes is small -- intuitively, the adjacency matrix is close to a blow-up of the model matrix.
+    \item We recover these vectors $u_i$ approximately by subspace enumeration in the eigenspace of the adjacency matrix bounded away from zero. For this procedure to be efficient, we need that the adjacency matrix has only few very negative eigenvalues -- this is not guaranteed by assumption, as we only make an assumption about the second largest eigenvalue. In \cref{cor:spectral_small_to_small} we show a surprising more general result that guarantees it nevertheless: for any symmetric matrix, small top threshold rank implies small bottom threshold rank.
+\end{enumerate}
+
+
+To deduce \cref{thm:3alg} from \cref{thm:kalg}, we observe in \cref{lemma: 3coloringfixedaveragedegree} that for $k=3$, given the colour class sizes, the model matrix is fixed due to regularity, and unless one colour class contains almost half of the vertices, it will have no repeated rows. 
+
+The proof for approximate recovery in the random planted setting (\cref{thm: random-planting-partial}) is similar to the proof of \cref{thm:kalg}, but note that while the original graph is a one-sided expander, the resulting graph after planting might no longer be expanding. Hence, to show low variance of the degrees between colour classes, instead of \cref{lemma: expansionimpliesvariance} we exploit full randomness using concentration bounds. Efficient subspace enumeration is guaranteed by \cref{lemma: threshold_rank_kept} that shows that low threshold rank is preserved after planting. To convert an approximate colouring into a complete colouring (\cref{thm: random-planting-full}) we adapt \cite{MR3536556-David16} by showing that the expander mixing lemma and small-set vertex expansion -- on which their algorithms rely -- essentially holds for one-sided expansion as well (\cref{lemma: emlonesided}, \cref{lemma: ssveonesided}).
+
+The proof of \cref{cor:independentsetrecovery} relies on the observation that if an independent set is nearly half the size of the graph, regularity ensures most edges connect the independent set to the rest of the graph. Consequently, the $\pm 1$ vector representing this partition is approximately an eigenvector of the adjacency matrix with a very negative eigenvalue.
+
+Finally, the hardness results in \cref{sec: hardness} build on \cref{thm:propA1} (from \cite{bafna-hsieh-kothari}) which shows that without any expansion assumption, it is NP-hard (under the Unique Games Conjecture) to recover even a linear-sized independent set in an almost-bipartite graph.
+
+\subsection{An introductory example}
 
 \begin{itemize}
     \item As demonstration give the simple example of linear degree semi-random
@@ -50,79 +57,3 @@ Finally, in \cref{sec: hardness} we provide hardness results corresponding to mo
     \item For $k=3$ we can use SoS to get low edge violation and show that it implies low vertex violation.
     \item Corollary for $k=2$
 \end{itemize}
-
-% [Introduction to coloring. Coloring random graphs: Blum and Spencer~\cite{MR1344544-Blum95}, Alon and Kahale~\cite{MR1484153-Alon97}.]
-
-Finding proper \(k\)-colorings in graphs for \(k\ge 3\) is among the first computational problems shown to be NP-hard \cite{MR4679190-Karp72}.
-% TODO; discuss approximation algorithms for coloring
-As a consequence, much research has focused on approximation algorithms for this problem and identifying assumptions on the input that allow us to solve the problem efficiently \cite{MR819128-83, MR1369207-94, MR1344544-Blum95, MR1439867-97, MR1484153-Alon97, MR1623197-98, MR1774844-00, MR1948749-01, MR2277147-06, MR2538841-09, MR2863244-Arora11, MR3536556-David16, MR3634492-17, kumar2018finding, MR4764817-24}.
-
-Most relevant to this paper, Blum and Spencer~\cite{MR1344544-Blum95} and Alon and Kahale~\cite{MR1484153-Alon97} studied an average-case setting in which a $k$-coloring is planted in a random graph,
-and showed that polynomial-time algorithms can recover the planted $k$-coloring with high probability.
-This result was subsequently derandomized by David and Feige~\cite{MR3536556-David16}:
-They obtain the same guarantees if the $k$-coloring is planted \emph{at random} in a (two-sided) expander graph, where we require all but one eigenvalue of its normalized adjacency matrix to be close to \(0\).
-Furthermore, they can recover a $k$-coloring for a $0.99$ fraction of the vertices even if the $k$-coloring is planted \emph{adversarially} in such a graph.
-
-Kuman, Louis, and Tulsiani~\cite{kumar2018finding} provide a different derandomization result:
-given a graph that admits a $3$-coloring satisfying a particular pseudo-randomness condition, their algorithms finds a $3$-coloring for a $0.99$ fraction of the vertices in time $n^{O(t)}$, where $t$ is the number of eigenvalues of the graph smaller than $-0.51$.
-
-\paragraph{Two-sided vs one-sided expansion.}
-
-The results of Alon-Kahale and David-Feige crucially exploit the fact that both the positive and negative part of the spectrum of the graph are severely restricted.
-
-% [More recent, derandomization: Arora and Ge~\cite{MR2863244-Arora11}, David and Feige~\cite{MR3536556-David16}, Kumar, Louis, and Tulsiani~\cite{kumar2018finding}.]
-
-% \rares{This paragraph repeats information from before}
-% More recently, David and Feige~\cite{MR3536556-David16} derandomized various aspects of~\cite{MR1484153-Alon97}.
-% Of most relevance to us, they obtain the same guarantees even if the balanced $k$-coloring is planted at random in a regular two-sided expander graph, instead of a random regular graph.
-% Here, we call a graph is a two-sided expander if $\max\{\lambda_2, -\lambda_n\}$ is bounded away from $1$, where $1 = \lambda_1 \geq ... \geq \lambda_n$ are the eigenvalues of the normalized adjacency matrix of the graph.
-% Furthermore, the algorithms of David and Feige also find a $k$-coloring on $0.99n$ of the vertices of the graph even if the $k$-coloring is planted adversarially instead of randomly.
-
-Recent seminal work developed the first algorithms for one-sided expander graphs, where the negative part of the spectrum is completely unrestricted \cite{bafna-hsieh-kothari}.
-The current work further develops our understanding of the computational landscape of coloring and independent set problems on one-sided expander graphs and provides answers to key questions left open by this prior work.  
-
-% [Previous works use two-sided expanders, or more generally small bottom threshold rank. One-sided expanders: Bafna, Hsieh, and Kothari~\cite{bafna-hsieh-kothari}. They can find small independent sets.]
-
-% \paragraph{Bottom threshold rank}
-
-% [Explanation...]
-
-% [Our contribution]
-
-% [(1) One-sided expanders have constant threshold rank. Also generalization to bounded top threshold rank. State result. Say it is technically intricate.]
-
-% [This does not trivialize problem. As~\cite{bafna-hsieh-kothari} showed, it is still hard to even find small independent sets in 4-colorable/6-colorable one-sided expanders.]
-
-% [(2) Need pseudo-randomness in coloring. Indeed, we can recover a 0.99 k-coloring for any pseudo-random k-colorable one-sided expander. (To figure out if we want to discuss non-balancedness here.) If random planted, as in~\cite{MR3536556-David16}, can even get full coloring.]
-
-% [(3) However, 3-colorable one-sided expanders are always pseudo-random. Therefore, we can recover a 0.99 3-coloring for any pseudo-random 3-colorable one-sided expander.]
-
-% [(4) Finally,~\cite{bafna-hsieh-kothari} have a result for graphs with $(1/2-\e)$-independent set. We can get here a $(1/2-\e')$-independent set.]
-
-% [Optional: to figure out whether/where to state hardness results.]
-
-
-
-
-% \subsection{Notation}
-% \label{sec:notation}
-
-% \paragraph{General notations} For positive integers $l\leq l'$ , let $[l]$ denote $\Set{1\ldots, l}$ and let $\btw{l}{l'}$ denote $\Set{l\ldots, l'}$.
-
-% \paragraph{Graph notations}
-% Given a graph $G=(V, E)$, we denote by $A_G$ its unnormalized adjacency matrix, and by $\bar{A}_G = \frac{1}{d_{\avg}(G)} A_G$ its normalized adjacency matrix (we omit the subscript when it is clear from context).
-% \david{This notion of normalized adjacency matrix is non standard and potentially problematic.}
-
-% Given disjoint vertex sets $S, T \subseteq V$, we use $E(S, T)$ to denote the set of edges with one endpoint in $S$ and one endpoint in $T$. When $S = \set{s}$ is a single vertex, we simplify the notation to $E(s, T)$ (analogously for the case when $T$ is a single vertex).
-
-% \paragraph{Matrix notations} Given matrix $M$, we denote by $\lambda_i(M)$ the $i$-th largest eigenvalue of $M$.
-
-% \subsection{Organization}
-% \label{sec:organization}
-
-
-
-%%% Local Variables:
-%%% mode: LaTeX
-%%% TeX-master: "../main.tex"
-%%% End:

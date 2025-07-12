@@ -283,6 +283,41 @@ As in the proof of \cref{thm:kalg-partial}, for each candidate $3$-coloring we a
 The rest of the analysis is identical to that in the proof of \cref{thm:kalg-partial}.
 \end{proof}
 
+We also provide a completely different view on the $3$-coloring case, highlighting a potentially deeper connection. Theorem 1.1 of \cite{barak-raghavendra-steurer} shows a general result: given a satisfiable CSP with constraints over the edges of a graph with low \textit{top} threshold rank, a semidefinite programming hierarchy rounding algorithm can efficiently find an assignment to the vertices safisfying most of the constraints. As the colouring constraint is a special case of this, the result implies that a $k$-colouring violating only a small fraction of edges can be recovered efficiently for any $k$ -- what is more, the algorithm doesn't use the bottom eigenspace.
+
+However, we are after small \text{vertex} violation, not small edge violation: we want that the number of vertices that are not colored correctly is small. For $k=3$ we show a surprising connection: under one-sided expansion and balancedness, low edge-violation implies low vertex violation -- hence, an alternative of \cref{thm:3alg} immediately follows from Theorem 1.1 of \cite{barak-raghavendra-steurer}. For convenience, we show the contrapositive instead: high vertex violation (i.e. low agreement) implies high edge violation.
+
+
+
+\begin{theorem}[Vertex vs edge violation]\label{thm: vertexvsedgeviolation}
+    Let $0<\gamma, \delta<\frac{1}{6}$ be constants. Let $G$ be an $n$-vertex $d$-regular graph with $\lambda_2\leq \frac{\delta^6\gamma^9}{10^2}$ that admits a \tcl $\chi$ such that $\max_{a \in [3]} \frac{1}{n} |\chi^{-1}(a)| \leq 1/2 - \gamma$. Let $\chi'$ be an alternative (not necessarily proper) \tcl with $\text{agree}(\chi, \chi')\leq 1-\delta$. Then, $\chi'$ must have at least $\frac{1}{10^4}\delta^3\gamma^4 nd$ monochromatic edges. 
+\end{theorem}
+
+The proof is quite calculation heavy and the calculations are similar to those in \cref{lemma: expansionimpliesvariance} so we only provide a sketch highlighting the main ideas.
+
+
+\begin{proof}[Proof sketch of \cref{thm: vertexvsedgeviolation}]
+    Let $\psi^{-1}(a, b) := \chi^{-1}(a) \cap \chi'^{-1}(b)$ be the intersection of the colour classes of $\chi$ and $\chi'$ -- without loss of generality, we can assume that the identity permutation maximises agreement. 
+
+    The proof starts with a technical lemma showing that as $\chi$ and $\chi'$ have low agreement, there exist colours $a$ and $b$ such that $\Abs{\chi'^{-1}(b)}$, $\Abs{\psi^{-1}(a, b)}$, and $\Abs{\psi^{-1}(b, b)}$ are not too large and not too small either.
+
+    By \cref{lemma: expansionimpliesvariance}, we have that variance of the degrees between $\chi^{-1}(a)$ and $\chi^{-1}(b)$ is small. On the other hand, note that if the average degree between $\psi^{-1}(a, b)$ and $\chi'^{-1}(b)$ was much less than the average degree between $\chi^{-1}(a)$ and $\chi^{-1}(b)$, it would imply that the variance of the degrees between $\chi^{-1}(a)$ and $\chi^{-1}(b)$ is large.
+    
+    However, if $\chi'$ had only few monochromatic edges, then the average degree between $\psi^{-1}(a, b)$ and $\psi^{-1}(b, b)$ must be small, so the only way the average degree between $\psi^{-1}(a, b)$ and $\chi'^{-1}(b)$ can be large enough is if much more edges from $\psi^{-1}(a, b)$ go to $\chi'^{-1}(b) \setminus \psi^{-1}(b, b)$ than to $\psi^{-1}(b, b)$.
+
+    In this case, however, for suitably chosen $\alpha$ and $\beta$, we can construct a test vector $v$ (orthogonal to $\1$) showcasing that expansion must be poor by lower bounding $\frac{v^\top A_G v}{v^\top v}$ and using the Courant-Fischer Theorem:
+
+    \begin{itemize}
+        \item for $x \in \psi^{-1}(a, b)$, let $v_x := 1$
+        \item for $x \in \psi^{-1}(b, b)$, let $v_x := -\alpha$
+        \item for $x \in \chi'^{-1}(b) \setminus \psi^{-1}(b, b)$, let $v_x := \beta$
+        \item otherwise, let $v_x := 0$
+    \end{itemize}
+
+    This is a contradiction, so $\chi'$ must have many monochromatic edges.
+\end{proof}
+
+
 \subsection{Random planting}
 
 Instead of a regular $k$-colorable one-sided expander, in this section we consider randomly planting a \kcl in a regular one-sided expander.

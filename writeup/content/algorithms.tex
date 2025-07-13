@@ -210,12 +210,56 @@ Let us now prove \cref{thm:kalg-partial}.
 
 \subsection{$2$-colorable models}
 
+
+Assuming the UGC conjecture, \cite{MR2648426} showed that it is NP-hard to recover even a small linear-sized independent set from a graph that is almost bipartite. As a $k=2$ corollary of \cref{thm:kalg}, we show that assuming expansion additionally, it is possible to receover almost the full bipartition.
+
+\andor{TODO: note that only reversible row stocastic 2 by 2 M is 0 1 1 0}
+
+
+\andor{TODO: row separation is $1$}
+
+\begin{lemma}[Balanced bipartition]
+    Let $G$ be an $n$-vertex $d$-regular graph with adjacency matrix $A$, let $\tilde{A} = \frac{1}{d}A$, and let $M = M(\tilde{A}, \chi)$ be defined as in \cref{def:model} with respect to $\tilde{A}$.
+    Let $\chi: [n] \to [2]$ be a $2$-coloring of its vertices, and suppose that $G$ has a vertex cover of all monochromatic edges of size at most $\delta n$.
+    Then, $|\chi^{-1}(0)|,\ |\chi^{-1}(0)|  \geq (1/2-\delta)n$, and $M_{12},\ M_{21} \geq 1-4\delta$.
+\end{lemma}
+
+
+\begin{theorem}[Result for $2$-coloring]
+\label{thm:2alg}
+Let $G$ be an $n$-vertex $d$-regular graph with adjacency matrix $A$ and let $\tilde{A} = \frac{1}{d}A$.
+Let $\lambda$ be the second largest eigenvalue of $\tilde{A}$.
+Let $\chi: [n] \to [2]$ be a $2$-coloring of its vertices, and suppose that $G$ has a vertex cover of all monochromatic edges of size at most $\delta n$.
+Then, for $\delta, \gamma, \lambda > 0$ small enough, there exists an algorithm that runs in time $n^{O(1)} \cdot O_{\delta,\lambda}(1)$ and outputs a $(3, O_{\delta,\lambda}(1))$-coloring for $G$.
+\end{theorem}
+\begin{proof}
+For simplicity of notation, let $M = M(\tilde{A}, \chi)$ be defined as in \cref{def:model} with respect to $\tilde{A}$.
+We aim again to apply \cref{thm:part-recovery} with matrices $M$ and $\tilde{A}$, and we verify that its conditions hold.
+We have by \cref{lemma: 3coloringrowseparation} that any two distinct rows of $M$ have separation $\gamma$.
+Furthermore, the bound $\max_{a \in [3]} \frac{1}{n} |\chi^{-1}(a)| \leq 1/2 - \gamma$ implies that $|\chi^{-1}(a)| \geq 2\gamma n$ for all $a \in [3]$.
+For the rest of the proof, we will largely repeat the analysis in the proof of \cref{thm:kalg-partial}, but using that any two distinct rows of $M$ are separated and taking into account explicitly the parameter $\gamma$.
+
+Let $W = Z M B^{-1} Z^\top$, with the partition matrices $Z, B$ corresponding to the $k$-coloring $\chi$.
+We have trivially that $B^{1/2} M B^{-1/2}$ is symmetric and that $\Norm{M} = 1$.
+We also have that $|\chi^{-1}(a)| \geq 2\gamma n$ for all $a \in [3]$.
+
+In addition, as argued above, we have that any two distinct rows of $M$ have separation $\gamma$.
+For the closeness of $\tilde{A}$ and $W$, we have by \cref{lemma: expansionimpliesvariance} and \cref{lem:small-var-to-indic} that $\Norm{\tilde{A} \frac{Z_a}{\Norm{Z_a}} - W \frac{Z_a}{\Norm{Z_a}}}^2 \leq O\Paren{\lambda/\gamma + \frac{\delta}{\gamma \lambda}}$ for all $a \in [3]$.
+For the low rank of $\tilde{A}$, we have by applying \cref{cor:spectral_small_to_small} with $\sigma=\lambda$ that $\rank_{\leq -\sqrt{2\lambda}}(\tilde{A}) \leq 1/\lambda^2$, and also $\lambda \leq \sqrt{2 \lambda}$. 
+
+Then we apply \cref{thm:part-recovery} with matrices $M$ and $\tilde{A}$ and eigenvalue threshold\linebreak $\lambda' = \max\{\sqrt{2 \lambda}, \Omega(\gamma^{3/2})\}$, such that it satisfies the condition of the theorem, and such that we can take $t = O(1/(\lambda')^2) = O(1/\gamma^3) = O_{\gamma}(1)$.
+Then, we can recover in time $n^{O(1)} \cdot O_{\delta,\gamma,\lambda}(1)$ a list of $O_{\delta,\gamma,\lambda}(1)$ $3$-colorings $\hat{\chi}: [n] \to [3]$ such that, for at least one of them, it holds up to a permutation of the color classes that $\mathbb{E}_{\bm{x} \sim \operatorname{Unif}([n])} \1[\hat\chi(x) \neq \chi(x)] \leq O(\lambda/\gamma^7+\delta/(\lambda\gamma^7))$.
+As in the proof of \cref{thm:kalg-partial}, for each candidate $3$-coloring we apply the rounding algorithm in \cref{lemma: generalrounding} on each of its color classes to obtain $3$ independent sets, and return the set of $3$ independent sets that cover most vertices of $G$.
+The rest of the analysis is identical to that in the proof of \cref{thm:kalg-partial}.
+\end{proof}
+
+
 \andor{TODO: story about how almost bipartition is actually hard}
 
 \begin{theorem}[Result for $2$-coloring]
     \label{thm:2alg}
     \andor{TODO}
-    \end{theorem}
+\end{theorem}
 
 \subsection{$3$-colorable models}
 

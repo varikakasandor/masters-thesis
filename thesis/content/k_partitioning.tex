@@ -1,0 +1,296 @@
+\section{Recovering partitions}
+\label{sec:k-partitioning}
+
+In this section we state and prove our meta-theorem for recovering partitions.
+The result in this section is written in a very general form, to make clear what properties we exploit in the proof.
+Then, in \Cref{sec:algorithms}, we apply this meta-theorem to our settings of interest and obtain our algorithmic results.
+
+\begin{theorem}[Result for recovering partitions]
+\label{thm:part-recovery}
+Let $\chi: [n] \to [k]$ be a $k$-partition of $[n]$, and consider its partition matrices $Z \in \{0,1\}^{n \times k}$ and $B \in \R^{k \times k}$ as per \cref{def:partition_Z}.
+Suppose $|\chi^{-1}(a)| \geq c n$ for all $a \in [k]$.
+Let $M \in \R^{k \times k}$ be a matrix such that 
+\begin{itemize}
+    \item $M B^{-1}$ is symmetric,
+    \item $\Norm{M} \leq \zeta$,
+    \item $\Norm{M^{(a)} - M^{(b)}} \geq \alpha$ for any two rows $M^{(a)}$ and $M^{(b)}$ of $M$.
+\end{itemize}
+Also let $W = Z M B^{-1} Z^\top$ and let $A \in \R^{n \times n}$ be some matrix such that, for all $a \in [k]$,
+\[\Norm{A \frac{Z_a}{\Norm{Z_a}} - W \frac{Z_a}{\Norm{Z_a}}}^2 \leq \delta\,,\]
+and suppose that $\rank_{\leq -\lambda}(A) + \rank_{\geq \lambda}(A) \leq t$ for some $\lambda > 0$ such that $\lambda \leq \alpha \sqrt{c} / 4$ and $\lambda \leq \zeta/4$.
+
+Then, given $A$, there exists an algorithm that runs in time $n^{O(1)} \cdot \Paren{O_{\alpha, \delta, \zeta, c, k}(1)}^t$ and outputs a list of $\Paren{O_{\alpha, \delta, \zeta, c, k, t}(1)}^t$ $k$-partitions $\hat{\chi}: [n] \to [k]$ such that, for at least one of them, it holds up to a permutation of the colour classes that $\mathbb{E}_{\bm{x} \sim \operatorname{Unif}([n])} \1[\hat\chi(\bm{x}) \neq \chi(\bm{x})] \leq O\Paren{\frac{\delta \zeta^2 k^3}{\min\{\alpha^2 c, \zeta^2\} \alpha^2 c}}$.
+\end{theorem}
+
+In our applications, we will take $M$ to be a model of the colouring $\chi$, as per \Cref{def:model}.
+Our main results for graph colouring, in particular, take $M = M(\tilde{A}, \chi)$, where $\tilde{A}$ is the normalized adjacency matrix of the graph.
+Then $M_{ab}$ corresponds to the transition probability from colour class $a$ to colour class $b$.
+(An exception is our result for randomly planted graph colourings in \Cref{thm: random-planting-partial}, where for technical reasons we take $M = \frac{1}{d'} A$, where $A$ is the adjacency matrix of the graph and $d'$ is its \emph{expected} average degree.)
+We note that $W_{ij} = M_{\chi(i)\chi(j)} / |\chi^{-1}(\chi(j))|$ is simply the extension of $M$ to the entire matrix, according to the colour classes, up to the normalization factor $1/|\chi^{-1}(\chi(j))|$.
+
+The proof of \cref{thm:part-recovery} is a straightforward combination of the following three independent lemmas.
+
+\begin{lemma}[Eigenspace approximation]
+\label[lemma]{thm:partition_recovery_theorem2}
+    Let $\chi: [n] \to [k]$ be a $k$-partition of $[n]$, and consider its partition matrix $Z \in \{0,1\}^{n \times k}$ as per \cref{def:partition_Z}.
+    Let $W \in \mathbb{R}^{n \times n}$ be a symmetric matrix such that $W$ has column span in the span of $\set{Z_a}_{a \in [k]}$.
+    Alo let $A \in \R^{n \times n}$ be some matrix such that, for all $a \in [k]$,
+    \[\Norm{A \frac{Z_a}{\Norm{Z_a}} - W \frac{Z_a}{\Norm{Z_a}}}^2 \leq \delta\,,\]
+    and suppose that $\rank_{\leq -\lambda}(A) + \rank_{\geq \lambda}(A) \leq t$ for some $\lambda > 0$.
+    Then, given $A$, for any $\eta > 0$, 
+    there exists an algorithm that runs in time $n^{O(1)} \cdot \Paren{\delta k /\eta^2}^{-O(t)}$ and outputs a list of size $\Paren{\delta k /\eta^2}^{-O(t)}$ of unit vectors such that, for each unit vector $u \in \R^n$ in the eigenspace of $W$ corresponding to eigenvalues larger than $\lambda + \eta$ in absolute value, there exists some $\hat{u} \in \R^n$ in the list such that $\Norm{\hat{u}-u}^2 \leq O\Paren{\delta k /\eta^2}$.
+\end{lemma}
+
+\begin{lemma}[Eigenvector coordinate separation]
+\label[lemma]{lem:eigenvalue_separation}
+    Let $\chi: [n] \to [k]$ be a $k$-partition of $[n]$, and consider its partition matrices $Z \in \{0,1\}^{n \times k}$ and $B \in \R^{k \times k}$ as per \cref{def:partition_Z}.
+    Suppose $|\chi^{-1}(a)| \geq c n$ for all $a \in [k]$.
+    Let $M \in \R^{k \times k}$ be a matrix such that 
+    \begin{itemize}
+        \item $M B^{-1}$ is symmetric,
+        \item $\Norm{M} \leq \zeta$,
+        \item $\Norm{M^{(a)} - M^{(b)}} \geq \alpha$ for any two rows $M^{(a)}$ and $M^{(b)}$ of $M$.
+    \end{itemize}
+    For some $\lambda \leq \alpha \sqrt{c} / 2$ and $\lambda \leq \zeta/2$, let the unit vectors $v_1, \ldots, v_r \in \R^k$ be the eigenvectors of $M$ corresponding to eigenvalues larger than $\lambda$ in absolute value.
+    Then
+    \[\min_{a\neq b\in[k]}\max_{i \in [r]} \frac{1}{\Norm{Z v_i}} \Abs{(v_i)_a- (v_i)_b} \geq \Omega\Paren{\frac{\alpha \sqrt{c}}{\zeta \sqrt{k n}}}\,.\]
+\end{lemma}
+
+\begin{lemma}[Clustering with separated rows]
+\label[lemma]{lem:cluster-eigen}
+    Let $\chi: [n] \to [k]$ be a $k$-partition of $[n]$, and consider its partition matrix $Z \in \{0,1\}^{n \times k}$ as per \cref{def:partition_Z}.
+    Suppose $|\chi^{-1}(a)| \geq c n$ for all $a \in [k]$.
+    Let unit vectors $v_1, \ldots, v_r \in \R^k$ satisfy 
+    \[\min_{a\neq b\in[k]}\max_{i \in [r]} \frac{1}{\Norm{Z v_i}} \Abs{(v_i)_a- (v_i)_b} \geq \frac{\alpha}{\sqrt{n}}\,.\]
+    Then, given unit vectors $\hat{u}_1, \ldots, \hat{u}_r \in \R^n$ such that $\Norm{\hat{u}_i - \frac{Z v_i}{\Norm{Z v_i}}}^2 \leq \delta$ for all $i \in [r]$, there exists an algorithm that runs in time $n^{O(1)} \cdot \Paren{\alpha \sqrt{c}}^{-O(k^2)}$ and outputs a list of $\Paren{\alpha \sqrt{c}}^{-O(k^2)}$ $k$-partitions $\hat{\chi}: [n] \to [k]$ such that, for at least one of them, it holds up to a permutation of the colour classes that $\mathbb{E}_{\bm{x} \sim \operatorname{Unif}([n])} \1[\hat\chi(\bm{x}) \neq \chi(\bm{x})] \leq O\Paren{\frac{\delta k}{\alpha^2}}$.
+\end{lemma}
+
+Let us now prove \cref{thm:part-recovery} given \cref{thm:partition_recovery_theorem2}, \cref{lem:eigenvalue_separation}, and \cref{lem:cluster-eigen}.
+
+\begin{proof}[Proof of \cref{thm:part-recovery}]
+We will assume $\lambda = \min\{\alpha \sqrt{c} / 4, \zeta/4\}$, such that $2\lambda$ satisfies the upper bound required to apply \cref{lem:eigenvalue_separation}.
+
+First, let $S:=\Set{u \in \R^n\; \mid\; W u = \tau u, \Norm{u}=1, \Abs{\tau}> 2\lambda}$ be the set of eigenvectors of $W$ with corresponding eigenvalues larger than $2\lambda$ in absolute value.
+By applying \cref{thm:partition_recovery_theorem2} with $\eta = \lambda$, we can recover a list of size $\Paren{\delta k/\lambda^2}^{-O(t)}$ such that, for each unit eigenvector $u \in \R^n$ in this subspace, there exists some $\hat{u}$ in the list with $\norm{\hat{u}-u}^2 \leq O(\delta k/\lambda^2)$.
+
+Observe that each eigenvector $u$ of $W$ is by definition in the column span of $Z$, so we can write $u = Z v$ for some $v \in \R^{k}$.
+Suppose $Wu = \tau u$.
+Then $M v = B^{-1} Z^\top W Z v = \tau B^{-1} Z^\top Z v = \tau v$, so $v$ is an eigenvector of $M$ with eigenvalue $\tau$.
+Hence, if $v_1, \ldots, v_r$ are the eigenvalues of $M$ with corresponding eigenvalues larger than $2\lambda$ in absolute value, then $\frac{Z v_1}{\Norm{Zv_1}}, \ldots, \frac{Z v_r}{\Norm{Zv_r}} \in S$.
+
+By \cref{lem:eigenvalue_separation}, we have for these eigenvectors $v_1, \ldots, v_r$ of $M$ that 
+\[\min_{a\neq b\in[k]}\max_{i \in [r]} \frac{1}{\Norm{Z v_i}} \Abs{(v_i)_a- (v_i)_b} \geq \Omega\Paren{\frac{\alpha \sqrt{c}}{\zeta \sqrt{k n}}}\,,\]
+and by the previous discussion for each $v_i$ there exists some $\hat{u} \in \R^n$ in the recovered list such that $\Norm{\hat{u} - \frac{Z v_i}{\Norm{Zv_i}}}^2 \leq O(\delta k / \lambda^2)$.
+To know which of the unit vectors $\hat{u}$ in the list correspond to these eigenvectors, we can afford to try all possibilities of at most $k$ vectors in the list; there are at most $\Paren{\delta k/\lambda^2}^{-O(tk)}$ such possibilities.
+The guarantee then follows from \cref{lem:cluster-eigen}, giving probability of misclassification $O(\frac{\delta \zeta^2 k^3}{\min\{\alpha^2 c, \zeta^2\} \alpha^2 c} )$.
+\end{proof}
+
+The next three subsection prove \cref{thm:partition_recovery_theorem2}, \cref{lem:eigenvalue_separation}, and \cref{lem:cluster-eigen}.
+
+\subsection{Eigenspace approximation}
+
+In this section we prove \cref{thm:partition_recovery_theorem2}.
+First, we state a generic result that proves that if two matrices are close in a subspace that for one of the matrices is an eigenspace with eigenvalues of large absolute value, then the small eigenvalues of the other matrix are far from this subspace.
+
+\begin{lemma}[Eigenspace closeness]
+    \label[lemma]{lemma:lin-alg-subspace}
+    Let $X \in \R^{n \times n}$ be a symmetric matrix, and let $v_1, \ldots, v_k$ be any $k$ of its eigenvectors with non-zero eigenvalues $\lambda_1, \ldots, \lambda_{k}$.
+    Let $\lambda = \min\{|\lambda_1|, \ldots, |\lambda_k|\}$.
+    Also let $Y \in \R^{n \times n}$ be a symmetric matrix, and let $P \in \R^{n \times n}$ be the orthogonal projection to the span of the eigenvectors of $Y$ that are smaller in absolute value than $\lambda - \eta$ for some $\eta > 0$.
+    Then, for any orthonormal basis $u_1, \ldots, u_{k} \in \R^n$ of $\operatorname{span}(v_1, \ldots, v_k)$,
+    \[\sum_{i=1}^{k} \Norm{P u_i}^2 \leq \frac{1}{\eta^2} \sum_{i=1}^{k} \Norm{(X-Y)u_i}^2\,.\]
+\end{lemma}
+\begin{proof}
+First, for the eigenvectors $v_1, \ldots, v_{k}$ of $X$ we have that 
+\begin{equation}
+\label{lemma:lin-alg-subspace-eq1}
+\Norm{(X-Y)v_i}^2 = \Norm{\lambda_i v_i - Y v_i}^2 = \Norm{(\lambda_i I_n - Y) v_i}^2 \geq \Norm{P(\lambda_i I_n - Y) v_i}^2\,.
+\end{equation}
+Let now $v_1', \ldots, v_{m}' \in \R^n$ be the eigenvectors of $Y$ in $P$ with corresponding eigenvalues $\lambda_1', \ldots, \lambda_{m}'$ smaller in absolute value than $\lambda - \eta$.
+Continuing \cref{lemma:lin-alg-subspace-eq1},
+\begin{equation}
+\label{lemma:lin-alg-subspace-eq2}
+\Norm{(X-Y)v_i}^2 \geq \sum_{j=1}^{m} (\lambda_i - \lambda_j')^2 \langle v_j', v_i \rangle^2 \geq \eta^2 \sum_{j=1}^{m} \langle v_j', v_i \rangle^2 = \eta^2 \Norm{Pv_i}^2\,.
+\end{equation}
+
+Second, we claim that $\sum_{i=1}^k \Norm{(X-Y)v_i}^2 = \sum_{i=1}^{k} \Norm{(X-Y)u_i}^2$ and $\sum_{i=1}^k \Norm{P v_i}^2 = \sum_{i=1}^{k} \Norm{P u_i}^2$.
+The proof is simply that, for any matrix $M \in \R^{n \times n}$ and any two orthonormal bases of the same subspace $\{x_i\}$ and $\{y_i\}$,
+\[\sum_{i} \Norm{Mx_i}^2 = \sum_{i} \Tr(M^\top M x_i x_i^\top) = \Tr\Paren{M^\top M \sum_{i} x_i x_i^\top} = \Tr\Paren{M^\top M \sum_{i} y_i y_i^\top}\,,\]
+and by the same sequence of transformations we get back that $\Tr\Paren{M^\top M \sum_{i} y_i y_i^\top} = \sum_{i} \Norm{My_i}^2$. 
+Using this fact for the orthonormal bases $\{v_i\}$ and $\{u_i\}$, we prove the desired fact, and combining it with \cref{lemma:lin-alg-subspace-eq2} we complete the proof.
+\end{proof}
+
+We state now the well-known bounds of subspace enumeration.
+
+\begin{lemma}[Subspace enumeration]
+    \label[lemma]{lemma:subspace_enumeration}
+    There exists an algorithm that outputs with high probability an $\delta$-net of the unit $(d-1)$-dimensional ball in time $(1/\delta)^{O(d)}$.
+\end{lemma}
+
+\begin{proof}
+    By standard arguments, there exists such a cover of size $m = O(1/\delta)^d$ (see Example 5.8 in~\cite{MR3967104-Wainwright19}).
+    Furthermore, it suffices to sample $O(m \log m)$ random points on the unit ball in order to obtain with high probability such a cover.
+\end{proof}
+
+Finally, we prove \cref{thm:partition_recovery_theorem2}.
+
+\begin{proof}[Proof of \cref{thm:partition_recovery_theorem2}]
+    We have $\Norm{A \frac{Z_a}{\Norm{Z_a}} - W \frac{Z_a}{\Norm{Z_a}}}^2 \leq \delta$ for all $a \in [k]$, so $\sum_{a=1}^k \Norm{\Paren{A - W}\frac{Z_a}{\Norm{Z_a}}}^2 \leq \delta k$.
+    Because $\frac{Z_a}{\Norm{Z_a}}$ are orthonormal, for any orthonormal $u_1, \ldots, u_k$ that span the same subspace we also have $\sum_{i=1}^k \Norm{\Paren{A -W}u_i}^2
+    \leq \delta k$.
+    Also recall that $W$ has column span in the span of $\{Z_a\}_{a \in [k]}$, so all of its eigenvectors with non-zero eigenvalues lie in the span of $\{u_1, \ldots, u_k\}$.
+    Let $P$ be the orthogonal projection to the eigenvectors of $A$ with eigenvalue smaller than $\lambda$ in absolute value.
+    Then, by \cref{lemma:lin-alg-subspace} applied with $W, A$ as $X, Y$, we get for any orthonormal vectors $u_1, \ldots, u_r$ that span the eigenspace of $W$ with eigenvalues larger than $\lambda+\eta$ in absolute value, for any $\eta >0$, that $\sum_{i=1}^r \Norm{P u_i}^2 \leq \delta k / \eta^2$.
+    Hence, $\Norm{P u_i}^2 \leq \delta k / \eta^2$ for all $i \in [r]$, so each $u_i$ is $O(\sqrt{\delta k / \eta^2})$-close to the subspace corresponding to $P^{\bot} = I_n - P$.
+
+    Then, by \cref{lemma:subspace_enumeration}, by finding an $O(\sqrt{\delta k / \eta^2})$-net of the eigenspace of $A$ corresponding to $P^\bot$, we are guaranteed to find a vector that is $O(\sqrt{\delta k / \eta^2})$-close to each $u_i$.
+    This subspace has dimension at most $t$, so applying \cref{lemma:subspace_enumeration} takes time $(\delta k/\eta^2)^{O(t)}$ and produces a list of size at most $(\delta k /\eta^2)^{O(t)}$.
+    The overall time complexity is then bounded by $n^{O(1)} \cdot (\delta k/\eta^2)^{O(t)}$.
+\end{proof}
+
+\subsection{Eigenvector coordinate separation}
+
+In this section we prove \cref{lem:eigenvalue_separation}.
+First, we state a technical lemma.
+
+\begin{lemma}[Non-uniformity of eigenvectors]\label[lemma]{lem: eigenvectorsdistinguish}
+    Let $c\geq 0$, $0<\lambda< \zeta$, and $\alpha\geq \sqrt{2}c\lambda$ be parameters.
+    Let $D \in \R^k$ with $D_x \leq c$ for all $x \in [k]$.
+    Let $M$ be a symmetric $k\times k$ matrix with $\Norm{M}\leq \zeta$ such that for any two distinct columns $M_x$ and $M_y$ it holds that $\Norm{D_xM_x-D_yM_y}^2 \geq \alpha^2$.
+    Let $v_1, \ldots, v_k$ be orthonormal eigenvectors of $M$ and let $S:=\Set{v_r \; \mid\; M v_r = \tau v_r, |\tau| > \lambda}$.
+    Then
+    $$\min_{x\neq y\in[k]}\max_{v_r \in S} \Abs{D_x (v_r)_x-D_y (v_r)_y}\geq \sqrt{\frac{\alpha^2-2c^2\lambda^2}{k\Paren{\zeta^2-\lambda^2}}} \,.$$
+\end{lemma}
+
+\begin{proof}
+    We write $M = \sum_{r=1}^k \lambda_r v_r v_r^{\top}$ and get that, for any $x \neq y \in [k]$,
+    \begin{equation*}
+        D_x M_x - D_y M_y=\sum_{r=1}^k \lambda_r (D_x (v_r)_x - D_y (v_r)_y)v_r \,.
+    \end{equation*}
+    Using that $\Norm{M}\leq \zeta$ and $\Abs{\lambda_r}\leq \lambda$, we get
+    \begin{align}
+    \label{eq:rounding_split_1}
+        \begin{split}
+            \Norm{D_x M_x- D_y M_y}^2
+            &=\sum_{r=1}^k \lambda_r^2 (D_x (v_r)_x - D_y(v_r)_y)^2 \\
+            &=\sum_{r\in S} \lambda_r^2 (D_x (v_r)_x - D_y(v_r)_y)^2+\sum_{r\notin S} \lambda_r^2 (D_x (v_r)_x - D_y(v_r)_y)^2 \\
+            &\leq \zeta^2\sum_{r\in S} (D_x (v_r)_x- D_y (v_r)_y)^2+\lambda^2\sum_{r\notin S} (D_x (v_r)_x- D_y (v_r)_y)^2 \,.
+        \end{split}
+    \end{align}
+    Because the eigenvectors are orthonormal, the rows of the matrix $V \in \R^{k \times k}$ whose columns are $\set{v_{r}}_{r \in [k]}$ are also orthonormal: that is, $\sum_{r=1}^{k} (v_r)_x (v_r)_y = 0$ for $x \neq y$ and $\sum_{r=1}^{k} (v_r)_x^2 = 1$ for $x \in [k]$.
+    Therefore, we obtain
+    \begin{align*}
+        \sum_{r \notin S} (D_x (v_r)_x- D_y (v_r)_y)^2
+        & = \sum_{r=1}^k (D_x (v_r)_x- D_y (v_r)_y)^2 - \sum_{r \in S} (D_x (v_r)_x- D_y (v_r)_y)^2 \\
+        & = D_x^2 + D_y^2 - \sum_{r \in S} (D_x (v_r)_x- D_y (v_r)_y)^2 \\
+        % & \leq D_x^2 + D_y^2 - \sum_{r \in S} (D_x (v_r)_x- D_y (v_r)_y)^2 \\
+        & \leq 2c^2 - \sum_{r \in S} (D_x (v_r)_x- D_y (v_r)_y)^2 \,.
+    \end{align*}
+    Plugging it into \cref{eq:rounding_split_1}, we get
+    \begin{equation*}
+        \Norm{D_x M_x- D_y M_y}^2
+        \leq \Paren{\zeta^2-\lambda^2} \sum_{r \in S} (D_x (v_r)_x- D_y (v_r)_y)^2 + 2 c^2 \lambda^2 \,.
+    \end{equation*}
+    Since $\Norm{D_xM_x-D_yM_y}^2\geq \alpha^2$, it follows that
+    \begin{equation*}
+        \sum_{r \in S} (D_x (v_r)_x- D_y (v_r)_y)^2 \geq \frac{\alpha^2 - 2c^2\lambda^2}{\zeta^2-\lambda^2} \,.
+    \end{equation*}
+    Finally, by an averaging argument, there must exist some $r \in S$ such that
+    \begin{equation*}
+        (D_x (v_r)_x- D_y (v_r)_y)^2 \geq \frac{\alpha^2 - 2c^2\lambda^2}{k(\zeta^2-\lambda^2)} \,.
+    \end{equation*}
+    % from which the result follows by taking square roots and using $\zeta^2\geq 1>\lambda^2$.
+\end{proof}
+
+Next, we prove \cref{lem:eigenvalue_separation}.
+
+\begin{proof}[Proof of \cref{lem:eigenvalue_separation}]
+Observe that if $Mv = \tau v$, then we also have that $B^{1/2}v$ is an eigenvector of $\widetilde{M} = B^{1/2} M B^{-1/2}$ of value $\tau$.
+Note that $\widetilde{M}$ is symmetric and continues to satisfy $\Norm{\widetilde{M}}\leq \zeta$.
+Then, we apply \cref{lem: eigenvectorsdistinguish} with the matrix $\widetilde{M}$ and with the eigenvectors $B^{1/2} v$ of $\widetilde{M}$ with eigenvalue at least $\lambda$ in absolute value (normalized to be unit vectors).
+We apply the lemma with $D \in \R^k$ such that $D_x = (\sqrt{n} B^{-1/2})_x$, whose largest entry is upper bounded by $1/\sqrt{c}$.
+Recall that we assume any two rows of $M$ satisfy $\Norm{M^{(a)} - M^{(b)}} \geq \alpha$, so also any two rows of $\sqrt{n} M B^{-1/2} = \sqrt{n} B^{-1/2} \widetilde{M}$ satisfy $\Norm{\sqrt{n}B^{-1/2} \Paren{M^{(a)} - M^{(b)}}} \geq \alpha$.
+Taking the transpose and using that $\widetilde{M}$ is symmetric, any two columns of $\sqrt{n} \widetilde{M} B^{-1/2}$ satisfy $\Norm{\sqrt{n}B^{-1/2}(a) \widetilde{M}_a - \sqrt{n}B^{-1/2}(b) \widetilde{M}_b} \geq \alpha$.
+Applying \cref{lem: eigenvectorsdistinguish}, and using that $\alpha^2 \geq 4 \lambda^2 /c$ and $\zeta^2 \geq 4 \lambda^2$, we get 
+\[\min_{a\neq b\in[k]}\max_{v \in S} \frac{1}{\Norm{B^{1/2}v}} \sqrt{n} \Abs{v_a- v_b} \geq \Omega\Paren{\sqrt{\frac{\alpha^2 - 2\lambda^2/c}{k(\zeta^2-\lambda^2)}}} \geq \Omega\Paren{\frac{\alpha}{\zeta\sqrt{k}}}\,.\]
+
+The above shows that, for all $a \neq b \in [k]$, there exists $\frac{v}{\Norm{v}} \in S$ with $\Norm{B^{1/2}v}=1$ such that $\sqrt{n}\Abs{v_a - v_b} \geq \Omega\Paren{\frac{\alpha}{\zeta\sqrt{k}}}$, so $\Abs{v_a - v_b} \geq \Omega\Paren{\frac{\alpha}{\zeta\sqrt{kn}}}$.
+We note that $\Norm{B^{1/2}v} = 1$ implies that $\frac{1}{\sqrt{n}} \leq \Norm{v} \leq \frac{1}{\sqrt{cn}}$.
+We also have $\sqrt{c n} \norm{v} \leq \norm{Zv} \leq \sqrt{n} \norm{v}$, so $\sqrt{c} \leq \norm{Zv} \leq \frac{1}{\sqrt{c}}$.
+Then, if we consider for each such $v$ some $v' \propto v$ such that $\norm{Zv'} = 1$, we have that $\Abs{v'_a - v'_b} \geq \Omega\Paren{\frac{\alpha\sqrt{c}}{\zeta\sqrt{k n}}}$
+\end{proof}
+
+\subsection{Clustering with separated rows}
+
+In this section we prove \cref{lem:cluster-eigen}.
+First, we state the guarantees of a clustering algorithm used in the proof.
+
+\begin{lemma}[Partitioning based on distinguishing eigenvectors (based on Lemma E.7 in \cite{MR3536556-David16})]\label[lemma]{lem:clusteringalmosteigenvectors}
+    Let $\chi: [n] \to [k]$ be a $k$-partition of $[n]$.
+    Suppose $|\chi^{-1}(a)| \geq c n$ for all $a \in [k]$.
+    For $\ell \leq k$, let $\set{v_{i}}_{i \in [\ell]}$ be $k$-dimensional vectors that satisfy
+    \[\min_{a\neq b\in[k]}\max_{i\in [\ell]} \Abs{(v_i)_a-(v_i)_b}\geq \frac{\alpha}{\sqrt{n}}\,.\]
+    Also let $\set{\hat{u}_{i}}_{i \in [\ell]}$ be $n$-dimensional unit vectors that satisfy $\sum_{j=1}^\ell \Norm{\hat{u}_j-Zv_j}^2\leq \delta$.
+    Then \cref{alg: spectralclustering} runs in time $n^{O(1)} \cdot (\alpha \sqrt{c})^{-O(k^2)}$ and returns a list of $(\alpha \sqrt{c})^{-O(k^2)}$ $k$-partitions $\hat{\chi}: [n] \to [k]$ such that, for at least one of them, it holds up to a permutation of the colour classes that $\mathbb{E}_{\bm{x} \sim \operatorname{Unif}([n])} \1[\hat\chi(x) \neq \chi(x)] \leq O\Paren{\frac{\delta k}{\alpha^2}}$.
+\end{lemma}
+
+\begin{algorithm}[H]
+    \caption{Spectral partitioning algorithm (based on Algorithm 10 in \cite{MR3536556-David16})}
+    \label{alg: spectralclustering}
+    \DontPrintSemicolon
+    Guess $k$-dimensional vectors $\{v_i^*\}_{i \in [\ell]}$ with entries in $[-1/\sqrt{cn}, 1/\sqrt{cn}]$ up to entrywise resolution $\alpha / \sqrt{12 k n}$.\;
+    Let $S_1 = \emptyset, \ldots, S_k = \emptyset$.\;
+    Insert each $x \in [n]$ in $S_a$ where
+    \[
+    a = \argmax_{a \in [k]} \sum_{j=1}^\ell \Paren{(\hat{u}_j)_x-(v^*_j)_a}^2\,.
+    \]
+\end{algorithm}
+
+\begin{proof}
+    To begin with, we remark that the number of guesses is bounded by
+    \[\Paren{\Paren{2/\sqrt{cn}} / \Paren{\alpha/\sqrt{12kn}}}^{k\ell} \leq O(\sqrt{k}/(\alpha\sqrt{c}))^{k^2}\,,\] 
+    so the algorithm leads to the desired time complexity bound and list size bound.
+
+    Let $u_j=Zv_j$, and note that if $Z_{ia}=1$ then $(u_j)_i=(v_j)_a$. Define the set 
+    $$\mathrm{Good}:=\Set{x\in [n]\;\mid\; \Paren{(\hat{u}_j)_x-(u_j)_x}^2\leq \frac{\alpha^2}{12kn}, \forall j \in [\ell]}\,.$$
+    Note that, because $\Norm{\hat{u}_j-Zv_j}^2\leq \delta$ for all $j \in [\ell]$, we have that $n - |\mathrm{Good}| \leq \frac{\delta}{\alpha^2/(12kn)} = \frac{12\delta k}{\alpha^2} n$, so $|\mathrm{Good}| \geq n - \frac{12\delta k}{\alpha^2} n$.
+
+    Consider the guess of the algorithm in which $|(v^*_i)_a - (v_i)_a| \leq \alpha / \sqrt{12 k n}$ for all $a \in [k]$, $i \in [\ell]$.
+    Consider some $x \in \mathrm{Good}$ with $Z_{x a}=1$ for some $a \in [k]$.
+    Then $\Paren{(\hat{u}_j)_x-(u_j)_x}^2\leq \frac{\alpha^2}{12kn}$ and $(u_j)_x = (v_j)_a$, so
+    \begin{align*}
+        \Paren{(\hat{u}_j)_x-(v^*_j)_a}^2
+        &= \Paren{\Paren{(\hat{u}_j)_x-(u_j)_x}+\Paren{(u_j)_x-(v_j)_a}+\Paren{(v_j)_a-(v^*_j)_a}}^2\\
+        &= \Paren{\Paren{(\hat{u}_j)_x-(u_j)_x}+\Paren{(v_j)_a-(v^*_j)_a}}^2\\
+        &\leq 2 \Paren{(\hat{u}_j)_x-(u_j)_x}^2 + 2 \Paren{(v_j)_a-(v^*_j)_a}^2\\
+        &\leq \frac{\alpha^2}{3kn}\,.
+    \end{align*}
+
+    Then, overall, we have 
+    $$\sum_{j=1}^\ell \Paren{(\hat{u}_j)_x-(v^*_j)_a}^2 \leq \ell \frac{\alpha^2}{3kn} \leq \frac{\alpha^2}{3n}\,.$$
+
+    On the other hand, for any $b \neq a \in [k]$, there exists $i\in[\ell]$ with $\Abs{(u_i)_x-(v_i)_b}=\Abs{(v_i)_a-(v_i)_b}\geq \frac{\alpha}{\sqrt{n}}$, so similarly we have
+    \begin{align*}
+    \Paren{(\hat{u}_i)_x-(v_i^*)_b}^2
+    &= \Bigg(\Paren{(\hat{u}_i)_x-(u_i)_x}+\Paren{(u_i)_x-(v_i)_b}+\Paren{(v_i)_b-(v^*_i)_b}\Bigg)^2\\
+    &\geq \Paren{\frac{\alpha}{\sqrt{n}}-2\frac{\alpha}{\sqrt{12kn}}}^2\\
+    &> \frac{\alpha^2}{3n}\,.
+    \end{align*}
+    Hence, 
+    $$\sum_{j=1}^\ell \Paren{(\hat{u}_j)_x-(v_j^*)_b}^2 > \frac{\alpha^2}{3n}\,.$$
+    This shows that there exists a guess of the algorithm $v_1^*, \ldots, v_\ell^*$ for which all vertices in $\mathrm{Good}$ get correctly partitioned.
+    Then, because $|\mathrm{Good}| \geq n - \frac{12\delta k}{\alpha^2} n$, for this guess at most $\frac{12k\delta}{\alpha^2}n$ vertices are misclassified.
+\end{proof}
+
+Finally, we prove \cref{lem:cluster-eigen}.
+
+\begin{proof}[Proof of \cref{lem:cluster-eigen}]
+    % For the eigenvectors $S = \{v_1, \ldots, v_r\} \in \R^k$ of $M$ with eigenvalue at least $\lambda$ in absolute value, we have $\hat{u}_1, \ldots, \hat{u}_r \in \R^n$ such that $\Norm{\hat{u}_i - Z v_i}^2 \leq \delta$ for all $i \in [r]$.
+
+    For each $v_i$, let $v'_i \propto v_i$ such that $\Norm{Z v'_i} = 1$.
+    Then the assumptions guarantee that 
+    \[\min_{a\neq b\in[k]}\max_{i \in [r]} \Abs{(v'_i)_a- (v'_i)_b} \geq \frac{\alpha}{\sqrt{n}}\,.\]
+    We also have that $\Norm{\hat{u}_i - Z v'_i}^2 \leq \delta$ for all $i \in [r]$.
+    Then the proof follows by \cref{lem:clusteringalmosteigenvectors}: we can recover a list of partitions such that one of them contains (up to a permutation) at most $O\Paren{\frac{\delta k}{\alpha^2}} n$ wrongly partitioned vertices.
+    The time complexity is $n^{O(1)} \cdot (\alpha \sqrt{c})^{-O(k^2)}$ the list size bound is $(\alpha \sqrt{c})^{-O(k^2)}$.
+\end{proof}

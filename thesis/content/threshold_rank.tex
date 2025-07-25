@@ -1,0 +1,59 @@
+\section{Proof of top threshold rank lower bound}
+\label{sec:rank-lb}
+
+In this section, we prove for the sake of completeness a slight generalization of Lemma 6.1 in \cite{barak-raghavendra-steurer}, such that it extends to all bounded-norm symmetric matrices.
+The proof is essentially the same as the original proof.
+We note that the original proof has a minor mistake in an application of Cauchy-Schwarz, and to fix it we need to modify the guarantee of the lemma to give a threshold rank lower bound of $(1-1/C)^2r$ instead of the original lower bound of $(1-1/C)r$.
+
+\begin{lemma}[Generalized restatement of Lemma 6.1 in \cite{barak-raghavendra-steurer}]
+    Let $A \in \R^{n \times n}$ be symmetric with $\Norm{A} \leq 1$.
+    % Given a graph $G$ with adjacency matrix $A \in \set{0, 1}^{n \times n}$, define the degree matrix $D \in {R}^{n \times n}$ as the diagonal matrix with $D_{i, i} = \deg_G(i)$ and the normalized adjacency matrix $A \in {R}^{n \times n}$ as $A = D^{-1/2} A D^{-1/2}$.
+    Suppose there exists $M \in \R^{n \times n}$ positive semidefinite such that
+    \begin{equation*}
+        \iprod{A, M} \geq 1-\e \,, \quad
+        \Norm{M}_F^2 \leq \frac{1}{r} \,, \quad
+        \Tr(M) = 1 \,.
+    \end{equation*}
+    Then for all $C > 1$,
+    \begin{equation*}
+        \rank_{\geq 1- C \cdot \e} (A) \geq \Paren{1-\frac{1}{C}}^2 r \,.
+    \end{equation*}
+\end{lemma}
+
+\begin{proof}
+    Let the spectral decomposition of $A$ be $A = \sum_{i} \lambda_i u_i u_i^{\top}$ and let $k = \rank_{\geq 1- C \e} (A)$.
+    We use $\Lambda_{\geq 1- C\e} = \sum_{i=1}^{k} u_i u_i^{\top}$ to denote the subspace spanned by the eigenvectors with corresponding eigenvalues at least $1- C\e$. 
+    Then we can rewrite $\iprod{A, M}$ as
+    \begin{align}
+    \label{eq:BRS11_proof_1}
+    \begin{split}
+        \iprod{A, M}
+        & = \sum_{i=1}^{k} \lambda_i \iprod{u_i u_i^{\top}, M} + \sum_{i=k+1}^{n} \lambda_i \iprod{u_i u_i^{\top}, M} \\
+        & \leq \iprod{\Lambda_{\geq 1- C\e}, M} + (1- C\e) \iprod{\Id_n - \Lambda_{\geq 1- C\e}, M} \\
+        & =  C \e \iprod{\Lambda_{\geq 1- C\e}, M} + (1- C\e) \iprod{\Id_n, M} \,.
+    \end{split}
+    \end{align}
+    For the first term, it follows by the assumption $\Norm{M}_F^2 \leq \frac{1}{r}$ and Cauchy–Schwarz that
+    \begin{equation}
+    \label{eq:BRS11_proof_2}
+        \iprod{\Lambda_{\geq 1- C\e}, M}
+        \leq \Norm{\Lambda_{\geq 1- C\e}}_F \Norm{M}_F
+        \leq  \sqrt{k} \cdot \frac{1}{\sqrt{r}}\,.
+    \end{equation}
+    For the second term, it follows by the assumption $\Tr(M) = 1$ that
+    \begin{equation}
+    \label{eq:BRS11_proof_3}
+        \iprod{\Id_n, M} = \Tr(M) = 1 \,.
+    \end{equation}
+    Plugging \cref{eq:BRS11_proof_2} and \cref{eq:BRS11_proof_3} into \cref{eq:BRS11_proof_1}, it follows that
+    \begin{equation*}
+        \iprod{A, M}
+        \leq C \e \sqrt{\frac{k}{r}} + 1- C\e \,.
+    \end{equation*}
+    Since by assumption $\iprod{A, M} \geq 1-\e$, it follows by rearranging the terms that
+    \begin{equation*}
+        \rank_{\geq 1- C \cdot \e} (A)
+        = k
+        \geq \Paren{1-\frac{1}{C}}^2 r \,.
+    \end{equation*}
+\end{proof}

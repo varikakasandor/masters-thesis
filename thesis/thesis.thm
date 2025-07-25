@@ -1,0 +1,109 @@
+\contentsline {lemma}{{Lemma}{1.{1}}{Linear degree random planting full recovery}}{4}{theorem.1.1}%
+\contentsline {proof}{{Proof}{1}{Proof of \protect \cref {lemma: lineardegree}}}{4}{proof.1}%
+\contentsline {definition}{{Definition}{2.{1}}{$(k,\delta )$-colouring}}{6}{theorem.2.1}%
+\contentsline {definition}{{Definition}{2.{2}}{Partition matrices of a colouring}}{6}{theorem.2.2}%
+\contentsline {definition}{{Definition}{2.{3}}{Model of a colouring}}{6}{theorem.2.3}%
+\contentsline {remark}{{Remark}{2.{4}}{}}{6}{theorem.2.4}%
+\contentsline {definition}{{Definition}{2.{5}}{$(M, \delta )$-colourable graph}}{7}{theorem.2.5}%
+\contentsline {theorem}{{Theorem}{3.{1}}{Large bottom rank implies large top rank}}{8}{theorem.3.1}%
+\contentsline {corollary}{{Corollary}{3.{2}}{Small top rank implies small bottom rank}}{8}{theorem.3.2}%
+\contentsline {lemma}{{Lemma}{3.{3}}{Generalized restatement of Lemma 6.1 in \cite {barak-raghavendra-steurer}}}{9}{theorem.3.3}%
+\contentsline {lemma}{{Lemma}{3.{4}}{Construction of witness matrix}}{9}{theorem.3.4}%
+\contentsline {proof}{{Proof}{2}{}}{9}{proof.2}%
+\contentsline {proof}{{Proof}{3}{Proof of \protect \cref {thm:spectral_large_to_large}}}{10}{proof.3}%
+\contentsline {theorem}{{Theorem}{4.{1}}{Result for recovering partitions}}{11}{theorem.4.1}%
+\contentsline {lemma}{{Lemma}{4.{2}}{Eigenspace approximation}}{12}{theorem.4.2}%
+\contentsline {lemma}{{Lemma}{4.{3}}{Eigenvector coordinate separation}}{12}{theorem.4.3}%
+\contentsline {lemma}{{Lemma}{4.{4}}{Clustering with separated rows}}{12}{theorem.4.4}%
+\contentsline {proof}{{Proof}{4}{Proof of \protect \cref {thm:part-recovery}}}{13}{proof.4}%
+\contentsline {lemma}{{Lemma}{4.{5}}{Eigenspace closeness}}{13}{theorem.4.5}%
+\contentsline {proof}{{Proof}{5}{}}{14}{proof.5}%
+\contentsline {lemma}{{Lemma}{4.{6}}{Subspace enumeration}}{14}{theorem.4.6}%
+\contentsline {proof}{{Proof}{6}{}}{14}{proof.6}%
+\contentsline {proof}{{Proof}{7}{Proof of \protect \cref {thm:partition_recovery_theorem2}}}{14}{proof.7}%
+\contentsline {lemma}{{Lemma}{4.{7}}{Non-uniformity of eigenvectors}}{15}{theorem.4.7}%
+\contentsline {proof}{{Proof}{8}{}}{15}{proof.8}%
+\contentsline {proof}{{Proof}{9}{Proof of \protect \cref {lem:eigenvalue_separation}}}{16}{proof.9}%
+\contentsline {lemma}{{Lemma}{4.{8}}{Partitioning based on distinguishing eigenvectors (based on Lemma E.7 in \cite {MR3536556-David16})}}{17}{theorem.4.8}%
+\contentsline {proof}{{Proof}{10}{}}{17}{proof.10}%
+\contentsline {proof}{{Proof}{11}{Proof of \protect \cref {lem:cluster-eigen}}}{18}{proof.11}%
+\contentsline {lemma}{{Lemma}{5.{1}}{Variance of $k$-colourings in expanders}}{19}{theorem.5.1}%
+\contentsline {proof}{{Proof}{12}{}}{19}{proof.12}%
+\contentsline {theorem}{{Theorem}{6.{1}}{Result for $k$-colouring}}{21}{theorem.6.1}%
+\contentsline {corollary}{{Corollary}{6.{2}}{Result for $k$-colouring, distinct rows}}{21}{theorem.6.2}%
+\contentsline {lemma}{{Lemma}{6.{3}}{Model colour class size lower bound}}{21}{theorem.6.3}%
+\contentsline {proof}{{Proof}{13}{}}{22}{proof.13}%
+\contentsline {lemma}{{Lemma}{6.{4}}{Small variance implies close indicators}}{22}{theorem.6.4}%
+\contentsline {proof}{{Proof}{14}{}}{23}{proof.14}%
+\contentsline {proof}{{Proof}{15}{Proof of \protect \cref {thm:kalg-partial}}}{23}{proof.15}%
+\contentsline {claim}{{Claim}{6.{5}}{Closeness of $M(\tilde {A}, \chi )$ and $M(\tilde {A}, \chi ')$}}{23}{theorem.6.5}%
+\contentsline {proof}{{Proof}{16}{}}{24}{proof.16}%
+\contentsline {claim}{{Claim}{6.{6}}{Closeness of $W$ and $W'$}}{24}{theorem.6.6}%
+\contentsline {proof}{{Proof}{17}{}}{24}{proof.17}%
+\contentsline {theorem}{{Theorem}{6.{7}}{Result for $2$-colouring}}{27}{theorem.6.7}%
+\contentsline {proof}{{Proof}{18}{}}{27}{proof.18}%
+\contentsline {lemma}{{Lemma}{6.{8}}{Model entries for $3$-colourings}}{28}{theorem.6.8}%
+\contentsline {proof}{{Proof}{19}{}}{28}{proof.19}%
+\contentsline {lemma}{{Lemma}{6.{9}}{Row separation for $3$-colourings}}{28}{theorem.6.9}%
+\contentsline {proof}{{Proof}{20}{}}{28}{proof.20}%
+\contentsline {theorem}{{Theorem}{6.{10}}{Result for $3$-colouring}}{28}{theorem.6.10}%
+\contentsline {proof}{{Proof}{21}{}}{28}{proof.21}%
+\contentsline {claim}{{Claim}{6.{11}}{}}{28}{theorem.6.11}%
+\contentsline {proof}{{Proof}{22}{}}{29}{proof.22}%
+\contentsline {theorem}{{Theorem}{6.{12}}{Vertex vs edge violation}}{30}{theorem.6.12}%
+\contentsline {proof}{{Proof}{23}{Proof sketch of \protect \cref {thm: vertexvsedgeviolation}}}{30}{proof.23}%
+\contentsline {definition}{{Definition}{6.{13}}{Randomly planted \kcl }}{31}{theorem.6.13}%
+\contentsline {theorem}{{Theorem}{6.{14}}{Result for random planting, partial recovery}}{31}{theorem.6.14}%
+\contentsline {lemma}{{Lemma}{6.{15}}{colour class concentration in random planting}}{31}{theorem.6.15}%
+\contentsline {proof}{{Proof}{24}{}}{31}{proof.24}%
+\contentsline {lemma}{{Lemma}{6.{16}}{Model entry concentration in random planting}}{31}{theorem.6.16}%
+\contentsline {proof}{{Proof}{25}{}}{32}{proof.25}%
+\contentsline {lemma}{{Lemma}{6.{17}}{Variance of random planting}}{32}{theorem.6.17}%
+\contentsline {proof}{{Proof}{26}{}}{32}{proof.26}%
+\contentsline {lemma}{{Lemma}{6.{18}}{Threshold rank kept after planting}}{33}{theorem.6.18}%
+\contentsline {proof}{{Proof}{27}{}}{33}{proof.27}%
+\contentsline {proof}{{Proof}{28}{Proof of \protect \cref {thm: random-planting-partial}}}{34}{proof.28}%
+\contentsline {theorem}{{Theorem}{6.{19}}{Result for random planting, full recovery}}{35}{theorem.6.19}%
+\contentsline {lemma}{{Lemma}{6.{20}}{Edge density upper bound}}{35}{theorem.6.20}%
+\contentsline {lemma}{{Lemma}{6.{21}}{Vertex expansion lower bound}}{36}{theorem.6.21}%
+\contentsline {theorem}{{Theorem}{6.{22}}{Independent sets, small bottom rank}}{36}{theorem.6.22}%
+\contentsline {corollary}{{Corollary}{6.{23}}{Independent sets, small top rank}}{36}{theorem.6.23}%
+\contentsline {proof}{{Proof}{29}{}}{36}{proof.29}%
+\contentsline {lemma}{{Lemma}{6.{24}}{Closeness to bottom eigenvectors}}{36}{theorem.6.24}%
+\contentsline {proof}{{Proof}{30}{}}{37}{proof.30}%
+\contentsline {lemma}{{Lemma}{6.{25}}{Independent set rounding}}{37}{theorem.6.25}%
+\contentsline {proof}{{Proof}{31}{}}{37}{proof.31}%
+\contentsline {proof}{{Proof}{32}{Proof of~\protect \Cref {thm:independentsetrecovery}}}{37}{proof.32}%
+\contentsline {lemma}{{Lemma}{6.{26}}{Rounding an approximate independent set}}{38}{theorem.6.26}%
+\contentsline {proof}{{Proof}{33}{}}{38}{proof.33}%
+\contentsline {lemma}{{Lemma}{6.{27}}{Rounding an approximate $k$-colouring}}{38}{theorem.6.27}%
+\contentsline {proof}{{Proof}{34}{}}{38}{proof.34}%
+\contentsline {theorem}{{Theorem}{7.{1}}{Fine-grained hardness of models}}{39}{theorem.7.1}%
+\contentsline {corollary}{{Corollary}{7.{2}}{Hardness of models with repeated rows}}{40}{theorem.7.2}%
+\contentsline {corollary}{{Corollary}{7.{3}}{Hardness of unbalanced $3$-colouring}}{40}{theorem.7.3}%
+\contentsline {corollary}{{Corollary}{7.{4}}{Generalization of Proposition A.2 in \cite {bafna-hsieh-kothari}}}{40}{theorem.7.4}%
+\contentsline {theorem}{{Theorem}{7.{5}}{Hardness of balanced $3$-colouring with small $\lambda _3$}}{40}{theorem.7.5}%
+\contentsline {lemma}{{Lemma}{7.{6}}{Blow-up graphs are expanding}}{41}{theorem.7.6}%
+\contentsline {proof}{{Proof}{35}{}}{41}{proof.35}%
+\contentsline {proof}{{Proof}{36}{Proof of \protect \cref {thm: finegrainedrowshard}}}{42}{proof.36}%
+\contentsline {proof}{{Proof}{37}{Proof of \protect \cref {thm: unbalancedhard}}}{43}{proof.37}%
+\contentsline {proof}{{Proof}{38}{Proof of \protect \cref {thm: kgeq4hard}}}{43}{proof.38}%
+\contentsline {proof}{{Proof}{39}{Proof of \protect \cref {thm: lowtopthresholdrankhard}}}{44}{proof.39}%
+\contentsline {lemma}{{Lemma}{.{7}}{Generalized restatement of Lemma 6.1 in \cite {barak-raghavendra-steurer}}}{47}{theorem.Alph0.7}%
+\contentsline {proof}{{Proof}{40}{}}{47}{proof.40}%
+\contentsline {theorem}{{Theorem}{.{8}}{Result for random planting, partial recovery of a list}}{48}{theorem.Alph0.8}%
+\contentsline {proof}{{Proof}{41}{}}{48}{proof.41}%
+\contentsline {proof}{{Proof}{42}{Proof of \protect \cref {lemma: emlonesided}}}{48}{proof.42}%
+\contentsline {proof}{{Proof}{43}{Proof of \protect \cref {lemma: ssveonesided}}}{49}{proof.43}%
+\contentsline {definition}{{Definition}{.{9}}{Partial colouring}}{50}{theorem.Alph0.9}%
+\contentsline {lemma}{{Lemma}{.{10}}{Adaptation of Lemma B.20 of \cite {MR3536556-David16}}}{50}{theorem.Alph0.10}%
+\contentsline {definition}{{Definition}{.{11}}{}}{50}{theorem.Alph0.11}%
+\contentsline {lemma}{{Lemma}{.{12}}{Restatement of Lemma B.14 of \cite {MR3536556-David16}}}{50}{theorem.Alph0.12}%
+\contentsline {lemma}{{Lemma}{.{13}}{Adaptation of Lemma B.19 of \cite {MR3536556-David16}}}{50}{theorem.Alph0.13}%
+\contentsline {proof}{{Proof}{44}{}}{50}{proof.44}%
+\contentsline {proof}{{Proof}{45}{Proof of \protect \cref {lemma: approximatetopartial}}}{51}{proof.45}%
+\contentsline {lemma}{{Lemma}{.{14}}{Adaptation of Lemma B.21 of \cite {MR3536556-David16}}}{52}{theorem.Alph0.14}%
+\contentsline {proof}{{Proof}{46}{}}{52}{proof.46}%
+\contentsline {lemma}{{Lemma}{.{15}}{}}{52}{theorem.Alph0.15}%
+\contentsline {proof}{{Proof}{47}{}}{52}{proof.47}%
+\contentsline {proof}{{Proof}{48}{Proof of \protect \cref {thm: random-planting-full}}}{53}{proof.48}%

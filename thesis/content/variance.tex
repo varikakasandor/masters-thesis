@@ -1,0 +1,76 @@
+\section{Variance of colourings in expander graphs}\label{sec: 3colouring}
+
+In this section we prove a structural result for colourable expander graphs concerning the variance of the connections between any two colour classes.
+This result is essential to our proof of \Cref{thm:kalg-partial}.
+
+\begin{lemma}[Variance of $k$-colourings in expanders]
+\label[lemma]{lemma: expansionimpliesvariance}
+Let $G$ be an $n$-vertex $d$-regular graph with adjacency matrix $A$, and let $\tilde{A} = \frac{1}{d}A$.
+Let $\lambda_2$ be the second largest eigenvalue of $\tilde{A}$.
+Let $\chi: [n] \to [k]$ be a $k$-partition of its vertices with $\min_{a \in [k]} |\chi^{-1}(a)| \geq c n$.
+Suppose that $G$ has at most $\delta d n$ edges with both endpoints in the same part with respect to $\chi$.
+For $x \in [n]$ and $a \in [k]$, let $\D{x}{a} = \sum_{y \in \chi^{-1}(a)} \tilde{A}_{xy}$.
+Then, for any $a, b \in [k]$ and $\bm{x}$ uniformly random in $\chi^{-1}(a)$,
+\[\E_{\bm{x} \sim \chi^{-1}(a)} \Paren{\D{\bm{x}}{b} - \E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b}}^2 \leq O\Paren{\frac{\lambda_2}{c} + \frac{\delta}{\lambda_2 c }}\,.\]
+\end{lemma}
+\begin{proof}
+    Fix some $a, b \in [k]$.
+    For simplicity, we denote $\sigma^2 = \E_{\bm{x} \sim \chi^{-1}(a)} \Paren{\D{\bm{x}}{b}-\E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b}}^2$.
+
+    If $a = b$, we have 
+    \begin{align*}
+        \sigma^2
+        \leq \E_{\bm{x} \sim \chi^{-1}(a)} \Paren{\D{\bm{x}}{a}}^2
+        \leq \E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{a}
+        \leq \frac{2 \delta n}{|\chi^{-1}(a)|}
+        \leq \frac{2\delta}{c}\,.
+    \end{align*}
+
+    We focus now on the case $a \neq b$.
+    By regularity, $\lambda_1=1$ corresponds to eigenvector $\1$.
+    Let $\beta \in [0, 1]$ be some parameter to be chosen later.
+    We define $v \in \R^n$ as follows:
+    \begin{itemize}
+        \item $v_x:=\frac{1}{\sqrt{|\chi^{-1}(a)|}}\Paren{\D{x}{b}-\E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b}}$ for $x\in \chi^{-1}(a)$\,,
+        \item $v_x:=\frac{1}{\sqrt{|\chi^{-1}(a)|}}\beta$ for $x\in \chi^{-1}(b)$\,,
+        \item $v_x:=0$ otherwise\,.
+    \end{itemize}
+
+    Let us calculate $v^\top \tilde{A}v$.
+    Let $\tilde{A}_{(a)} \in \R^{|\chi^{-1}(a)| \times |\chi^{-1}(a)|}$ be the restriction of $\tilde{A}$ to rows and columns in $\chi^{-1}(a)$, and let $v_{(a)} \in \R^{|\chi^{-1}(a)|}$ be the restriction of $v$ to entries in $\chi^{-1}(a)$.
+    Then
+    \begin{align}
+    \begin{split}
+    \label{eq:3_col_num}
+    v^\top \tilde{A}v
+        &= v_{(a)}^\top \tilde{A}_{(a)} v_{(a)} + v_{(b)}^\top \tilde{A}_{(b)} v_{(b)} + 2 \beta \frac{1}{|\chi^{-1}(a)|} \sum_{x \in \chi^{-1}(a)} \sum_{\substack{y \in \chi^{-1}(b)\\y \sim x}} \Paren{\D{x}{b}-\E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b}}\\
+        &= v_{(a)}^\top \tilde{A}_{(a)} v_{(a)} + v_{(b)}^\top \tilde{A}_{(b)} v_{(b)} + 2 \beta \E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b} \Paren{\D{\bm{x}}{b}-\E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b}}\,.
+    \end{split}
+    \end{align}
+
+    For the first two terms, we have 
+    \[v_{(a)}^\top \tilde{A}_{(a)} v_{(a)} \geq - \Paren{\sum_{x, y \in \chi^{-1}(a)} \tilde{A}_{xy}} \cdot \Norm{v_{(a)}}^2_\infty \geq - \frac{2\delta n}{|\chi^{-1}(a)|} \geq - \frac{2\delta}{c}\]
+    and 
+    \[v_{(b)}^\top \tilde{A}_{(b)} v_{(b)} \geq - \Paren{\sum_{x, y \in \chi^{-1}(b)} \tilde{A}_{xy}} \cdot \Norm{v_{(b)}}^2_\infty \geq - \frac{2\delta n}{|\chi^{-1}(a)|} \geq - \frac{2\delta}{c}\,.\]
+
+    For the cross-term, we use that
+    \begin{align*}
+    &2 \beta \E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b} \Paren{\D{\bm{x}}{b}-\E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b}}\\
+    &= 2 \beta \E_{\bm{x} \sim \chi^{-1}(a)} \Paren{\D{\bm{x}}{b}-\E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b}}^2 + 2 \beta \E_{\bm{x} \sim \chi^{-1}(a)} \Paren{\E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b}} \Paren{\D{\bm{x}}{b}-\E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b}}\\
+    &= 2 \beta \E_{\bm{x} \sim \chi^{-1}(a)} \Paren{\D{\bm{x}}{b}-\E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b}}^2\\
+    &= 2\beta \sigma^2\,.
+    \end{align*}
+    Then, plugging these bounds back into \cref{eq:3_col_num}, we get 
+    \begin{align*}
+    v^\top \tilde{A}v
+    \geq 2 \beta \sigma^2 - 4 \delta/c\,.
+    \end{align*}
+    We also note that $\norm{v}^2 = \sigma^2 + \frac{|\chi^{-1}(b)|}{|\chi^{-1}(a)|} \beta^2 \leq \sigma^2 + \beta^2/c$ and $\langle v, \frac{\1}{\sqrt{n}}\rangle^2 = \frac{|\chi^{-1}(b)|^2}{|\chi^{-1}(a)| n}\beta^2 \leq \beta^2 / c$, so
+    \[v^\top \tilde{A} v \leq \frac{1}{n} \langle v, \1\rangle^2 + \lambda_2 \Paren{\norm{v}^2 - \frac{1}{n} \langle v, \1\rangle^2} \leq \lambda_2 \sigma^2 + \beta^2/c\,.\]
+    Putting everything together,
+    \begin{align*}
+        2 \beta \sigma^2 - 4 \delta/c \leq v^\top \tilde{A} v \leq \lambda_2 \sigma^2 + \beta^2/c\,,
+    \end{align*}
+    and taking $\beta=\lambda_2$ we get
+    \[\sigma^2 \leq \lambda_2/c + \frac{4\delta }{\lambda_2c} \leq O\Paren{\frac{\lambda_2}{c} + \frac{\delta}{\lambda_2 c }}\,.\]
+\end{proof}

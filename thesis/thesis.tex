@@ -1,0 +1,108 @@
+% (Master) Thesis template adapted for your paper
+\documentclass[11pt,a4paper,oneside]{memoir}
+
+%% Font encoding, language, input encoding
+\usepackage[OT1]{fontenc}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+%% Palatino
+\usepackage[sc]{mathpazo}
+
+%% TikZ, AMS, theorems, graphics, hyperlinks
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta}
+\usepackage{amsmath,amssymb,amsfonts,mathrsfs}
+\usepackage[amsmath,thmmarks]{ntheorem}
+\usepackage{graphicx}
+\usepackage{soul}
+\usepackage{pdfpages}
+\usepackage[sort&compress,round]{natbib}
+
+\input{extrapackages}     % your extra packages
+\input{layoutsetup}
+\input{theoremsetup}
+\input{macrosetup}
+\usepackage[linkcolor=black,colorlinks=true,citecolor=black]{hyperref}
+\usepackage{cleveref}
+% cleveref names (copy from thesis template)
+\crefname{theorem}{theorem}{theorems}
+\Crefname{theorem}{Theorem}{Theorems}
+% …and so on for lemma, corollary, etc.
+
+%% restating macros
+\usepackage{thmtools}
+\usepackage{thm-restate}
+
+%% pseudocode
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+
+%% student‐writing switch
+\newif\ifstudentwriting
+\studentwritingtrue   % flip to true once you start writing
+
+%% Document info — fill in:
+\title{Your Thesis Title}
+\author{Andor Vári-Kakas}
+\thesistype{Master Thesis}
+\advisors{Advisors: Prof.\ Dr.\ A. D. Visor, Dr.\ P. Ostdoc}
+\department{Department of Computer Science}
+\date{July 25, 2025}
+
+\begin{document}
+\frontmatter
+  \begin{titlingpage}
+    \calccentering{\unitlength}
+    \begin{adjustwidth*}{\unitlength-24pt}{-\unitlength-24pt}
+      \maketitle
+    \end{adjustwidth*}
+  \end{titlingpage}
+
+  \chapter*{Acknowledgments}
+  \input{acknowledgments.tex}
+
+  \ifstudentwriting
+    \input{student_abstract.tex}
+  \else
+    \input{abstract.tex}
+  \fi
+
+  \cleartorecto
+  \tableofcontents
+\mainmatter
+
+%% Now pull in your paper’s sections as thesis chapters
+\chapter{Introduction}
+\input{content/intro}
+
+\chapter{Notation and Preliminaries}
+\input{content/notations}
+
+\chapter{Spectral Result}
+\input{content/spectral_result}
+
+\chapter{\(k\)-Partitioning}
+\input{content/k_partitioning}
+
+\chapter{Variance Analysis}
+\input{content/variance}
+
+\chapter{Algorithms}
+\input{content/algorithms}
+
+\chapter{Hardness}
+\input{content/hardness}
+
+\backmatter
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\appendix
+\input{content/threshold_rank}
+\input{content/random_planting}
+
+%% declaration of originality
+\includepdf[pages={-}]{declaration-originality.pdf}
+\end{document}

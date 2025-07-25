@@ -1,0 +1,213 @@
+\section{Hardness results}
+
+In this section, we give various hardness results against algorithms that are given as input \emph{almost-colourable} graphs.
+As in~\cite{bafna-hsieh-kothari}, our hardness reductions proceed from the following hardness result for approximating independent sets by Bansal and Khot~\cite{MR2648426-Bansal09}:
+
+\begin{fact}[Hardness of approximating independent sets~\cite{MR2648426-Bansal09}]
+    \label[fact]{thm:propA1}
+Let $\e, \gamma > 0$ be any small enough constants.
+Assuming the Unique Games Conjectures, given an $n$-vertex graph with maximum degree $o(n)$, it is NP-hard to decide between
+\begin{itemize}
+    \item the graph contains two disjoint independent sets of size $\Paren{\frac{1}{2}-\e}n$,
+    \item the graph contains no independent set of size $\gamma n$.
+\end{itemize}
+\end{fact}
+
+\cite{bafna-hsieh-kothari} use~\Cref{thm:propA1} to show that it is hard to find an independent set of size $\gamma n$ in a regular one-sided expander graph that admits a $(4, \e)$-colouring.
+
+Our main hardness result concerns graphs colourable according to model matrices with repeated rows (see \cref{def:model-colouring}).
+In particular, we prove that under the Unique Games Conjecture it is hard to colour all but a small fraction of the vertices of one-sided expander graphs corresponding to models with repeated rows.
+Our hardness result is in fact more fine-grained and matches the algorithmic result in \cref{thm:kalg-partial}.
+
+\begin{theorem}[Fine-grained hardness of models]
+    \label{thm: finegrainedrowshard}
+    Let $M \in \R_{\geq 0}^{k \times k}$ be a reversible row stochastic matrix with zero on the diagonal and non-positive second eigenvalue.
+    Let $S_1, \ldots, S_{k'}$ be the partition of $[k]$ such that, for all $a, b \in S_i$ the rows $M^{(a)}$ and $M^{(b)}$ of $M$ are equal, and for all $a \in S_i, b \in S_j$ with $i \neq j$ the rows $M^{(a)}$ and $M^{(b)}$ of $M$ are distinct.
+    For all $i \in [k']$, let $a_i^* = \argmax_{a \in S_i} \pi_a$, and let $p_i = \max\Paren{0, \pi_{a_i^{*}} - \sum_{\substack{a \neq a_i^{*} \in S_i}} \pi_a}$.
+    Then, assuming the Unique Games Conjecture, the following problem is NP-hard for all $\e, \gamma, \lambda > 0$ small enough:
+    Given a regular $\lambda$-one-sided expander graph $G$ that admits an $(M, \e)$-colouring, find a $(k, 1 - \sum_{i \in [k']} p_i - \gamma)$-colouring.
+  \end{theorem}
+
+As an immediate corollary, we obtain the following hardness result for colouring all but a small fraction of the vertices of one-sided expander graphs corresponding to models with repeated rows:
+
+\begin{corollary}[Hardness of models with repeated rows]
+  \label[corollary]{thm: identicalrowshard}
+  Let $M \in \R_{\geq 0}^{k \times k}$ be a reversible row stochastic matrix with zero on the diagonal and non-positive second eigenvalue, and let $\pi$ be its stationary distribution.
+  Suppose \(M\) has repeated rows. % without loss of generality that its first two rows are equal: $M^{(1)}=M^{(2)}$.
+  Then, assuming the Unique Games Conjecture, there exists $\delta > 0$ such that the following problem is NP-hard, for all $\e, \lambda > 0$:
+  Given a regular $\lambda$-one-sided expander graph $G$ that admits an $(M, \e)$-colouring, find a $(k, \delta)$-colouring.
+\end{corollary}
+
+We deduce two more corollaries of \cref{thm: finegrainedrowshard}. First, assuming the UGC, given an almost-$3$-colourable graph, it is NP-hard to find a proper colouring on most of its vertices.
+Hence, the dependence of \cref{thm:3alg} on an upper bound on the colour class sizes is necessary.
+Technically, this result is captured by \cref{thm: finegrainedrowshard} by noticing that, without an upper bound on the colour class sizes, two rows of the corresponding model matrix can be identical.
+
+\begin{corollary}[Hardness of unbalanced $3$-colouring]
+\label[corollary]{thm: unbalancedhard}
+    Let $\e, \gamma > 0$ be any small enough constants.
+    Assuming the Unique Games Conjectures, given an $n$-vertex regular graph with $\lambda_2=o(1)$ that admits a $(3, \e)$-colouring, it is NP-hard to find a $(3, 1/2-\gamma)$-colouring.
+\end{corollary}
+
+The second corollary of \cref{thm: finegrainedrowshard} is a generalization of Proposition A.2 in \cite{bafna-hsieh-kothari} to any composite $k$. We show that, given an almost-$k$-colourable graph with identical colour class sizes, assuming the UGC, it is NP-hard to find a linear-sized independent set in the graph.\footnote{It is easy to extend the lower bound to all $k \geq 4$ (not only composite $k$) if, instead of requiring the colour class sizes to be identical, we merely require them to be lower bounded by $\Omega(1/k)$.}
+
+\begin{corollary}[Generalization of Proposition A.2 in \cite{bafna-hsieh-kothari}]\label[corollary]{thm: kgeq4hard}
+    Let $\e, \gamma > 0$ be any small enough constants and let $k$ be composite.
+    Assuming the Unique Games Conjecture, given an $n$-vertex regular graph with $\lambda_2=o(1)$ that admits a $(k,\e)$-colouring with identical colour class sizes, it is NP-hard to find a $(k, 1-\gamma)$-colouring.
+\end{corollary}
+
+
+In our final hardness result, we prove that if we only assume small $\lambda_3$, as opposed to small $\lambda_2$, then assuming the UGC, given an almost-$3$-colourable one-sided expander graph with identical colour class sizes, it is NP-hard to find a proper colouring on most of the vertices.
+
+\begin{theorem}[Hardness of balanced $3$-colouring with small $\lambda_3$]
+\label{thm: lowtopthresholdrankhard}
+    Let $\e, \gamma > 0$ be any small enough constants.
+    Assuming the Unique Games Conjectures, given an $n$-vertex regular graph with $\lambda_3=o(1)$ that admits a $(3, \e)$-colouring with identical colour class sizes, it is NP-hard to find a $(3, 2/9-\gamma)$-colouring.
+\end{theorem}
+
+We now turn to the proofs of our hardness results. To prove \cref{thm: finegrainedrowshard}, we first give a helper lemma showing that suitable blow-up graphs are expanding.
+
+\begin{lemma}[Blow-up graphs are expanding]\label[lemma]{lem: blowupexpanding}
+   Let $M \in \R_{\geq 0}^{k \times k}$ be a reversible row stochastic matrix with zero on the diagonal and non-positive second eigenvalue.
+    Let $G$ be an $n$-vertex $d$-regular graph with adjacency matrix $A$, and let $\tilde{A} = \frac{1}{d} A$. 
+    Suppose there exists a $k$-partition $\chi: [n] \to [k]$ such that $\Norm{M-M(\tilde{A},\chi)}=o(1)$.
+    For $x \in [n]$ and $a \in [k]$, let $\D{x}{a} = \sum_{y \in \chi^{-1}(a)} \tilde{A}_{xy}$.
+    For $a \neq b \in [k]$, let $G^{(ab)}$ be the bipartite graph induced between the vertices in $\chi^{-1}(a)$ and the vertices in $\chi^{-1}(b)$, and for $a \in [k]$ let $G^{(aa)}$ be the graph induced by the vertices in $\chi^{-1}(a)$.
+    Suppose
+    \begin{itemize}
+        \item for all $a \in [k]$: $|\chi^{-1}(a)| \geq \Omega(n)$,
+        \item for all $a, b \in [k]$: either $\lambda_1\Paren{\frac{1}{d}A_{G^{(ab)}}} = o(1)$, or $G^{(ab)}$ is biregular and $\lambda_2\Paren{\frac{1}{d}A_{G^{(ab)}}} = o(1)$.
+    \end{itemize}
+    Then $\lambda_2(\tilde{A})=o(1)$.
+\end{lemma}
+
+\begin{proof}
+    For any $a,b\in[k]$, let $E^{(ab)}$ be the $n\times n$ matrix with entries $E^{(ab)}_{xy}=\tilde{A}_{xy}-\frac{M(\tilde{A},\chi)_{\chi(x)\chi(y)}}{\Abs{\chi^{-1}(\chi(y))}}$ for $\Set{\chi(x), \chi(y)}=\Set{a, b}$ and $E^{(ab)}_{xy}=0$ otherwise.
+    Using the definitions of the partition and model matrices in \cref{def:partition_Z} and \cref{def:model}, we decompose $\tilde{A}$ as
+    $$\tilde{A}=ZMB^{-1}Z^T+Z\Paren{M(\tilde{A},\chi)-M}B^{-1}Z^T+\sum_{1\leq a\leq b\leq k} E^{(ab)}\,.$$
+
+    Then we argue about each term separately:
+    \begin{itemize}
+        \item the non-zero eigenvalues of $M$ and $ZMB^{-1}Z^T$ are the same (see the proof of \cref{thm:part-recovery}), so because $\lambda_2(M)\leq 0$ we also have $\lambda_2(ZMB^{-1}Z^T)\leq 0$,
+        \item because $\Norm{M-M(\tilde{A},\chi)}=o(1)$ and $\Norm{Z}^2=\Norm{B}$ we have
+    $$\Norm{Z\Paren{M(\tilde{A},\chi)-M}B^{-1}Z^T}\leq \Norm{Z}\Norm{M(\tilde{A},\chi)-M}\Norm{B^{-1}}\Norm{Z^T}=\frac{\max_{a\in[k]}\Abs{\chi^{-1}(a)}}{\min_{a\in[k]}\Abs{\chi^{-1}(a)}}\ o(1)=o(1)\,,$$
+        \item if for some $1\leq a \leq b\leq k$ we have $\lambda_1\Paren{\frac{1}{d}A_{G^{(ab)}}} = o(1)$, then as $E^{(ab)}$ is obtained from $\frac{1}{d}A_{G^{(ab)}}$ by row-centering (which is an orthogonal projection) and padding with $0$s, we also get $\lambda_1(E^{(ab)})=o(1)$,
+        \item if for some $1\leq a \leq b\leq k$ we have that $G^{(ab)}$ is biregular and $\lambda_2\Paren{\frac{1}{d}A_{G^{(ab)}}} = o(1)$, then row-centering sends the leading eigenvalue pair to $0$ while the others remain unchanged, so the spectrum of $E^{(ab)}$ is $\Set{0, 0}\cup \lambda_{\btw{2}{\Paren{\chi^{-1}(a)+\chi^{-1}(b)-1}}}\Paren{\frac{1}{d}A_{G^{(ab)}}}$, implying $\lambda_1(E^{(ab)})=o(1)$.
+    \end{itemize}
+    Hence, as all terms are symmetric, we can use Weyl's inequality to get $\lambda_2(\tilde{A})=o(1)$, as desired.
+\end{proof}
+
+We now prove \cref{thm: finegrainedrowshard}.
+
+\begin{proof}[Proof of \cref{thm: finegrainedrowshard}]
+    For the sake of contradiction, suppose an algorithm $\ALG$ solves the problem above efficiently and returns a $(k, 1 - \sum_{i \in [k']} p_i - \gamma)$-colouring.
+    Let $r_1, \ldots, r_k$ be even integers bounded by $O_{M, \e, \gamma}(1)$\footnote{By \cref{lemma:model-colour-size} we have $\pi_i=\Theta(1)$ for all $i\in[k]$.} such that $\Norm{\hat{\pi} - \pi}_{\infty}\leq \min\Paren{\frac{\gamma}{2k}, \frac{\e}{2}\min_{i\in [k]}\pi_i}$ and $\argmax_{a \in S_i} \pi_a=\argmax_{a \in S_i} \hat{\pi}_a$ for all $i\in[k']$, where $\hat{\pi}_i:=\frac{r_i}{\sum_{i\in[k]} r_i}$.
+    Let $\widehat{M}$ be the $k\times k$ matrix defined by $\widehat{M}_{ij}=\frac{\hat{\pi}_j}{\pi_j}M_{ij}$, satisfying $\hat{\pi}_i\widehat{M}_{ij}=\hat{\pi}_j\widehat{M}_{ji}$.
+    Finally, let \( f : [k'] \to [k] \) be a choice function selecting an element from each set \( S_i \), i.e., \( f(i) \in S_i \) for all \( i \in [k'] \).
+    
+    Then, we show that the following derived algorithm solves the problem in \cref{thm:propA1}:
+
+    \begin{algorithm}[H]
+        \caption{Fine-grained model hardness algorithm}
+        \label{alg: finegrainedrowshard}
+        \DontPrintSemicolon
+        \textbf{Input:} A $2n$-vertex graph $G$ with maximum degree $d_{\max} = o(n)$ from \cref{thm:propA1} with parameters $\e/2$ and $\frac{\gamma}{2k}$\;
+        For each $i \in [k']$ construct a graph $G_i$ as follows:\;
+        \quad If $r_{a_i^*} \leq \sum_{\substack{a \neq a_i^{*} \in S_i}} r_a$, let $G_i$ have $\frac{1}{2} \sum_{a \in S_i} r_a$ disjoint copies of $G$\;
+        \quad Else, let $G_i$ have $\sum_{a \neq a_i^* \in S_i} r_a$ disjoint copies of $G$ and let it also have $\Paren{r_{a_i^*} - \sum_{a \neq a_i^* \in S_i} r_a}n$ other isolated vertices\;
+        For each $1\leq i<j\leq k'$ add a random $(\widehat{M}_{f(i)f(j)}n, \widehat{M}_{f(j)f(i)}n)$-biregular Ramanujan graph $G_{ij}$ between $V(G_i)$ and $V(G_j)$\;
+        Decide based on whether running $\ALG$ on the final graph $G^*=\Paren{\bigcup_{i=1}^{k'} G_i} \cup \Paren{\bigcup_{1 \leq i < j \leq k'} G_{ij}}$ returns a $(k, 1 - \sum_{i \in [k']} p_i - \gamma)$-colouring\;
+    \end{algorithm}
+
+    Note that by an edge removal step analogous to that in \cref{alg: lowtopthresholdrankhard}, $G^*$ can be made $\Theta(d)$-regular.
+
+    Suppose $G$ has two disjoint independent sets of size $(1-\e/2)n$ each. Then, by construction $G^*$ admits a $(k, \e)$-colouring $\chi$ such that $\Abs{\chi^{-1}(a)}=\hat{\pi}_a \Abs{V(G^*)}$ for all $a\in[k]$. Indeed, if for some $i\in[k']$ we have $r_{a_i^*} \leq \sum_{\substack{a \neq a_i^{*} \in S_i}} r_a$, then the corresponding colour classes can be mapped to independent sets in copies of $G$ such that the two independent sets within any copy of $G$ get a different colour. If $r_{a_i^*} > \sum_{\substack{a \neq a_i^{*} \in S_i}} r_a$, the same holds after mapping the isolated vertices to the colour class corresponding to $a_i^*$.
+    
+    Let $\tilde{A}^*$ be the normalized adjacency matrix of $G^*$. Let us show that $\Norm{M(\tilde{A}^*, \allowbreak\chi)-M}_{\max}\leq \e$. Let $x\in S_i$ and $y\in S_j$ be arbitrary such that $f(i)=a$ and $f(j)=b$. By the expander mixing lemma,  we have $M(\tilde{A}^*, \chi)_{xy}=\widehat{M}_{ab}\pm o(1)$. On the other hand, using $\Norm{\hat{\pi} - \pi}_{\infty}\leq \frac{\e}{2} \min_{i\in [k]}\pi_i$ it follows that $\Abs{\widehat{M}_{ab}-M_{ab}}=\Abs{\frac{\hat{\pi}_b}{\pi_b}M_{ab} - M_{ab}}\leq \frac{\e}{2} M_{ab}\leq \e/2$. Combining the two by triangle inequality and using $M_{xy}=M_{ab}$ we get $\Abs{M(\tilde{A}^*, \chi)_{xy}-M_{xy}}\leq \e$ as desired.
+
+    Hence, in this case $G^*$ would admit an $(M, \e)$-colouring. Furthermore, as the maximum degree within each $G_{S_j}$ is $o(d)$ and the subgraphs between the $G_{S_j}$s are biregular Ramanujan, we can apply \cref{lem: blowupexpanding} to get $\lambda_2(G^*)=o(1)$. Overall we can conclude that the preconditions of $\ALG$ would be satisfied, and by assumption it would return a $(k, 1 - \sum_{i \in [k']} p_i - \gamma)$-colouring of $G^*$.
+
+    Now for the contrary, assume a $(k, 1 - \sum_{i \in [k']} p_i - \gamma)$-colouring of $G^*$. For $j\in[k']$, let
+    
+    $$q_j:=\max\Paren{0, r_{a_i^*} - \sum_{\substack{a \neq a_i^{*} \in S_j}} r_a}=\max\Paren{0, \hat{\pi}_{a_i^*} - \sum_{\substack{a \neq a_i^{*} \in S_j}} \hat{\pi}_a} \sum_{i\in[k]} r_i\,.$$
+    
+    Note that there are $\frac{\Paren{\sum_{i\in[k]} r_i-\sum_{j\in[k']} q_j}}{2}$ copies of $G$ each of size $2n$. Then, by the pigeonhole principle over the copies of $G$ and the colours, using $\Norm{\hat{\pi} - \pi}_{\infty}\leq \gamma/2k$, there must be an independent set of size at least 
+    
+    \begin{align*}
+        &\frac1{k\frac{\Paren{\sum_{i\in[k]} r_i-\sum_{j\in[k']} q_j}}{2}}\Paren{\sum_{i\in[k]} r_i-\sum_{j\in[k']} q_j-\Paren{1-\sum_{j\in[k']} p_j-\gamma}\sum_{i\in[k]} r_i}n\\
+        &= \frac{2n\sum_{i\in[k]} r_i}{k\Paren{\sum_{i\in[k]} r_i-\sum_{j\in[k']} q_j}}\Paren{\gamma-\sum_{j\in[k']} \Paren{\max\Paren{0, \hat{\pi}_{a_j^*} - \sum_{\substack{a \neq a_j^{*} \in S_j}} \hat{\pi}_a}-\max\Paren{0, \pi_{a_j^{*}} - \sum_{\substack{a \neq a_j^{*} \in S_j}} \pi_a}}}\\
+        &\geq  \frac{2n}{k}\Paren{\gamma-k\frac{\gamma}{2k}}\\
+        &=\frac{\gamma}{2k} \Abs{V(G)}
+    \end{align*}
+    in one of the copies of $G$, finishing the proof.
+\end{proof}
+
+We now provide proofs for the two corollaries of \cref{thm: finegrainedrowshard}.
+
+\begin{proof}[Proof of \cref{thm: unbalancedhard}]
+    Using \cref{lemma: 3colouringfixedaveragedegree}, consider the unique model $M$ corresponding to a stationary distribution with $\pi_1 = 1/2$, $\pi_2 = 1/4$, and $\pi_3=1/4$. The spectrum of $M$ is $\Set{1, 0, -1}$, so it has non-positive second eigenvalue. Noting that $\pi_2=\pi_3$ and that the rows of $M$ corresponding to $\pi_2$ and $\pi_3$ are identical.
+
+    Therefore, it follows from \cref{thm: finegrainedrowshard} that it is NP-hard under the UGC to find a $(3, 1/2-\gamma)$-colouring of $\lambda$-one-sided expander graphs that admit an $(M, \epsilon)$-colouring.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm: kgeq4hard}]
+    As $k$ is composite, it can be written as $k=k'\cdot q$ for some integers $k', q\geq 2$. Let $S_1, \ldots, S_{k'}$ be a partition of $[k]$ into groups of size $q$ each.
+    Let $f: [k] \to [k']$ map each $i \in [k]$ to $x \in [k']$ such that $i \in S_x$.
+    Let us define the model matrix $M \in \R^{k \times k}$ with zero on the diagonal and with entries
+    
+    \[
+    M_{ij}=
+    \begin{cases}
+    \dfrac1{k-q}, & i\in S_{f(i)},\;j\notin S_{f(i)},\\[4pt]
+    0,                                           & \text{otherwise},
+    \end{cases}
+    \]
+    
+    for $i \neq j \in [k]$. It is easy to verify that $M$ is row stochastic and reversible with stationary distribution $\pi = \frac1{k}\1\in \R^k$. The spectrum of $M$ is $\Set{1,\;0\ (\text{mult.\ }k-k'),\,-\tfrac1{k'-1}\ (\text{mult.\ }k'-1)}$ so it has non-positive second eigenvalue. By construction, for each $x \in [k']$, for all $i, j \in S_x$ the rows $M^{(i)}$ and $M^{(j)}$ of $M$ are equal, and for all $i \in S_x, j \notin S_x$ the rows $M^{(i)}$ and $M^{(j)}$ of $M$ are distinct.
+
+    For all $x \in [k']$, let $a_x^* := \argmax_{a \in S_x} \pi_a$, and let $p_x := \max\Paren{0, \pi_{a_x^{*}} - \sum_{\substack{a \neq a_x^{*} \in S_x}} \pi_a}$. For all $x\in [k']$, using $q\geq 2$ we have $\Abs{S_x}\geq 2$, so $p_x=0$. 
+
+    Therefore, as $1-\sum_{x\in [k']} p_x-\gamma=1-\gamma$, it follows from \cref{thm: finegrainedrowshard} that it is NP-hard under the UGC to find a $(k, 1-\gamma)$-colouring of $\lambda$-one-sided expander graphs that admit an $(M, \epsilon)$-colouring.
+\end{proof}
+
+We finish this section with the proof of \cref{thm: lowtopthresholdrankhard}.
+
+\begin{proof}[Proof of \cref{thm: lowtopthresholdrankhard}]
+    For the sake of contradiction, suppose an algorithm $\ALG$ solves the problem above efficiently.
+    Then, we show that the following derived algorithm solves the problem in \cref{thm:propA1}:
+
+    \begin{algorithm}[H]
+        \caption{Low top-threshold rank hardness algorithm}
+        \label{alg: lowtopthresholdrankhard}
+        \DontPrintSemicolon
+        \textbf{Input:} The $n$-vertex graph $G$ with average degree $d_{\avg} = o(n)$ and maximum degree $d_{\max} = o(n)$ from \cref{thm:propA1} with parameters $\e, \frac{3}{2}\gamma$\;
+        Insert into the graph $\frac{n+\sqrt{n(n-4d_{\avg})}}{2}$ new vertices and denote their set by $S$\;
+        Add edges $H$ between $V(G)$ and $S$ to form a complete bipartite graph\;
+        Let $H'$ be a bipartite graph between $V(G)$ and $S$ with degrees $d_G(x)$ for $x\in V(G)$ and $\frac{nd_{\avg}}{\Abs{S}}$ for $y\in S$\;
+        Remove $H'$ from $H$ to obtain a graph $G'$\;
+        Let $G''$ be a new $\Abs{S}$-regular tripartite graph with $\lambda_2(A_{G''})=o(\Abs{S})$ and sides of size $\Abs{S}, \Abs{S}, \Paren{\frac{1}{2} - \e}n\;$\footnotemark{}\;
+        Decide based on whether running $\ALG$ on the final graph $G^* = G' \cup G''$ returns a $\Paren{3, \frac{2}{9}-\gamma}$-colouring of $G^*$\;
+    \end{algorithm}
+    \footnotetext{Using \cref{lem: blowupexpanding} and $\Abs{S}\geq n/4$, such a graph exists based on the model matrix \(\left(\begin{smallmatrix}
+0 & \Abs{S} - (1/4-\e/2)n & (1/4-\e/2)n \\
+\Abs{S} - (1/4-\e/2)n & 0 & (1/4-\e/2)n \\
+å\Abs{S}/2 & \Abs{S}/2 & 0
+\end{smallmatrix}\right)\) with a non-positive second eigenvalue.}
+
+    Let us first show that $G^*$ is $\Abs{S}$-regular. Note that the degrees of $x\in V(G)$ coming from $G$ are offset by the removal of $H'$, so they will exactly have degree $\Abs{S}$ coming from $H$. For a vertex $y\in S$, the degree coming from $H$ is $n$, and the degree removed by $H'$ is $\frac{nd_{\avg}}{\Abs{S}}$, so the degree of $y$ in $G^*$ is also
+        
+    $$n-\frac{nd_{\avg}}{\Abs{S}}=n-\frac{nd_{\avg}}{\frac{n+\sqrt{n(n-4d_{\avg})}}{2}}=\frac{n+\sqrt{n(n-4d_{\avg})}}{2}=\Abs{S}\,.$$
+
+
+    Decomposing $A_{G'}=A_G+A_H-A_{H'}$ and using that $\lambda_2(A_H) = 0$ and that $G$ and $H'$ both have maximum degree at most $d_{\max} = o(n)$, we get by  Weyl's inequality that
+    \[\lambda_2(A_{G'}) \leq \lambda_1(A_G)+\lambda_2(A_H)-\lambda_n(A_{H'}) = o(n)\,.\]
+    Using $d_{\avg}=o(n)$ we have $|S| = \Omega(n)$, so $\lambda_2(A_{G'}) = o(|S|)$. Then, decomposing $A_{G^*}=A_{G'}+A_{G''}$ and using that $\lambda_2(A_{G''})=o(|S|)$ by construction, we finally get by Weyl's inequality that
+    \[\lambda_3(A_{G^*}) \leq \lambda_2(A_{G'})+\lambda_2(A_{G''}) =o(|S|)\,.\]
+
+    If $G$ has two disjoint independent sets of size $\Paren{\frac{1}{2}-\e}n$, then $G^*$ admits a \tcl with identical colour class sizes on all but $2\e n \leq \e |V(G^*)|$ vertices.
+    Hence, using the $|S|$-regularity of both $G'$ and $G''$ and that $\lambda_3(G^*)=o(1)$, $\ALG$ returns a $\Paren{3, \frac{2}{9}-\gamma}$-colouring of $G^*$.
+
+    However, we show that if $G^*$ admits a $\Paren{3, \frac{2}{9}-\gamma}$-colouring of $G^*$, then $G$ has an independent set of size $\frac{3}{2}\gamma n$, and $\ALG$ is a distinguisher.
+    Indeed, note that a $\Paren{3, \frac{2}{9}-\gamma}$-colouring of $G^*$ implies an independent set in $G$ of size at least
+    $$\frac{1}{3}\Bigg(\Paren{\frac{7}{9}+\gamma}\Abs{V(G^*)}-\Paren{\Abs{S}+|V(G'')|}\Bigg)\,,$$
+    which after plugging in the size of the components, and using that $\Abs{S}\leq n$, is lower bounded by $\frac{3}{2} \gamma n$.
+\end{proof}

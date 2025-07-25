@@ -1,15 +1,17 @@
 \section{Recovering partitions}
 \label{sec:k-partitioning}
 
-Our main meta-theorem for recovering partitions is the following.
+In this section we state and prove our meta-theorem for recovering partitions.
+The result in this section is written in a very general form, to make clear what properties we exploit in the proof.
+Then, in \Cref{sec:algorithms}, we apply this meta-theorem to our settings of interest and obtain our algorithmic results.
 
 \begin{theorem}[Result for recovering partitions]
 \label{thm:part-recovery}
-Let $\chi: [n] \to [k]$ be a $k$-coloring of $[n]$, and consider its partition matrices $Z \in \{0,1\}^{n \times k}$ and $B \in \R^{k \times k}$ as per \cref{def:partition_Z}.
+Let $\chi: [n] \to [k]$ be a $k$-partition of $[n]$, and consider its partition matrices $Z \in \{0,1\}^{n \times k}$ and $B \in \R^{k \times k}$ as per \cref{def:partition_Z}.
 Suppose $|\chi^{-1}(a)| \geq c n$ for all $a \in [k]$.
 Let $M \in \R^{k \times k}$ be a matrix such that 
 \begin{itemize}
-    \item $B^{1/2} M B^{-1/2}$ is symmetric,
+    \item $M B^{-1}$ is symmetric,
     \item $\Norm{M} \leq \zeta$,
     \item $\Norm{M^{(a)} - M^{(b)}} \geq \alpha$ for any two rows $M^{(a)}$ and $M^{(b)}$ of $M$.
 \end{itemize}
@@ -17,14 +19,20 @@ Also let $W = Z M B^{-1} Z^\top$ and let $A \in \R^{n \times n}$ be some matrix 
 \[\Norm{A \frac{Z_a}{\Norm{Z_a}} - W \frac{Z_a}{\Norm{Z_a}}}^2 \leq \delta\,,\]
 and suppose that $\rank_{\leq -\lambda}(A) + \rank_{\geq \lambda}(A) \leq t$ for some $\lambda > 0$ such that $\lambda \leq \alpha \sqrt{c} / 4$ and $\lambda \leq \zeta/4$.
 
-Then, given $A$, there exists an algorithm that runs in time $n^{O(1)} \cdot \Paren{O_{\alpha, \delta, \zeta, c, k}(1)}^t$ and outputs a list of $\Paren{O_{\alpha, \delta, \zeta, c, k, t}(1)}^t$ $k$-colorings $\hat{\chi}: [n] \to [k]$ such that, for at least one of them, it holds up to a permutation of the color classes that $\mathbb{E}_{\bm{x} \sim \operatorname{Unif}([n])} \1[\hat\chi(\bm{x}) \neq \chi(\bm{x})] \leq O\Paren{\frac{\delta \zeta^2 k^3}{\min\{\alpha^2 c, \zeta^2\} \alpha^2 c}}$.
+Then, given $A$, there exists an algorithm that runs in time $n^{O(1)} \cdot \Paren{O_{\alpha, \delta, \zeta, c, k}(1)}^t$ and outputs a list of $\Paren{O_{\alpha, \delta, \zeta, c, k, t}(1)}^t$ $k$-partitions $\hat{\chi}: [n] \to [k]$ such that, for at least one of them, it holds up to a permutation of the colour classes that $\mathbb{E}_{\bm{x} \sim \operatorname{Unif}([n])} \1[\hat\chi(\bm{x}) \neq \chi(\bm{x})] \leq O\Paren{\frac{\delta \zeta^2 k^3}{\min\{\alpha^2 c, \zeta^2\} \alpha^2 c}}$.
 \end{theorem}
+
+In our applications, we will take $M$ to be a model of the colouring $\chi$, as per \Cref{def:model}.
+Our main results for graph colouring, in particular, take $M = M(\tilde{A}, \chi)$, where $\tilde{A}$ is the normalized adjacency matrix of the graph.
+Then $M_{ab}$ corresponds to the transition probability from colour class $a$ to colour class $b$.
+(An exception is our result for randomly planted graph colourings in \Cref{thm: random-planting-partial}, where for technical reasons we take $M = \frac{1}{d'} A$, where $A$ is the adjacency matrix of the graph and $d'$ is its \emph{expected} average degree.)
+We note that $W_{ij} = M_{\chi(i)\chi(j)} / |\chi^{-1}(\chi(j))|$ is simply the extension of $M$ to the entire matrix, according to the colour classes, up to the normalization factor $1/|\chi^{-1}(\chi(j))|$.
 
 The proof of \cref{thm:part-recovery} is a straightforward combination of the following three independent lemmas.
 
 \begin{lemma}[Eigenspace approximation]
-\label{thm:partition_recovery_theorem2}
-    Let $\chi: [n] \to [k]$ be a $k$-coloring of $[n]$, and consider its partition matrix $Z \in \{0,1\}^{n \times k}$ as per \cref{def:partition_Z}.
+\label[lemma]{thm:partition_recovery_theorem2}
+    Let $\chi: [n] \to [k]$ be a $k$-partition of $[n]$, and consider its partition matrix $Z \in \{0,1\}^{n \times k}$ as per \cref{def:partition_Z}.
     Let $W \in \mathbb{R}^{n \times n}$ be a symmetric matrix such that $W$ has column span in the span of $\set{Z_a}_{a \in [k]}$.
     Alo let $A \in \R^{n \times n}$ be some matrix such that, for all $a \in [k]$,
     \[\Norm{A \frac{Z_a}{\Norm{Z_a}} - W \frac{Z_a}{\Norm{Z_a}}}^2 \leq \delta\,,\]
@@ -34,12 +42,12 @@ The proof of \cref{thm:part-recovery} is a straightforward combination of the fo
 \end{lemma}
 
 \begin{lemma}[Eigenvector coordinate separation]
-\label{lem:eigenvalue_separation}
-    Let $\chi: [n] \to [k]$ be a $k$-coloring of $[n]$, and consider its partition matrices $Z \in \{0,1\}^{n \times k}$ and $B \in \R^{k \times k}$ as per \cref{def:partition_Z}.
+\label[lemma]{lem:eigenvalue_separation}
+    Let $\chi: [n] \to [k]$ be a $k$-partition of $[n]$, and consider its partition matrices $Z \in \{0,1\}^{n \times k}$ and $B \in \R^{k \times k}$ as per \cref{def:partition_Z}.
     Suppose $|\chi^{-1}(a)| \geq c n$ for all $a \in [k]$.
     Let $M \in \R^{k \times k}$ be a matrix such that 
     \begin{itemize}
-        \item $B^{1/2} M B^{-1/2}$ is symmetric,
+        \item $M B^{-1}$ is symmetric,
         \item $\Norm{M} \leq \zeta$,
         \item $\Norm{M^{(a)} - M^{(b)}} \geq \alpha$ for any two rows $M^{(a)}$ and $M^{(b)}$ of $M$.
     \end{itemize}
@@ -49,12 +57,12 @@ The proof of \cref{thm:part-recovery} is a straightforward combination of the fo
 \end{lemma}
 
 \begin{lemma}[Clustering with separated rows]
-\label{lem:cluster-eigen}
-    Let $\chi: [n] \to [k]$ be a $k$-coloring of $[n]$, and consider its partition matrix $Z \in \{0,1\}^{n \times k}$ as per \cref{def:partition_Z}.
+\label[lemma]{lem:cluster-eigen}
+    Let $\chi: [n] \to [k]$ be a $k$-partition of $[n]$, and consider its partition matrix $Z \in \{0,1\}^{n \times k}$ as per \cref{def:partition_Z}.
     Suppose $|\chi^{-1}(a)| \geq c n$ for all $a \in [k]$.
     Let unit vectors $v_1, \ldots, v_r \in \R^k$ satisfy 
     \[\min_{a\neq b\in[k]}\max_{i \in [r]} \frac{1}{\Norm{Z v_i}} \Abs{(v_i)_a- (v_i)_b} \geq \frac{\alpha}{\sqrt{n}}\,.\]
-    Then, given unit vectors $\hat{u}_1, \ldots, \hat{u}_r \in \R^n$ such that $\Norm{\hat{u}_i - \frac{Z v_i}{\Norm{Z v_i}}}^2 \leq \delta$ for all $i \in [r]$, there exists an algorithm that runs in time $n^{O(1)} \cdot \Paren{\alpha \sqrt{c}}^{-O(k^2)}$ and outputs a list of $\Paren{\alpha \sqrt{c}}^{-O(k^2)}$ $k$-colorings $\hat{\chi}: [n] \to [k]$ such that, for at least one of them, it holds up to a permutation of the color classes that $\mathbb{E}_{\bm{x} \sim \operatorname{Unif}([n])} \1[\hat\chi(\bm{x}) \neq \chi(\bm{x})] \leq O\Paren{\frac{\delta k}{\alpha^2}}$.
+    Then, given unit vectors $\hat{u}_1, \ldots, \hat{u}_r \in \R^n$ such that $\Norm{\hat{u}_i - \frac{Z v_i}{\Norm{Z v_i}}}^2 \leq \delta$ for all $i \in [r]$, there exists an algorithm that runs in time $n^{O(1)} \cdot \Paren{\alpha \sqrt{c}}^{-O(k^2)}$ and outputs a list of $\Paren{\alpha \sqrt{c}}^{-O(k^2)}$ $k$-partitions $\hat{\chi}: [n] \to [k]$ such that, for at least one of them, it holds up to a permutation of the colour classes that $\mathbb{E}_{\bm{x} \sim \operatorname{Unif}([n])} \1[\hat\chi(\bm{x}) \neq \chi(\bm{x})] \leq O\Paren{\frac{\delta k}{\alpha^2}}$.
 \end{lemma}
 
 Let us now prove \cref{thm:part-recovery} given \cref{thm:partition_recovery_theorem2}, \cref{lem:eigenvalue_separation}, and \cref{lem:cluster-eigen}.
@@ -85,7 +93,7 @@ In this section we prove \cref{thm:partition_recovery_theorem2}.
 First, we state a generic result that proves that if two matrices are close in a subspace that for one of the matrices is an eigenspace with eigenvalues of large absolute value, then the small eigenvalues of the other matrix are far from this subspace.
 
 \begin{lemma}[Eigenspace closeness]
-    \label{lemma:lin-alg-subspace}
+    \label[lemma]{lemma:lin-alg-subspace}
     Let $X \in \R^{n \times n}$ be a symmetric matrix, and let $v_1, \ldots, v_k$ be any $k$ of its eigenvectors with non-zero eigenvalues $\lambda_1, \ldots, \lambda_{k}$.
     Let $\lambda = \min\{|\lambda_1|, \ldots, |\lambda_k|\}$.
     Also let $Y \in \R^{n \times n}$ be a symmetric matrix, and let $P \in \R^{n \times n}$ be the orthogonal projection to the span of the eigenvectors of $Y$ that are smaller in absolute value than $\lambda - \eta$ for some $\eta > 0$.
@@ -115,7 +123,7 @@ Using this fact for the orthonormal bases $\{v_i\}$ and $\{u_i\}$, we prove the 
 We state now the well-known bounds of subspace enumeration.
 
 \begin{lemma}[Subspace enumeration]
-    \label{lemma:subspace_enumeration}
+    \label[lemma]{lemma:subspace_enumeration}
     There exists an algorithm that outputs with high probability an $\delta$-net of the unit $(d-1)$-dimensional ball in time $(1/\delta)^{O(d)}$.
 \end{lemma}
 
@@ -132,7 +140,7 @@ Finally, we prove \cref{thm:partition_recovery_theorem2}.
     \leq \delta k$.
     Also recall that $W$ has column span in the span of $\{Z_a\}_{a \in [k]}$, so all of its eigenvectors with non-zero eigenvalues lie in the span of $\{u_1, \ldots, u_k\}$.
     Let $P$ be the orthogonal projection to the eigenvectors of $A$ with eigenvalue smaller than $\lambda$ in absolute value.
-    Then by \cref{lemma:lin-alg-subspace} we get for any orthonormal vectors $u_1, \ldots, u_r$ that span the eigenspace of $W$ with eigenvalues larger than $\lambda+\eta$ in absolute value, for any $\eta >0$, that $\sum_{i=1}^r \Norm{P u_i}^2 \leq \delta k / \eta^2$.
+    Then, by \cref{lemma:lin-alg-subspace} applied with $W, A$ as $X, Y$, we get for any orthonormal vectors $u_1, \ldots, u_r$ that span the eigenspace of $W$ with eigenvalues larger than $\lambda+\eta$ in absolute value, for any $\eta >0$, that $\sum_{i=1}^r \Norm{P u_i}^2 \leq \delta k / \eta^2$.
     Hence, $\Norm{P u_i}^2 \leq \delta k / \eta^2$ for all $i \in [r]$, so each $u_i$ is $O(\sqrt{\delta k / \eta^2})$-close to the subspace corresponding to $P^{\bot} = I_n - P$.
 
     Then, by \cref{lemma:subspace_enumeration}, by finding an $O(\sqrt{\delta k / \eta^2})$-net of the eigenspace of $A$ corresponding to $P^\bot$, we are guaranteed to find a vector that is $O(\sqrt{\delta k / \eta^2})$-close to each $u_i$.
@@ -145,7 +153,7 @@ Finally, we prove \cref{thm:partition_recovery_theorem2}.
 In this section we prove \cref{lem:eigenvalue_separation}.
 First, we state a technical lemma.
 
-\begin{lemma}[Non-uniformity of eigenvectors]\label{lem: eigenvectorsdistinguish}
+\begin{lemma}[Non-uniformity of eigenvectors]\label[lemma]{lem: eigenvectorsdistinguish}
     Let $c\geq 0$, $0<\lambda< \zeta$, and $\alpha\geq \sqrt{2}c\lambda$ be parameters.
     Let $D \in \R^k$ with $D_x \leq c$ for all $x \in [k]$.
     Let $M$ be a symmetric $k\times k$ matrix with $\Norm{M}\leq \zeta$ such that for any two distinct columns $M_x$ and $M_y$ it holds that $\Norm{D_xM_x-D_yM_y}^2 \geq \alpha^2$.
@@ -217,13 +225,13 @@ Then, if we consider for each such $v$ some $v' \propto v$ such that $\norm{Zv'}
 In this section we prove \cref{lem:cluster-eigen}.
 First, we state the guarantees of a clustering algorithm used in the proof.
 
-\begin{lemma}[Partitioning based on distinguishing eigenvectors (based on Lemma E.7 in \cite{MR3536556-David16})]\label{lem:clusteringalmosteigenvectors}
-    Let $\chi: [n] \to [k]$ be a $k$-coloring of $[n]$.
+\begin{lemma}[Partitioning based on distinguishing eigenvectors (based on Lemma E.7 in \cite{MR3536556-David16})]\label[lemma]{lem:clusteringalmosteigenvectors}
+    Let $\chi: [n] \to [k]$ be a $k$-partition of $[n]$.
     Suppose $|\chi^{-1}(a)| \geq c n$ for all $a \in [k]$.
     For $\ell \leq k$, let $\set{v_{i}}_{i \in [\ell]}$ be $k$-dimensional vectors that satisfy
     \[\min_{a\neq b\in[k]}\max_{i\in [\ell]} \Abs{(v_i)_a-(v_i)_b}\geq \frac{\alpha}{\sqrt{n}}\,.\]
     Also let $\set{\hat{u}_{i}}_{i \in [\ell]}$ be $n$-dimensional unit vectors that satisfy $\sum_{j=1}^\ell \Norm{\hat{u}_j-Zv_j}^2\leq \delta$.
-    Then \cref{alg: spectralclustering} runs in time $n^{O(1)} \cdot (\alpha \sqrt{c})^{-O(k^2)}$ and returns a list of $(\alpha \sqrt{c})^{-O(k^2)}$ $k$-colorings $\hat{\chi}: [n] \to [k]$ such that, for at least one of them, it holds up to a permutation of the color classes that $\mathbb{E}_{\bm{x} \sim \operatorname{Unif}([n])} \1[\hat\chi(x) \neq \chi(x)] \leq O\Paren{\frac{\delta k}{\alpha^2}}$.
+    Then \cref{alg: spectralclustering} runs in time $n^{O(1)} \cdot (\alpha \sqrt{c})^{-O(k^2)}$ and returns a list of $(\alpha \sqrt{c})^{-O(k^2)}$ $k$-partitions $\hat{\chi}: [n] \to [k]$ such that, for at least one of them, it holds up to a permutation of the colour classes that $\mathbb{E}_{\bm{x} \sim \operatorname{Unif}([n])} \1[\hat\chi(x) \neq \chi(x)] \leq O\Paren{\frac{\delta k}{\alpha^2}}$.
 \end{lemma}
 
 \begin{algorithm}[H]

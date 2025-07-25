@@ -1,6 +1,7 @@
 \section{Small top threshold rank implies small bottom threshold rank}
 
 In this section, we prove the following result which shows that, for bounded-norm symmetric matrices with non-negative entries, large bottom threshold rank implies large top threshold rank.
+In the rest of the paper, we will be applying this result to normalized adjacency matrices of graphs, which indeed are symmetric, have spectral norm $1$, and have non-negative entries.
 
 \begin{theorem}[Large bottom rank implies large top rank]
 \label[theorem]{thm:spectral_large_to_large}
@@ -10,7 +11,7 @@ In this section, we prove the following result which shows that, for bounded-nor
     \begin{equation*}
         \rank_{\leq -\lambda} (A) \geq t\,,
     \end{equation*}
-    for some integer $t$, then for any $\sigma \in (0, 1)$ it follows that
+    for some $\lambda \geq 0$ and some positive integer $t$, then for any $\sigma \in (0, 1)$ it follows that
     %that is a multiple of $\frac{1}{\sqrt{t}}$,
     \begin{equation*}
         \rank_{\geq \frac{\lambda^2-\sigma}{1-\sigma}} (A) \geq \sigma^2 t \,.
@@ -27,15 +28,15 @@ By taking the contrapositive of \cref{thm:spectral_large_to_large} and re-parame
     \begin{equation*}
         \rank_{\geq \tau}(A) \leq s\,,
     \end{equation*}
-    for some integer $s$, then for any $\sigma \in (0, 1)$ it follows that
+    for some $\tau \geq 0$ and some non-negative integer $s$, then for any $\sigma \in (0, 1)$ it follows that
     \begin{equation*}
-         \rank_{\leq -\sqrt{\tau(1-\sigma) + \sigma}} (A) \leq \left\lfloor{\frac{s}{\sigma^2}}\right\rfloor\,.
+         \rank_{\leq -\sqrt{\tau(1-\sigma) + \sigma}} (A) \leq \frac{s}{\sigma^2}\,.
     \end{equation*}
 \end{corollary}
 
-To prove \cref{thm:spectral_large_to_large}, we need the following generalized lemma from \cite{barak2011rounding}.
+To prove \cref{thm:spectral_large_to_large}, we need the following slight generalization of Lemma 6.1 in \cite{barak-raghavendra-steurer}.
 We include a proof of this lemma in \cref{sec:rank-lb} for completeness.
-\begin{lemma}[Generalized restatement of Lemma 6.1 in \cite{barak2011rounding}]
+\begin{lemma}[Generalized restatement of Lemma 6.1 in \cite{barak-raghavendra-steurer}]
     \label[lemma]{lemma:BRS11_lower_bound_top_threshold_rank}
     Let $A \in \R^{n \times n}$ be symmetric with $\Norm{A} \leq 1$.
     Suppose there exists $M \in \R^{n \times n}$ positive semidefinite such that
@@ -50,7 +51,7 @@ We include a proof of this lemma in \cref{sec:rank-lb} for completeness.
     \end{equation*}
 \end{lemma}
 
-The key observation that leads to the proof of \cref{thm:spectral_large_to_large} is that, if a bounded-norm symmetric matrix with non-negative entries has large bottom threshold rank, then we can construct a matrix $V$ that satisfies \cref{lemma:BRS11_lower_bound_top_threshold_rank}.
+The key observation that leads to the proof of \cref{thm:spectral_large_to_large} is that, if a bounded-norm symmetric matrix with non-negative entries has large bottom threshold rank, then we can construct a matrix $M$ that satisfies \cref{lemma:BRS11_lower_bound_top_threshold_rank}.
 This idea is captured by the following lemma.
 
 \begin{lemma}[Construction of witness matrix]
@@ -61,7 +62,7 @@ This idea is captured by the following lemma.
     \begin{equation*}
         \rank_{\leq -\lambda} (A) \geq t\,,
     \end{equation*}
-    for some integer $t$, then there exist $V \in \R^{t^2 \times n}$ such that
+    for some $\lambda \geq 0$ and some positive integer $t$, then there exist $V \in \R^{t^2 \times n}$ such that
     \begin{equation*}
         \iprod{A, V^{\top} V} \geq \lambda^2 \,, \quad
         \Norm{V^{\top} V}_F^2 \leq \frac{1}{t} \,, \quad
@@ -75,7 +76,7 @@ This idea is captured by the following lemma.
         \iprod{u_s, A u_s} \leq - \lambda \quad \text{and} \quad
         \norm{u_s}^2 = 1 \,.
     \end{equation*}
-    Let $U \in \R^{n \times t}$ be the matrix whose $s$-th column is $\frac{1}{\sqrt{t}} u_s$.
+    Let $U \in \R^{n \times t}$ be the matrix whose $s$-th column is $\frac{1}{\sqrt{t}} u_s$ for all $s \in [t]$.
     It follows that
     \begin{equation}
     \label{eq:spectral_construction_1}
@@ -102,29 +103,30 @@ This idea is captured by the following lemma.
     \end{equation}
     
     Let us denote the $i$-th row of $U$ by $w_i$.
-    For $i \in [n]$, define $v_i = \frac{w_i^{\otimes 2}}{\norm{w_i}}$ (throughout the proof, we define $\frac{0}{0} = 0$).
-    Let $V \in \R^{t^2 \times n}$ be a matrix whose column $i$ is $v_i$ for all $i \in [n]$.
+    For $i \in [n]$, define $v_i = \frac{w_i^{\otimes 2}}{\norm{w_i}}$ if $\norm{w_i} \neq 0$ and $v_i = 0$ (the all-zero vector) otherwise. %(throughout the proof, we define $\frac{0}{0} = 0$).
+    Let $S = \Set{i \in [n]: \norm{w_i} \neq 0}$.
+    Finally, let $V \in \R^{t^2 \times n}$ be the matrix whose $i$-th column is $v_i$ for all $i \in [n]$.
     We will show that $V$ satisfies the three conditions of the lemma.
     
-    \paragraph{Condition 1}
+    \paragraph{Condition 1.}
     Notice that, by Cauchy-Schwarz, we have
     \begin{align*}
-        \Paren{\sum_{i, j} A_{i j} \iprod{w_i, w_j}}^2
-        & = \Paren{\sum_{i, j} \frac{ \sqrt{A_{i j}} \cdot \iprod{w_i, w_j}}{\sqrt{\norm{w_i} \norm{w_j}}} \cdot \sqrt{A_{i j} \norm{w_i} \norm{w_j}}}^2 \\
-        & \leq \Paren{\sum_{i, j} A_{i j} \frac{\iprod{w_i, w_j}^2}{\norm{w_i} \norm{w_j}}} \cdot \Paren{\sum_{i, j} A_{i j} \norm{w_i} \norm{w_j}} \,.
+        \Paren{\sum_{i, j \in S} A_{i j} \iprod{w_i, w_j}}^2
+        & = \Paren{\sum_{i, j \in S} \frac{ \sqrt{A_{i j}} \cdot \iprod{w_i, w_j}}{\sqrt{\norm{w_i} \norm{w_j}}} \cdot \sqrt{A_{i j} \norm{w_i} \norm{w_j}}}^2 \\
+        & \leq \Paren{\sum_{i, j \in S} A_{i j} \frac{\iprod{w_i, w_j}^2}{\norm{w_i} \norm{w_j}}} \cdot \Paren{\sum_{i, j \in S} A_{i j} \norm{w_i} \norm{w_j}} \,.
     \end{align*}
     By rearranging, we get
     \begin{equation}
     \label{eq:spectral_construction_4}
         \iprod{A, V^{\top} V}
         = \sum_{i, j} A_{i j} \iprod{v_i, v_j}
-        = \sum_{i, j} A_{i j} \frac{\iprod{w_i, w_j}^2}{\norm{w_i} \norm{w_j}} \\
-        \geq \frac{\Paren{\sum_{i, j} A_{i j} \iprod{w_i, w_j}}^2}{\sum_{i, j} A_{i j} \norm{w_i} \norm{w_j}} \,.
+        = \sum_{i, j \in S} A_{i j} \frac{\iprod{w_i, w_j}^2}{\norm{w_i} \norm{w_j}} \\
+        \geq \frac{\Paren{\sum_{i, j \in S} A_{i j} \iprod{w_i, w_j}}^2}{\sum_{i, j \in S} A_{i j} \norm{w_i} \norm{w_j}} \,.
     \end{equation}
     For the numerator, by observing that $\iprod{w_i, w_j} = (U U^{\top})_{i j}$ and by \cref{eq:spectral_construction_1}, we get
     \begin{equation}
     \label{eq:spectral_construction_5}
-        \Paren{\sum_{i, j} A_{i j} \iprod{w_i, w_j}}^2
+        \Paren{\sum_{i, j \in S} A_{i j} \iprod{w_i, w_j}}^2
         = \Iprod{A, U U^{\top}}^2
         \geq \lambda^2 \,.
     \end{equation}
@@ -132,8 +134,8 @@ This idea is captured by the following lemma.
     \begin{align}
     \label{eq:spectral_construction_6}
     \begin{split}
-        \sum_{i, j} A_{i j} \norm{w_i} \norm{w_j}
-        &\leq  \sum_{i} \norm{w_i}^2
+        \sum_{i, j \in S} A_{i j} \norm{w_i} \norm{w_j}
+        &\leq  \sum_{i \in S} \norm{w_i}^2
         = \Tr(U U^{\top})
         = 1 \,.
     \end{split}
@@ -143,23 +145,23 @@ This idea is captured by the following lemma.
         \iprod{A, V^{\top} V} \geq \lambda^2 \,.
     \end{equation*}
 
-    \paragraph{Condition 2}
+    \paragraph{Condition 2.}
     By the definition of $V$ and by Cauchy-Schwarz, we get
     \begin{equation*}
         \Norm{V^{\top} V}_F^2
         = \sum_{i, j} \iprod{v_i, v_j}^2
-        = \sum_{i, j} \frac{\iprod{w_i, w_j}^4}{\norm{w_i}^2 \norm{w_j}^2}
-        \leq \sum_{i, j} \iprod{w_i, w_j}^2 \,.
+        = \sum_{i, j \in S} \frac{\iprod{w_i, w_j}^4}{\norm{w_i}^2 \norm{w_j}^2}
+        \leq \sum_{i, j \in S} \iprod{w_i, w_j}^2 \,.
     \end{equation*}
     Since $\iprod{w_i, w_j} = (U U^{\top})_{i j}$, it follows by \cref{eq:spectral_construction_2} that
     \begin{equation*}
         \Norm{V^{\top} V}_F^2
-        \leq \sum_{i, j} \iprod{w_i, w_j}^2
+        \leq \sum_{i, j \in S} \iprod{w_i, w_j}^2
         = \Norm{U U^{\top}}_F^2
         = \frac{1}{t}\,.
     \end{equation*}
 
-    \paragraph{Condition 3}
+    \paragraph{Condition 3.}
     By the definition of $V$ and \cref{eq:spectral_construction_3}, it follows that
     \begin{equation*}
         \Tr(V^{\top} V)

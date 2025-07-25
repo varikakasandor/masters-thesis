@@ -1,6 +1,6 @@
-\section{Full coloring in the random planted model} \label{app: plantedcoloring}
+\section{Full colouring in the random planted model} \label{app: plantedcolouring}
 
-This part is dedicated to proving \cref{thm: random-planting-full}. We start with the key first step that guarantees the recovery of a \emph{list} of candidate $k$-colorings, such that at least one of them is close to the planted $k$-coloring.
+This part is dedicated to proving \cref{thm: random-planting-full}. We start with the key first step that guarantees the recovery of a \emph{list} of candidate $k$-colourings, such that at least one of them is close to the planted $k$-colouring.
 
 
 \begin{theorem}[Result for random planting, partial recovery of a list]
@@ -8,14 +8,14 @@ This part is dedicated to proving \cref{thm: random-planting-full}. We start wit
     Let $H$ be an $n$-vertex $d$-regular graph with adjacency matrix $A_H$.
     Suppose $\rank_{\geq \lambda}(\frac{1}{d}A_H) \leq t$ for some $0 < \lambda < 1$ and $t \in \mathbb{N}$.
     Let $G$ be the graph obtained by randomly planting a \kcl in $H$, and let $\chi: [n] \to [k]$ be the associated \kcl.
-    Then, for $\lambda > 0$ small enough, there exists an algorithm that runs in time $n^{O(1)} \cdot \Paren{O_{k}(1)}^{t}$ and outputs a list of $\Paren{O_{k}(1)}^{t}$ $k$-colorings $\hat{\chi}: [n] \to [k]$ such that with high probability, for at least one of them, it holds up to a permutation of the color classes that $\mathbb{E}_{\bm{x} \sim \operatorname{Unif}([n])} \1[\hat\chi(\bm{x}) \neq \chi(\bm{x})] \leq O_k(1/d^{\Omega(1)})$.
+    Then, for $\lambda > 0$ small enough, there exists an algorithm that runs in time $n^{O(1)} \cdot \Paren{O_{k}(1)}^{t}$ and outputs a list of $\Paren{O_{k}(1)}^{t}$ $k$-colourings $\hat{\chi}: [n] \to [k]$ such that with high probability, for at least one of them, it holds up to a permutation of the colour classes that $\mathbb{E}_{\bm{x} \sim \operatorname{Unif}([n])} \1[\hat\chi(\bm{x}) \neq \chi(\bm{x})] \leq O_k(1/d^{\Omega(1)})$.
 \end{theorem}
 \begin{proof}
     The proof is identical to the proof of \cref{thm: random-planting-partial}, but omitting the last rounding step.
 \end{proof}
 
 
-To convert a coloring returned by \cref{thm: random-planting-partial-list} into a full coloring, we will need several helper lemmata. We start with the proofs of the two lemmata showing properties of \textbf{one}-sided expansion.
+To convert a colouring returned by \cref{thm: random-planting-partial-list} into a full colouring, we will need several helper lemmata. We start with the proofs of the two lemmata showing properties of \textbf{one}-sided expansion.
 
 \begin{proof}[Proof of \cref{lemma: emlonesided}]
     Let $\1_S \in \{0,1\}^n$ be the indicator vector of $S$ and write $\1_S$ in the orthonormal eigenbasis $e_{[n]}$ of $A$:
@@ -54,33 +54,33 @@ To convert a coloring returned by \cref{thm: random-planting-partial-list} into 
 \end{proof}
 
 
-Next, we need an algorithm that takes a coloring that agrees with most of the planted coloring and turns it into a coloring that leaves some of the vertices uncolored, but agrees with the planted coloring on the colored vertices. We define this notion of coloring formally now.
+Next, we need an algorithm that takes a colouring that agrees with most of the planted colouring and turns it into a colouring that leaves some of the vertices uncoloured, but agrees with the planted colouring on the coloured vertices. We define this notion of colouring formally now.
 
-\begin{definition}[Partial coloring]
-    \label{def: partialcoloring}
+\begin{definition}[Partial colouring]
+    \label[definition]{def: partialcolouring}
     Let $G$ be an $n$-vertex graph that admits a \kcl $\chi$.
-    A {\em $(k, \beta)$-partial} coloring w.r.t.\ $\chi$ is a \kcl of at least $(1-\beta)n$ vertices that is identical to $\chi$ on these vertices.
-    The remaining $\beta n$ vertices are left uncolored and are referred to as {\em free}. In the random planted model we always implicitly take $\chi$ to be the planted \kcl.
+    A {\em $(k, \beta)$-partial} colouring w.r.t.\ $\chi$ is a \kcl of at least $(1-\beta)n$ vertices that is identical to $\chi$ on these vertices.
+    The remaining $\beta n$ vertices are left uncoloured and are referred to as {\em free}. In the random planted model we always implicitly take $\chi$ to be the planted \kcl.
 \end{definition}
 
 Let us state now the corresponding algorithm and its guarantees.
 
 \begin{algorithm}[H]
-    As long as there is a vertex $x$ that has color $c_1$, and a color $c_2\neq c_1$ such that $x$ has less than $\frac{1}{6k}d$ neighbors with color $c_2$, uncolor $x$.%\andor{why does \cite{MR3536556-David16} need another condition?}
-    \protect\caption{\label{alg: uncoloring}Uncoloring Algorithm}
+    As long as there is a vertex $x$ that has colour $c_1$, and a colour $c_2\neq c_1$ such that $x$ has less than $\frac{1}{6k}d$ neighbors with colour $c_2$, uncolour $x$.%\andor{why does \cite{MR3536556-David16} need another condition?}
+    \protect\caption{\label{alg: uncolouring}Uncolouring Algorithm}
 \end{algorithm}
 
 
 \begin{lemma}[Adaptation of Lemma B.20 of \cite{MR3536556-David16}]\label[lemma]{lemma: approximatetopartial}
     Let $\alpha\leq\frac{1}{24k}$ be a parameter. Let $H$ be a $d\geq O(1)$-regular $n$-vertex  graph with $\lambda_2(H)\leq \frac{1}{9k}$. 
-    Let $G$ be the graph obtained from $H$ by randomly planting a \kcl $\chi$ in it. Given an \kcl $\hat{\chi}$ of $G$ with $\mathbb{E}_{\bm{x} \sim \operatorname{Unif}([n])} \1[\hat{\chi}(\bm{x}) \neq \chi(\bm{x})] \leq \alpha$, \cref{alg: uncoloring} \whp returns an $(k, 4\alpha)$-partial coloring of $G$.
+    Let $G$ be the graph obtained from $H$ by randomly planting a \kcl $\chi$ in it. Given an \kcl $\hat{\chi}$ of $G$ with $\mathbb{E}_{\bm{x} \sim \operatorname{Unif}([n])} \1[\hat{\chi}(\bm{x}) \neq \chi(\bm{x})] \leq \alpha$, \cref{alg: uncolouring} \whp returns an $(k, 4\alpha)$-partial colouring of $G$.
 \end{lemma}
 
 To prove \cref{lemma: approximatetopartial}, we will need a definition and two lemmata: one upper bounding the number of atypical vertices with high probability, and a structural lemma showing the existence of a ``nice'' subgraph.
 
 
-\begin{definition}\label{def: statisticallybad}
-    Let $H$ be a $d$-regular graph. Let $G$ be the graph obtained from $H$ by randomly planting a \kcl $\chi$ in it. We call a vertex $x\in V(G)$ \textit{statistically bad}, if there is a color $c\neq \chi(x)$ such that $x$ has less than $\frac{1}{2k}d$ neighbors $y$ with $\chi(y)=c$. We denote the set of statistically bad vertices by $SB(G)$, writing $SB$ when it is clear from context which graph we are referring to.
+\begin{definition}\label[definition]{def: statisticallybad}
+    Let $H$ be a $d$-regular graph. Let $G$ be the graph obtained from $H$ by randomly planting a \kcl $\chi$ in it. We call a vertex $x\in V(G)$ \textit{statistically bad}, if there is a colour $c\neq \chi(x)$ such that $x$ has less than $\frac{1}{2k}d$ neighbors $y$ with $\chi(y)=c$. We denote the set of statistically bad vertices by $SB(G)$, writing $SB$ when it is clear from context which graph we are referring to.
 \end{definition}
 
 \begin{lemma}[Restatement of Lemma B.14 of \cite{MR3536556-David16}]\label[lemma]{lemma: sbupperbound}
@@ -112,9 +112,9 @@ Now we are ready to prove \cref{lemma: approximatetopartial}.
 
 
 \begin{proof}[Proof of \cref{lemma: approximatetopartial}]
-    Let $c:=\frac{1}{9k}$. When $d$ is at least a large enough constant, $2^{-\Omega(d)}\leq \alpha$ holds. Let $B:=\Set{x\in V\mid \chi(x)\neq \hat{\chi}(x)}$ denote the set of vertices wrongly colored by $\hat{\chi}$. Note that $\Abs{B}\leq \alpha n$ by assumption, and $\Abs{SB(G)}\leq 2^{-\Omega(d)}\leq \alpha n$ by \cref{lemma: sbupperbound}. Hence, applying \cref{lemma: highmindegreesubgraph} on $H$ to $B\cup SB$ we get a set $R$ with $|R|=(1-4\alpha)n$ such that the minimum degree in $H_R$ is at least $\Paren{1-4\alpha-c}d$. Using $R\cap SB=\emptyset$, for any $x\in R$ and $c\neq \chi(x)$ we get that $x$ has degree at least $\Paren{\frac{1}{2k}-4\alpha-c}d\geq \frac{1}{6k}d$ into $\Set{y\in R\mid \chi(y)=c}$, i.e. into the vertices in $R$ colored with $c$. It follows by induction that no vertices in $R$ will be uncolored at any step of \cref{alg: uncoloring}. Hence, the coloring returned has size at least $|R|=(1-4\alpha)n$. It only remains to show that the coloring returned is proper. In fact, we will show that all vertices in $B$ will get uncolored, from which the statement follows.
+    Let $c:=\frac{1}{9k}$. When $d$ is at least a large enough constant, $2^{-\Omega(d)}\leq \alpha$ holds. Let $B:=\Set{x\in V\mid \chi(x)\neq \hat{\chi}(x)}$ denote the set of vertices wrongly coloured by $\hat{\chi}$. Note that $\Abs{B}\leq \alpha n$ by assumption, and $\Abs{SB(G)}\leq 2^{-\Omega(d)}\leq \alpha n$ by \cref{lemma: sbupperbound}. Hence, applying \cref{lemma: highmindegreesubgraph} on $H$ to $B\cup SB$ we get a set $R$ with $|R|=(1-4\alpha)n$ such that the minimum degree in $H_R$ is at least $\Paren{1-4\alpha-c}d$. Using $R\cap SB=\emptyset$, for any $x\in R$ and $c\neq \chi(x)$ we get that $x$ has degree at least $\Paren{\frac{1}{2k}-4\alpha-c}d\geq \frac{1}{6k}d$ into $\Set{y\in R\mid \chi(y)=c}$, i.e. into the vertices in $R$ coloured with $c$. It follows by induction that no vertices in $R$ will be uncoloured at any step of \cref{alg: uncolouring}. Hence, the colouring returned has size at least $|R|=(1-4\alpha)n$. It only remains to show that the colouring returned is proper. In fact, we will show that all vertices in $B$ will get uncoloured, from which the statement follows.
 
-    For the sake of contradiction, assume there exist vertices $B_2\subseteq B$ that remain colored by the end of the process. Let $x\in B_2$ be any such vertex. As $x$ has never been uncolored, at the end of the process it has at least $\frac{1}{6k}d$ neighbors $y$ with $\hat{\chi}(y)=c\neq \hat{\chi}(x)$. In particular, choosing $c=\chi(x)$, let $Q$ denote those neighbors $y$ of $x$ with $\hat{\chi}(y)=\chi(x)$. As $x$ and $y$ are neighbors in $G$, we have $\chi(x)\neq \chi(y)$, so $\hat{\chi}(y)\neq \chi(y)$, which implies $Q\subseteq B_2$. Summarizing, any vertex in $G_{B_2}$ has degree at least $\frac{1}{3k}d$. Therefore, $$e(G_{B_2})\geq \frac{\frac{1}{6k}d|B_2|}{2}= \frac{d|B_2|}{12k}\,.$$
+    For the sake of contradiction, assume there exist vertices $B_2\subseteq B$ that remain coloured by the end of the process. Let $x\in B_2$ be any such vertex. As $x$ has never been uncoloured, at the end of the process it has at least $\frac{1}{6k}d$ neighbors $y$ with $\hat{\chi}(y)=c\neq \hat{\chi}(x)$. In particular, choosing $c=\chi(x)$, let $Q$ denote those neighbors $y$ of $x$ with $\hat{\chi}(y)=\chi(x)$. As $x$ and $y$ are neighbors in $G$, we have $\chi(x)\neq \chi(y)$, so $\hat{\chi}(y)\neq \chi(y)$, which implies $Q\subseteq B_2$. Summarizing, any vertex in $G_{B_2}$ has degree at least $\frac{1}{3k}d$. Therefore, $$e(G_{B_2})\geq \frac{\frac{1}{6k}d|B_2|}{2}= \frac{d|B_2|}{12k}\,.$$
 
     On the other hand, by \cref{lemma: emlonesided}, $$e(G_{B_2})\leq e(H_{B_2})\leq \frac{d\Abs{B_2}}{2}\Paren{\frac{\Abs{B_2}}{n}+c}\,.$$
     
@@ -123,27 +123,27 @@ Now we are ready to prove \cref{lemma: approximatetopartial}.
     However, as $\Abs{B_2}\leq \Abs{B}\leq \alpha n$ by assumption, we get a contradiction, so $\Abs{B_2}=0$ finishing the proof.
 \end{proof}
 
-Next we need an algorithm that recolors some of the uncolored vertices in a way that guarantees that the remaining uncolored vertices split up into small components.
+Next we need an algorithm that recolours some of the uncoloured vertices in a way that guarantees that the remaining uncoloured vertices split up into small components.
 
 \begin{algorithm}[H]
-    As long as there is an uncolored vertex $x$ that has neighbors in every color except for some color $c$, color $x$ using $c$. 
-    \protect\caption{\label{alg: saferecoloring} Safe Recoloring Algorithm}
+    As long as there is an uncoloured vertex $x$ that has neighbors in every colour except for some colour $c$, colour $x$ using $c$. 
+    \protect\caption{\label{alg: saferecolouring} Safe Recolouring Algorithm}
 \end{algorithm}
 
 \begin{lemma}[Adaptation of Lemma B.21 of \cite{MR3536556-David16}]\label[lemma]{lemma: partialtologncomps}
     Let $H$ be a $d$-regular $n$-vertex  graph with $\lambda_2(H)\leq \frac{1}{16k^2}$. 
-    Let $G$ be the graph obtained from $H$ by randomly planting a \kcl $\chi$ in it. Starting from a $\Paren{k, \frac{1}{256k^4}}$-partial coloring $\hat{\chi}$ of $G$, let $U$ be the set of vertices left uncolored by \cref{alg: saferecoloring}. Then, \whp each component in $G_U$ has size at most $\ln{n}$.
+    Let $G$ be the graph obtained from $H$ by randomly planting a \kcl $\chi$ in it. Starting from a $\Paren{k, \frac{1}{256k^4}}$-partial colouring $\hat{\chi}$ of $G$, let $U$ be the set of vertices left uncoloured by \cref{alg: saferecolouring}. Then, \whp each component in $G_U$ has size at most $\ln{n}$.
 \end{lemma}
 
 \begin{proof}
     The proof closely follows that of Lemma B.21 of \cite{MR3536556-David16}, so we only provide the parts that are changed. Let us first prove a helper lemma similar to Claim B.22 of \cite{MR3536556-David16}:
-    \begin{lemma}\label[lemma]{lemma: largecoloredneighborhoodprob}
+    \begin{lemma}\label[lemma]{lemma: largecolouredneighborhoodprob}
         Let $C$ be any set of vertices of size $t_1$, let $D:=N_{H}\Paren{C}\setminus C$
         and let $t_2:=\Abs{D}$. If $t_2\ge 2k^2t_1$ then $C\subseteq U$ and $D\subseteq V\setminus U$ with probability at most $e^{-\frac{1}{2k}t_2}$.
     \end{lemma}
     \begin{proof}
-        Partition the vertices of $D$ to disjoint subsets $\Set{D_{v}}$, where $v\in C$ and $D_{v}\subseteq N_{H}\Paren{v}$. Consider some $D_{v}$ and assume that $v$ is colored by $1$. If both $v\in U$ and $D_{v}\subseteq V\setminus U$ then the set of colors that vertices in $D_{v}$ are using must be contained in exactly one
-        of the sets $[k]\setminus {c}$ for some $c\neq 1$ (otherwise \cref{alg: saferecoloring} would color $v$).
+        Partition the vertices of $D$ to disjoint subsets $\Set{D_{v}}$, where $v\in C$ and $D_{v}\subseteq N_{H}\Paren{v}$. Consider some $D_{v}$ and assume that $v$ is coloured by $1$. If both $v\in U$ and $D_{v}\subseteq V\setminus U$ then the set of colours that vertices in $D_{v}$ are using must be contained in exactly one
+        of the sets $[k]\setminus {c}$ for some $c\neq 1$ (otherwise \cref{alg: saferecolouring} would colour $v$).
         Therefore the probability that both $v\in U$ and $D_{v}\subseteq V\setminus U$
         is at most $(k-1)\Paren{\frac{k-1}{k}}^{\Abs{D_{v}}}$. Hence, the probability that both $C$ is in $U$ and $D\subseteq V\setminus U$ is at most
         \begin{align*}
@@ -167,18 +167,18 @@ Next we need an algorithm that recolors some of the uncolored vertices in a way 
     & \le n^{-1}\,.\label{eq:alpha4}
     \end{align}
 
-    Equality~\ref{eq:alpha1} follows by \cref{lemma: largecoloredneighborhoodprob} and that by \cref{lemma: ssveonesided}
+    Equality~\ref{eq:alpha1} follows by \cref{lemma: largecolouredneighborhoodprob} and that by \cref{lemma: ssveonesided}
     if $\lambda_2(H)\le \frac{1}{16k^2}$ then for a set of size $t_1\le\Abs{U}\le\frac{1}{256k^4}n$ it holds that its neighborhood is of size $t_2\ge7k^2t_1$. Inequality~\ref{eq:alpha2} follows by Lemma B.23 of \cite{MR3536556-David16}. Inequality~\ref{eq:alpha3} follows by the binomial identity ${n \choose k}\le\Paren{e\frac{n}{k}}^{k}$. Inequality~\ref{eq:alpha4} follows by $\ln\Paren{7k^2+1}\leq \frac{7k}{2}-6$ which holds for $k\geq 3$. This completes the proof.
 \end{proof}
 
 We are now finally ready to prove \cref{thm: random-planting-full}:
 
 \begin{proof}[Proof of \cref{thm: random-planting-full}]
-    We can apply \cref{thm: random-planting-partial-list} to get a list of $O_{k}(1)$ $k$-colorings $\hat{\chi}: [n] \to [k]$ such that, for at least one of them, it holds up to a permutation of the color classes that $\mathbb{E}_{\bm{x} \sim \operatorname{Unif}([n])} \1[\hat\chi(\bm{x}) \neq \chi(\bm{x})] \leq O_k\Paren{1/d^{\Omega(1)}}$.
+    We can apply \cref{thm: random-planting-partial-list} to get a list of $O_{k}(1)$ $k$-colourings $\hat{\chi}: [n] \to [k]$ such that, for at least one of them, it holds up to a permutation of the colour classes that $\mathbb{E}_{\bm{x} \sim \operatorname{Unif}([n])} \1[\hat\chi(\bm{x}) \neq \chi(\bm{x})] \leq O_k\Paren{1/d^{\Omega(1)}}$.
 
-    Then, for $d$ at least a large enough constant compared to $k$, running \cref{alg: uncoloring} on all colorings in $L$, by \cref{lemma: approximatetopartial} it turns the coloring $\hat{\chi}$ with $\mathbb{E}_{\bm{x} \sim \operatorname{Unif}([n])} \1[\hat\chi(\bm{x}) \neq \chi(\bm{x})] \leq O_k\Paren{1/d^{\Omega(1)}}$ into a $\Paren{k, O_k\Paren{1/d^{\Omega(1)}}}$-partial coloring and returns a list of colorings $L'$. %\andor{should we remark that we somehow managed to avoid doing iterative recoloring which works only for two-sided expansion?}  
+    Then, for $d$ at least a large enough constant compared to $k$, running \cref{alg: uncolouring} on all colourings in $L$, by \cref{lemma: approximatetopartial} it turns the colouring $\hat{\chi}$ with $\mathbb{E}_{\bm{x} \sim \operatorname{Unif}([n])} \1[\hat\chi(\bm{x}) \neq \chi(\bm{x})] \leq O_k\Paren{1/d^{\Omega(1)}}$ into a $\Paren{k, O_k\Paren{1/d^{\Omega(1)}}}$-partial colouring and returns a list of colourings $L'$. %\andor{should we remark that we somehow managed to avoid doing iterative recolouring which works only for two-sided expansion?}  
 
-    Then, for $d$ at least a large enough constant compared to $k$, running \cref{alg: saferecoloring} on all colorings in $L'$, \cref{lemma: partialtologncomps} guarantees that, for the $\Paren{k, O_k\Paren{1/d^{\Omega(1)}}}$-partial coloring, all the remaining still uncolored vertices are in connected components of size $O(\ln{n})$ and returns a list of colorings $L''$:
+    Then, for $d$ at least a large enough constant compared to $k$, running \cref{alg: saferecolouring} on all colourings in $L'$, \cref{lemma: partialtologncomps} guarantees that, for the $\Paren{k, O_k\Paren{1/d^{\Omega(1)}}}$-partial colouring, all the remaining still uncoloured vertices are in connected components of size $O(\ln{n})$ and returns a list of colourings $L''$:
 
-    Hence, we can try a brute force search on each component of those colorings in $L''$ that have component sizes $O(\ln{n})$. By the above, we are guaranteed to find a full coloring on at least one of them. This finishes the proof.
+    Hence, we can try a brute force search on each component of those colourings in $L''$ that have component sizes $O(\ln{n})$. By the above, we are guaranteed to find a full colouring on at least one of them. This finishes the proof.
 \end{proof}

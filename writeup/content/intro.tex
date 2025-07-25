@@ -37,7 +37,7 @@ Let $\lambda_1, \ldots, \lambda_k$ and $v_1, \ldots, v_k$ represent the $k$ eige
 \end{enumerate}
 
 
-To deduce \cref{thm:3alg} from \cref{thm:kalg}, we observe in \cref{lemma: 3coloringfixedaveragedegree} that for $k=3$, given the colour class sizes, the model matrix is fixed due to regularity, and unless one colour class contains almost half of the vertices, it will have no repeated rows. 
+To deduce \cref{thm:3alg} from \cref{thm:kalg}, we observe in \cref{lemma: 3colouringfixedaveragedegree} that for $k=3$, given the colour class sizes, the model matrix is fixed due to regularity, and unless one colour class contains almost half of the vertices, it will have no repeated rows. 
 
 The proof for approximate recovery in the random planted setting (\cref{thm: random-planting-partial}) is similar to the proof of \cref{thm:kalg}, but note that while the original graph is a one-sided expander, the resulting graph after planting might no longer be expanding. Hence, to show low variance of the degrees between colour classes, instead of \cref{lemma: expansionimpliesvariance} we exploit full randomness using concentration bounds. Efficient subspace enumeration is guaranteed by \cref{lemma: threshold_rank_kept} that shows that low threshold rank is preserved after planting. To convert an approximate colouring into a complete colouring (\cref{thm: random-planting-full}) we adapt \cite{MR3536556-David16} by showing that the expander mixing lemma and small-set vertex expansion -- on which their algorithms rely -- essentially holds for one-sided expansion as well (\cref{lemma: emlonesided}, \cref{lemma: ssveonesided}).
 

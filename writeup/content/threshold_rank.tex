@@ -1,10 +1,11 @@
 \section{Proof of top threshold rank lower bound}
 \label{sec:rank-lb}
 
-In this section, we provide a generalized proof of Lemma 6.1 of \cite{barak2011rounding} that extends to bounded-norm symmetric matrices.
+In this section, we prove for the sake of completeness a slight generalization of Lemma 6.1 in \cite{barak-raghavendra-steurer}, such that it extends to all bounded-norm symmetric matrices.
+The proof is essentially the same as the original proof.
 We note that the original proof has a minor mistake in an application of Cauchy-Schwarz, and to fix it we need to modify the guarantee of the lemma to give a threshold rank lower bound of $(1-1/C)^2r$ instead of the original lower bound of $(1-1/C)r$.
 
-\begin{lemma}[Generalized restatement of Lemma 6.1 in \cite{barak2011rounding}]
+\begin{lemma}[Generalized restatement of Lemma 6.1 in \cite{barak-raghavendra-steurer}]
     Let $A \in \R^{n \times n}$ be symmetric with $\Norm{A} \leq 1$.
     % Given a graph $G$ with adjacency matrix $A \in \set{0, 1}^{n \times n}$, define the degree matrix $D \in {R}^{n \times n}$ as the diagonal matrix with $D_{i, i} = \deg_G(i)$ and the normalized adjacency matrix $A \in {R}^{n \times n}$ as $A = D^{-1/2} A D^{-1/2}$.
     Suppose there exists $M \in \R^{n \times n}$ positive semidefinite such that
@@ -20,8 +21,8 @@ We note that the original proof has a minor mistake in an application of Cauchy-
 \end{lemma}
 
 \begin{proof}
-    Let the spectral decomposition of $A$ be $A = \sum_{i} \lambda_i u_i u_i^{\top}$ and let $k = \rank_{\geq 1- C\e} (A)$.
-    We use $\Lambda_{\geq 1- C\e} = \sum_{i=1}^{k} u_i u_i^{\top}$ to denote the subspace spanned by the eigenvectors with value at least $1- C\e$. 
+    Let the spectral decomposition of $A$ be $A = \sum_{i} \lambda_i u_i u_i^{\top}$ and let $k = \rank_{\geq 1- C \e} (A)$.
+    We use $\Lambda_{\geq 1- C\e} = \sum_{i=1}^{k} u_i u_i^{\top}$ to denote the subspace spanned by the eigenvectors with corresponding eigenvalues at least $1- C\e$. 
     Then we can rewrite $\iprod{A, M}$ as
     \begin{align}
     \label{eq:BRS11_proof_1}
@@ -37,7 +38,7 @@ We note that the original proof has a minor mistake in an application of Cauchy-
     \label{eq:BRS11_proof_2}
         \iprod{\Lambda_{\geq 1- C\e}, M}
         \leq \Norm{\Lambda_{\geq 1- C\e}}_F \Norm{M}_F
-        \leq  \sqrt{k} \cdot \sqrt{\frac{1}{r}} \,.
+        \leq  \sqrt{k} \cdot \frac{1}{\sqrt{r}}\,.
     \end{equation}
     For the second term, it follows by the assumption $\Tr(M) = 1$ that
     \begin{equation}

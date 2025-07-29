@@ -156,7 +156,7 @@ Next we need an algorithm that recolours some of the uncoloured vertices in a wa
         using $t_2\ge 2k^2t_1$ and $\ln{k}-\ln(k-1)\geq \frac1{k}$ on the last line.
     \end{proof}
 
-    Letting $N_{H}\Paren{n,t_1,t_2}$ denote the number of connected components of size $t_1$ with a neighborhood of size exactly $t_2$ and letting $P_{t_1,t_2}:=\max_{C\subset H,\Abs{C}=t_1,\Abs{N\Paren{C}}=t_2}\Pr\Brac{\text{\ensuremath{C}\,\ is in\,\ensuremath{U}}}$, we get by union bound that the probability that there exists a connected component in $G_{U}$ of size $\Omega(\ln n)$ is at most
+    Let $N_{H}\Paren{n,t_1,t_2}$ denote the number of connected components of size $t_1$ with a neighbourhood of size exactly $t_2$ and define \[P_{t_1,t_2}:=\max_{C\subset H,\Abs{C}=t_1,\Abs{N\Paren{C}}=t_2}\Pr\Brac{\text{\ensuremath{C}\,\ is in\,\ensuremath{U}}}\;.\] Then, by union bound, the probability that there exists a connected component in $G_{U}$ of size $\Omega(\ln n)$ is at most
     
     \begin{align}
     \sum_{t_1=\ln n\,}^{\Abs{U}}\sum_{t_2=1}^{d t_1}N_{H}\Paren{n,t_1,t_2}P_{t_1,t_2} & =\sum_{t_1=\ln n\,}^{\Abs{U}}\sum_{t_2= 7k^2t_1 }^{d t_1}N_{G}\Paren{n,t_1,t_2}e^{-\frac{1}{2k} t_2}\label{eq:alpha1}\\

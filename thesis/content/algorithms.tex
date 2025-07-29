@@ -38,9 +38,22 @@ Together with the fact that $\sum_{a \in [k]} \pi_a = 1$, we get that $\pi$ is u
 Second, we have that $M(A, \chi)_{ab}$ is $\delta$-close to $M_{ab}$ for all $a,b\in [k]$. 
 Also, for all $a \neq b \in [k]$ we have $\frac{1}{n}|\chi^{-1}(a)| M(A, \chi)_{ab} = \frac{1}{n}|\chi^{-1}(b)| M(A, \chi)_{ba}$ and $\sum_{a \in [k]} \frac{1}{n}|\chi^{-1}(a)| = 1$.
 Then, if $M_{ab},M_{ba}>0$ and $\delta > 0$ is small enough such that $\delta \leq \sqrt{\delta} M_{ab}, \sqrt{\delta} M_{ba}$, also 
-\[(1-4\sqrt{\delta}) \frac{\pi_a}{\pi_b} \leq \frac{(1-\sqrt{\delta})M_{ab}}{(1+\sqrt{\delta})M_{ba}} \leq \frac{\frac{1}{n}|\chi^{-1}(a)|}{\frac{1}{n}|\chi^{-1}(b)|} = \frac{M(A, \chi)_{ab}}{M(A, \chi)_{ba}} \leq \frac{(1+\sqrt{\delta})M_{ab}}{(1-\sqrt{\delta})M_{ba}} \leq (1+4\sqrt{\delta})\frac{\pi_a}{\pi_b}\,.\]
+\begin{align*}
+    (1-4\sqrt{\delta}) \frac{\pi_a}{\pi_b}
+    &\le \frac{(1-\sqrt{\delta})M_{ab}}{(1+\sqrt{\delta})M_{ba}}
+      \le \frac{|\chi^{-1}(a)|/n}{|\chi^{-1}(b)|/n}
+      = \frac{M(A,\chi)_{ab}}{M(A,\chi)_{ba}} \\[6pt]
+    &\le \frac{(1+\sqrt{\delta})M_{ab}}{(1-\sqrt{\delta})M_{ba}}
+      \le (1+4\sqrt{\delta})\frac{\pi_a}{\pi_b}\,.
+\end{align*}  
 This implies that for all $a, b \in[k]$ we have 
-\[(1-8\sqrt{\delta}k) \frac{\pi_a}{\pi_b} \leq (1-4\sqrt{\delta})^{k-1} \frac{\pi_a}{\pi_b} \leq \frac{\frac{1}{n}|\chi^{-1}(a)|}{\frac{1}{n}|\chi^{-1}(b)|} \leq (1+4\sqrt{\delta})^{k-1} \frac{\pi_a}{\pi_b} \leq (1+4\sqrt{\delta}k) \frac{\pi_a}{\pi_b}\,,\]
+\begin{align*}
+    (1-8\sqrt{\delta}k)\,\frac{\pi_a}{\pi_b}
+    &\le (1-4\sqrt{\delta})^{k-1}\,\frac{\pi_a}{\pi_b}
+      \le \frac{|\chi^{-1}(a)|/n}{|\chi^{-1}(b)|/n} \\[6pt]
+    &\le (1+4\sqrt{\delta})^{k-1}\,\frac{\pi_a}{\pi_b}
+      \le (1+8\sqrt{\delta}k)\,\frac{\pi_a}{\pi_b}\,.
+\end{align*}  
 so summing over all $a \in [k]$ we get 
 \[(1-8\sqrt{\delta}k)\frac{1}{\pi_b} \leq \frac{1}{\frac{1}{n}|\chi^{-1}(b)|} \leq (1+4\sqrt{\delta}k) \frac{1}{\pi_b}\,,\]
 which finally implies that $\Abs{\frac{1}{n}|\chi^{-1}(b)| - \pi_b} \leq 8\sqrt{\delta}k$ for all $b \in [k]$.
@@ -152,9 +165,9 @@ Let us now prove \cref{thm:kalg-partial}.
     \paragraph{Row separation of $M(\tilde{A}, \chi')$.}
     We prove now that the rows of $M(\tilde{A}, \chi')$ are separated.
     Consider two rows $M(\tilde{A}, \chi')^{(i)}$ and $M(\tilde{A}, \chi')^{(i')}$ with $i \neq i' \in [k']$.
-    Because $M^{(a^*_i)} \neq M^{(a^*_{i'})}$, we have that $\Norm{M^{(a^*_i)} - M^{(a^*_{i'})}} \geq \Omega_M(1)$, so then by the closeness of $M$ and $M(\tilde{A}, \chi)$ we also have that $\Norm{M(\tilde{A}, \chi)^{(a^*_i)} - M(\tilde{A}, \chi)^{(a^*_{i'})}} \geq \Omega_M(1)$.
-    Therefore, there exists some $b \in [k]$ such that\linebreak $\Abs{M(\tilde{A}, \chi)_{a^*_ib} - M(\tilde{A}, \chi)_{a^*_{i'}b}} \geq \Omega_M(1)$.
-    By \cref{claim:close-entries-M} this implies that, for $j = \phi(b)$, we also have $\Abs{M(\tilde{A}, \chi')_{i j} - M(\tilde{A}, \chi')_{i' j}} \geq \Omega_M(1)$.
+    Because $M^{(a^*_i)} \neq M^{(a^*_{i'})}$, we have that $\Norm{M^{(a^*_i)} - M^{(a^*_{i'})}} \geq \Omega_M(1)$, so then by the closeness of $M$ and $M(\tilde{A}, \chi)$ we also have that \[\Norm{M(\tilde{A}, \chi)^{(a^*_i)} - M(\tilde{A}, \chi)^{(a^*_{i'})}} \geq \Omega_M(1)\;.\]
+    Therefore, there exists some $b \in [k]$ such that $\Abs{M(\tilde{A}, \chi)_{a^*_ib} - M(\tilde{A}, \chi)_{a^*_{i'}b}} \geq \Omega_M(1)$.
+    By \cref{claim:close-entries-M} this implies that, for $j = \phi(b)$, we also have \[\Abs{M(\tilde{A}, \chi')_{i j} - M(\tilde{A}, \chi')_{i' j}} \geq \Omega_M(1)\;.\]
     Hence, $\Norm{M(\tilde{A}, \chi')^{(i)} - M(\tilde{A}, \chi')^{(i')}} \geq \Omega_M(1)$.
 
     \paragraph{Closeness of $\tilde{A}$ and $W'$.}
@@ -165,7 +178,15 @@ Let us now prove \cref{thm:kalg-partial}.
     By \cref{claim:close-entries-W}, we have that $\Norm{W'-W} \leq \Norm{W'-W}_F \leq O_M(\delta)$.
     Then, for each $S_i$, denoting its elements as $S_i = \{a_1, \ldots, a_{\ell}\}$, we are interested in the closeness of $\tilde{A}$ and $W'$ with respect to the indicator $\sum_{j=1}^{\ell} Z_{a_j}$.
     We have
-    \[\Norm{(\tilde{A} - W') \sum_{j=1}^{\ell} Z_{a_j}} \leq \sum_{j=1}^{\ell} \Norm{(\tilde{A} - W') Z_{a_j}} \leq \sum_{j=1}^{\ell} \Norm{(\tilde{A} - W) Z_{a_j}} + \sum_{j=1}^{\ell}\Norm{(W'-W)Z_{a_j}}\,.\]
+    \[
+        \begin{aligned}
+        \Norm{(\tilde{A} - W') \sum_{j=1}^{\ell} Z_{a_j}}
+            &\le \sum_{j=1}^{\ell} \Norm{(\tilde{A} - W') Z_{a_j}} \\[4pt]
+            &\le \sum_{j=1}^{\ell} \Norm{(\tilde{A} - W)   Z_{a_j}}
+            \;+\;\sum_{j=1}^{\ell} \Norm{(W' - W)      Z_{a_j}}\,.
+        \end{aligned}
+    \]
+
     For the first term on the right-hand side, we have that $\Norm{\tilde{A} \frac{Z_a}{\Norm{Z_a}} - W \frac{Z_a}{\Norm{Z_a}}}^2 \leq O_M\Paren{\lambda + \frac{\delta}{\lambda}}$ for all $a \in [k]$, so using that $\Norm{Z_a} \leq \sqrt{n}$ we can bound
     \[\sum_{j=1}^{\ell} \Norm{(\tilde{A} - W) Z_{a_j}} \leq \sqrt{n} \cdot O_M\Paren{\sqrt{\lambda + \frac{\delta}{\lambda}}}\,.\]
     For the second term, we have that
@@ -190,8 +211,18 @@ Let us now prove \cref{thm:kalg-partial}.
 
     To analyze these removals, let us start by defining $\bar{a}_i^* = \argmax_{a \in S_i} |\chi^{-1}(a)|$ for each $i \in [k']$.
     Then, for each $i \in [k']$, the rounding algorithm in \cref{lemma: generalrounding} may remove at most\linebreak $\min\Paren{\sum_{a \in S_i} |\chi^{-1}(a)|, 2\sum_{\substack{a \neq a_i^{*} \in S_i}} |\chi^{-1}(a)|}$ vertices from $(\chi')^{-1}(i)$.
-    Then for each $i \in [k']$ the number of surviving vertices is at least $\bar{p}_i = \max\Paren{0, |\chi^{-1}(a_i^*)| - \sum_{\substack{a \neq a_i^{*} \in S_i}} |\chi^{-1}(a)|}$.
-    Then the algorithm returns a $(k', 1 - \frac{1}{n} \sum_{i \in [k']} \bar{p}_i + 2\delta + 2\e)$-colouring for $G$.
+    Then for each \(i\in[k']\) the number of surviving vertices is at least
+    \[
+    \bar p_i \;=\;
+    \max\Paren{
+        0,
+        \;\bigl|\chi^{-1}(a_i^*)\bigr|
+        \;-\;\sum_{\substack{a\in S_i\\a\neq a_i^*}}
+            \bigl|\chi^{-1}(a)\bigr|
+    }\,.
+    \]
+
+    Hence, the algorithm returns a $(k', 1 - \frac{1}{n} \sum_{i \in [k']} \bar{p}_i + 2\delta + 2\e)$-colouring for $G$.
     Finally, by \cref{lemma:model-colour-size}, for $\delta > 0$ small enough, $\frac{1}{n} |\chi^{-1}(a)|$ and $\pi_a$ are $O(\sqrt{\delta}k)$-close for all $a \in [k]$, so the algorithm also returns a $(k', 1 - \sum_{i \in [k']} p_i + O_M(\sqrt{\delta}) + 2\e)$-colouring for $G$, where $p_i$ is defined as in the statement of the theorem.
     Recalling that $\e = O_M(\lambda + \delta/\lambda)$ gives the stated result.
 \end{proof}
@@ -280,9 +311,12 @@ For simplicity of notation, let $M = M(\tilde{A}, \chi)$ be defined as in \cref{
 We aim again to apply \cref{thm:part-recovery} with matrices $M$ and $\tilde{A}$, and we verify that its conditions hold.
 
 \begin{claim}
-\label[claim]{claim:3-row-sep}
-If $\delta \ll \gamma^2$, then any two rows $M^{(a)}$ and $M^{(b)}$ of $M$ satisfy $\Norm{M^{(a)} - M^{(b)}} \geq \Omega(\gamma)$.
-\end{claim}
+    \label[claim]{claim:3-row-sep}
+    If \(\delta \ll \gamma^2\), then any two rows \(M^{(a)}\) and \(M^{(b)}\) of \(M\) satisfy
+    \[
+      \Norm{M^{(a)} - M^{(b)}} \;\ge\; \Omega(\gamma)\,.
+    \]
+\end{claim}    
 \begin{proof}
 We first argue that $M$ is close to a reversible row stochastic matrix with zero on the diagonal, to which we will apply \cref{lemma: 3colouringrowseparation}.
 Let $M' \in \R^{3 \times 3}$ be obtained from $M$ by setting the diagonal entries to zero and by rescaling each row such that it sums up to $1$.
@@ -290,7 +324,7 @@ Then $M'$ is row stochastic with zero on the diagonal.
 Let us now understand the stationary distribution of $M'$.
 Let $\pi$ be the stationary distribution of $M$, which coincides with $\Set{\frac{1}{n} |\chi^{-1}(a)|}_{a \in [3]}$.
 Then $\pi_{a} M_{ab} = \pi_b M_{ba}$ for all $a \neq b \in [3]$, so by construction also $\pi_a \Paren{\sum_{c \neq a} M_{ac}} M'_{ab} = \pi_b \Paren{\sum_{c \neq b} M_{bc}} M'_{ba}$ for all $a \neq b \in [3]$.
-Therefore, the stationary distribution of $M'$ has probability mass function proportional to $\Set{\pi_a \Paren{\sum_{c \neq a} M_{ac}}}_{a \in [3]}$, normalized to sum up to $1$.
+Therefore, the stationary distribution of $M'$ has probability mass function proportional to $\Set{\pi_a \Paren{\sum_{c \neq a} M_{ac}}}_{a \in [3]}$, normalised to sum up to $1$.
 Finally, we note that $\max_{a \in [3]} M_{aa} \leq O(\delta / \gamma)$, which also implies that $\sum_{c \neq a} M_{ac} \geq 1 - O(\delta / \gamma)$.
 Then $\Norm{M - M'} \leq O(\delta / \gamma)$, and also the stationary distribution of $M'$ has maximum probability mass bounded by $1/2 - \gamma + O(\delta/\gamma) \leq 1/2 - \Omega(\gamma)$.
 By \cref{lemma: 3colouringrowseparation}, any two distinct rows of $M'$ have separation $\Omega(\gamma)$.
@@ -363,7 +397,7 @@ Then we say the graph $G$ is obtained by randomly planting a \kcl in $H$ if it i
 \end{definition}
 
 % \rares{What to do with these?}
-% Letting $d':=\frac{k-1}{k}d$, we define a normalized adjacency matrix $\tilde{A} := \frac1{d'}A_G$ of $G$. For $x \in [n]$ and $a \in [k]$, let $\D{x}{a} = \sum_{y \in \chi^{-1}(a)} \tilde{A}_{xy}$. Then, we define the model $M \in \R^{k \times k}$ such that for any $a, b \in [k]$, has entries $M_{ab} = \frac{1}{|\chi^{-1}(a)|} \sum_{x \in \chi^{-1}(a)}\D{x}{b}$\andor{is it fine to use $M$ instead of $M(\tilde{A},\chi)$?}.
+% Letting $d':=\frac{k-1}{k}d$, we define a normalised adjacency matrix $\tilde{A} := \frac1{d'}A_G$ of $G$. For $x \in [n]$ and $a \in [k]$, let $\D{x}{a} = \sum_{y \in \chi^{-1}(a)} \tilde{A}_{xy}$. Then, we define the model $M \in \R^{k \times k}$ such that for any $a, b \in [k]$, has entries $M_{ab} = \frac{1}{|\chi^{-1}(a)|} \sum_{x \in \chi^{-1}(a)}\D{x}{b}$\andor{is it fine to use $M$ instead of $M(\tilde{A},\chi)$?}.
 % Let $\rank_{\le x}(H):=\rank_{\le x}\Paren{\frac1{d}A_H}$, and $\rank_{\ge x}(H):=\rank_{\ge x}\Paren{\frac1{d}A_H}$.\andor{is using $\rank{\tilde{A}}$ but $\rank(H)$ fine?}
 
 The following is our main recovery result.
@@ -403,7 +437,7 @@ To prove \cref{thm: random-planting-partial}, we first prove some properties of 
     By linearity of expectation,
     \[
     \begin{aligned}
-    \E\Brac{\sum_{x\in \chi^{-1}(a)} \D{x}{b}}
+    &\E\Brac{\sum_{x\in \chi^{-1}(a)} \D{x}{b}}\\
     &= \frac1{d'}\;\E\Brac{\sum_{x\sim y\in E(H)}
         \Paren{\1[\chi(x)=a\land\chi(y)=b]
             +\1[\chi(x)=b\land\chi(y)=a]}} \\[6pt]
@@ -468,7 +502,12 @@ Next, we show that with high probability the graph $G$ has a good variance bound
     = 1/d^{\Omega(1)}.
     \]
     
-    By \cref{lemma: plantedmodelconcentration}, the second term of \cref{eq:variance_split} is also bounded by $\Paren{\frac1{k-1}-M_{ab}}^2 \leq 1/d^{\Omega(1)}$, finishing the proof.
+    By \cref{lemma: plantedmodelconcentration}, the second term of \cref{eq:variance_split} satisfies
+    \[
+    \Paren{\tfrac1{k-1}-M_{ab}}^2
+    \;\le\; d^{-\Omega(1)}\,,
+    \]
+    finishing the proof.
 \end{proof}
 
 The last ingredient to prove \cref{thm: random-planting-partial} is a lemma that shows how low threshold rank is approximately preserved after planting.
@@ -477,7 +516,7 @@ The last ingredient to prove \cref{thm: random-planting-partial} is a lemma that
     % Let $r_1, r_2\geq 0$, $t_1, t_2\geq 1$, $c>0$ and $k\geq 1$ be parameters.
     Let $H$ be an $n$-vertex graph with adjacency matrix $A_H$.
     Let $G$ be the graph obtained by planting a \kcl in $H$ (not necessarily randomly), and let $A_G$ be its adjacency matrix.
-    Let $\bar{A}_H:=\frac1{c}A_H$ and $\bar{A}_G:=\frac1{c}A_G$ be adjacency matrices of $H$ and $G$ respectively normalized by the same parameter $c > 0$.
+    Let $\bar{A}_H:=\frac1{c}A_H$ and $\bar{A}_G:=\frac1{c}A_G$ be adjacency matrices of $H$ and $G$ respectively normalised by the same parameter $c > 0$.
     For $r_1, r_2 \geq 0$ and $t_1, t_2 \geq 1$, assuming that
     \[
     \rank_{\ge r_1}(\bar{A}_H)\le t_1
@@ -662,7 +701,7 @@ Given \cref{lemma:strongerprojectionargument} and \cref{lemma:independentsetroun
 We iterate over a net of the subspace spanned by the bottom $t$ eigenvectors of $\bar{A}$ in order to find a vector close to $u$ as defined in~\Cref{lemma:independentsetrounding}, and then use \cref{lemma:independentsetrounding} to round it to an independent set.
 
 By standard arguments, we can construct a $c \sqrt{\gamma/(1-\lambda)}$-cover of the unit ball in the subspace spanned by the bottom $t$ eigenvectors of $\tilde{A}$ in time $(\gamma/(1-\lambda))^{-O(t)}$, for any constant $c > 0$.
-The cover will have size $O(\sqrt{\gamma/(1-\lambda)})^{-t}$.
+The cover has size $O(\sqrt{\gamma/(1-\lambda)})^{-t}$.
 Then, we iterate over all $\hat{u}$ in this cover and for each of them we apply the rounding algorithm in \cref{lemma:independentsetrounding} to construct an independent set.
 We return the largest independent set thus obtained.
 

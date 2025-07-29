@@ -23,7 +23,7 @@ Then, given $A$, there exists an algorithm that runs in time $n^{O(1)} \cdot \Pa
 \end{theorem}
 
 In our applications, we will take $M$ to be a model of the colouring $\chi$, as per \Cref{def:model}.
-Our main results for graph colouring, in particular, take $M = M(\tilde{A}, \chi)$, where $\tilde{A}$ is the normalized adjacency matrix of the graph.
+Our main results for graph colouring, in particular, take $M = M(\tilde{A}, \chi)$, where $\tilde{A}$ is the normalised adjacency matrix of the graph.
 Then $M_{ab}$ corresponds to the transition probability from colour class $a$ to colour class $b$.
 (An exception is our result for randomly planted graph colourings in \Cref{thm: random-planting-partial}, where for technical reasons we take $M = \frac{1}{d'} A$, where $A$ is the adjacency matrix of the graph and $d'$ is its \emph{expected} average degree.)
 We note that $W_{ij} = M_{\chi(i)\chi(j)} / |\chi^{-1}(\chi(j))|$ is simply the extension of $M$ to the entire matrix, according to the colour classes, up to the normalization factor $1/|\chi^{-1}(\chi(j))|$.
@@ -113,10 +113,10 @@ Continuing \cref{lemma:lin-alg-subspace-eq1},
 \Norm{(X-Y)v_i}^2 \geq \sum_{j=1}^{m} (\lambda_i - \lambda_j')^2 \langle v_j', v_i \rangle^2 \geq \eta^2 \sum_{j=1}^{m} \langle v_j', v_i \rangle^2 = \eta^2 \Norm{Pv_i}^2\,.
 \end{equation}
 
-Second, we claim that $\sum_{i=1}^k \Norm{(X-Y)v_i}^2 = \sum_{i=1}^{k} \Norm{(X-Y)u_i}^2$ and $\sum_{i=1}^k \Norm{P v_i}^2 = \sum_{i=1}^{k} \Norm{P u_i}^2$.
+Second, we claim that \[\sum_{i=1}^k \Norm{(X-Y)v_i}^2 = \sum_{i=1}^{k} \Norm{(X-Y)u_i}^2\quad\text{and}\quad \sum_{i=1}^k \Norm{P v_i}^2 = \sum_{i=1}^{k} \Norm{P u_i}^2\;.\]
 The proof is simply that, for any matrix $M \in \R^{n \times n}$ and any two orthonormal bases of the same subspace $\{x_i\}$ and $\{y_i\}$,
 \[\sum_{i} \Norm{Mx_i}^2 = \sum_{i} \Tr(M^\top M x_i x_i^\top) = \Tr\Paren{M^\top M \sum_{i} x_i x_i^\top} = \Tr\Paren{M^\top M \sum_{i} y_i y_i^\top}\,,\]
-and by the same sequence of transformations we get back that $\Tr\Paren{M^\top M \sum_{i} y_i y_i^\top} = \sum_{i} \Norm{My_i}^2$. 
+and by the same sequence of transformations we get back that \[\Tr\Paren{M^\top M \sum_{i} y_i y_i^\top} = \sum_{i} \Norm{My_i}^2\;.\] 
 Using this fact for the orthonormal bases $\{v_i\}$ and $\{u_i\}$, we prove the desired fact, and combining it with \cref{lemma:lin-alg-subspace-eq2} we complete the proof.
 \end{proof}
 
@@ -136,8 +136,8 @@ Finally, we prove \cref{thm:partition_recovery_theorem2}.
 
 \begin{proof}[Proof of \cref{thm:partition_recovery_theorem2}]
     We have $\Norm{A \frac{Z_a}{\Norm{Z_a}} - W \frac{Z_a}{\Norm{Z_a}}}^2 \leq \delta$ for all $a \in [k]$, so $\sum_{a=1}^k \Norm{\Paren{A - W}\frac{Z_a}{\Norm{Z_a}}}^2 \leq \delta k$.
-    Because $\frac{Z_a}{\Norm{Z_a}}$ are orthonormal, for any orthonormal $u_1, \ldots, u_k$ that span the same subspace we also have $\sum_{i=1}^k \Norm{\Paren{A -W}u_i}^2
-    \leq \delta k$.
+    Because $\frac{Z_a}{\Norm{Z_a}}$ are orthonormal, for any orthonormal $u_1, \ldots, u_k$ that span the same subspace we also have \[\sum_{i=1}^k \Norm{\Paren{A -W}u_i}^2
+    \leq \delta k\;.\]
     Also recall that $W$ has column span in the span of $\{Z_a\}_{a \in [k]}$, so all of its eigenvectors with non-zero eigenvalues lie in the span of $\{u_1, \ldots, u_k\}$.
     Let $P$ be the orthogonal projection to the eigenvectors of $A$ with eigenvalue smaller than $\lambda$ in absolute value.
     Then, by \cref{lemma:lin-alg-subspace} applied with $W, A$ as $X, Y$, we get for any orthonormal vectors $u_1, \ldots, u_r$ that span the eigenspace of $W$ with eigenvalues larger than $\lambda+\eta$ in absolute value, for any $\eta >0$, that $\sum_{i=1}^r \Norm{P u_i}^2 \leq \delta k / \eta^2$.
@@ -207,7 +207,7 @@ Next, we prove \cref{lem:eigenvalue_separation}.
 \begin{proof}[Proof of \cref{lem:eigenvalue_separation}]
 Observe that if $Mv = \tau v$, then we also have that $B^{1/2}v$ is an eigenvector of $\widetilde{M} = B^{1/2} M B^{-1/2}$ of value $\tau$.
 Note that $\widetilde{M}$ is symmetric and continues to satisfy $\Norm{\widetilde{M}}\leq \zeta$.
-Then, we apply \cref{lem: eigenvectorsdistinguish} with the matrix $\widetilde{M}$ and with the eigenvectors $B^{1/2} v$ of $\widetilde{M}$ with eigenvalue at least $\lambda$ in absolute value (normalized to be unit vectors).
+Then, we apply \cref{lem: eigenvectorsdistinguish} with the matrix $\widetilde{M}$ and with the eigenvectors $B^{1/2} v$ of $\widetilde{M}$ with eigenvalue at least $\lambda$ in absolute value (normalised to be unit vectors).
 We apply the lemma with $D \in \R^k$ such that $D_x = (\sqrt{n} B^{-1/2})_x$, whose largest entry is upper bounded by $1/\sqrt{c}$.
 Recall that we assume any two rows of $M$ satisfy $\Norm{M^{(a)} - M^{(b)}} \geq \alpha$, so also any two rows of $\sqrt{n} M B^{-1/2} = \sqrt{n} B^{-1/2} \widetilde{M}$ satisfy $\Norm{\sqrt{n}B^{-1/2} \Paren{M^{(a)} - M^{(b)}}} \geq \alpha$.
 Taking the transpose and using that $\widetilde{M}$ is symmetric, any two columns of $\sqrt{n} \widetilde{M} B^{-1/2}$ satisfy $\Norm{\sqrt{n}B^{-1/2}(a) \widetilde{M}_a - \sqrt{n}B^{-1/2}(b) \widetilde{M}_b} \geq \alpha$.
@@ -225,7 +225,7 @@ Then, if we consider for each such $v$ some $v' \propto v$ such that $\norm{Zv'}
 In this section we prove \cref{lem:cluster-eigen}.
 First, we state the guarantees of a clustering algorithm used in the proof.
 
-\begin{lemma}[Partitioning based on distinguishing eigenvectors (based on Lemma E.7 in \cite{MR3536556-David16})]\label[lemma]{lem:clusteringalmosteigenvectors}
+\begin{lemma}[Partitioning by distinguishing eigenvectors (c.f. Lemma E.7 in \cite{MR3536556-David16})]\label[lemma]{lem:clusteringalmosteigenvectors}
     Let $\chi: [n] \to [k]$ be a $k$-partition of $[n]$.
     Suppose $|\chi^{-1}(a)| \geq c n$ for all $a \in [k]$.
     For $\ell \leq k$, let $\set{v_{i}}_{i \in [\ell]}$ be $k$-dimensional vectors that satisfy

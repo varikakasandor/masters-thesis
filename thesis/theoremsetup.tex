@@ -5,29 +5,22 @@
 
 \numberwithin{equation}{chapter}
 
-%% German theorems
-%\newtheorem{satz}{Satz}[chapter]
-%\newtheorem{beispiel}[satz]{Beispiel}
-%\newtheorem{bemerkung}[satz]{Bemerkung}
-%\newtheorem{korrolar}[satz]{Korrolar}
-%\newtheorem{definition}[satz]{Definition}
-%\newtheorem{lemma}[satz]{Lemma}
-%\newtheorem{proposition}[satz]{Proposition}
-
 %% English variants
-\newtheorem{theorem}{Theorem}[chapter]
-\newtheorem{example}[theorem]{Example}
-\newtheorem{remark}[theorem]{Remark}
-\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{theorem}{Theorem}[section]
 \newtheorem{definition}[theorem]{Definition}
+\newtheorem{problem}[theorem]{Problem}
 \newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
 \newtheorem{claim}[theorem]{Claim}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{proposition}[theorem]{Proposition}
+% \newtheorem*{theorem*}{Theorem}
+% \newtheorem*{lemma*}{Lemma}
 
 
 %% Proof environment with a small square as a "qed" symbol
 \theoremstyle{nonumberplain}
 \theorembodyfont{\normalfont}
 \theoremsymbol{\ensuremath{\square}}
-\newtheorem{proof}{Proof}
-%\newtheorem{beweis}{Beweis}
+\newtheorem{proof}{Proof} % TODO: figure out if needed

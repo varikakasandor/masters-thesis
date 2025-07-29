@@ -1,4 +1,4 @@
-\section{Hardness results}
+\section{Hardness results}\label{sec: hardness}
 
 In this section, we give various hardness results against algorithms that are given as input \emph{almost-colourable} graphs.
 As in~\cite{bafna-hsieh-kothari}, our hardness reductions proceed from the following hardness result for approximating independent sets by Bansal and Khot~\cite{MR2648426-Bansal09}:
@@ -89,7 +89,15 @@ We now turn to the proofs of our hardness results. To prove \cref{thm: finegrain
     \begin{itemize}
         \item the non-zero eigenvalues of $M$ and $ZMB^{-1}Z^T$ are the same (see the proof of \cref{thm:part-recovery}), so because $\lambda_2(M)\leq 0$ we also have $\lambda_2(ZMB^{-1}Z^T)\leq 0$,
         \item because $\Norm{M-M(\tilde{A},\chi)}=o(1)$ and $\Norm{Z}^2=\Norm{B}$ we have
-    $$\Norm{Z\Paren{M(\tilde{A},\chi)-M}B^{-1}Z^T}\leq \Norm{Z}\Norm{M(\tilde{A},\chi)-M}\Norm{B^{-1}}\Norm{Z^T}=\frac{\max_{a\in[k]}\Abs{\chi^{-1}(a)}}{\min_{a\in[k]}\Abs{\chi^{-1}(a)}}\ o(1)=o(1)\,,$$
+        \begin{equation*}  % or equation if you want a number
+            \begin{split}
+              \Norm{Z\bigl(M(\tilde A,\chi)-M\bigr)B^{-1}Z^T}
+              &\le \Norm{Z}\,\Norm{M(\tilde A,\chi)-M}\,\Norm{B^{-1}}\,\Norm{Z^T}\\
+              &= \frac{\max_{a\in[k]}\Abs{\chi^{-1}(a)}}
+                     {\min_{a\in[k]}\Abs{\chi^{-1}(a)}}\;o(1)
+                = o(1)\,.
+            \end{split}
+          \end{equation*}          
         \item if for some $1\leq a \leq b\leq k$ we have $\lambda_1\Paren{\frac{1}{d}A_{G^{(ab)}}} = o(1)$, then as $E^{(ab)}$ is obtained from $\frac{1}{d}A_{G^{(ab)}}$ by row-centering (which is an orthogonal projection) and padding with $0$s, we also get $\lambda_1(E^{(ab)})=o(1)$,
         \item if for some $1\leq a \leq b\leq k$ we have that $G^{(ab)}$ is biregular and $\lambda_2\Paren{\frac{1}{d}A_{G^{(ab)}}} = o(1)$, then row-centering sends the leading eigenvalue pair to $0$ while the others remain unchanged, so the spectrum of $E^{(ab)}$ is $\Set{0, 0}\cup \lambda_{\btw{2}{\Paren{\chi^{-1}(a)+\chi^{-1}(b)-1}}}\Paren{\frac{1}{d}A_{G^{(ab)}}}$, implying $\lambda_1(E^{(ab)})=o(1)$.
     \end{itemize}
@@ -100,7 +108,7 @@ We now prove \cref{thm: finegrainedrowshard}.
 
 \begin{proof}[Proof of \cref{thm: finegrainedrowshard}]
     For the sake of contradiction, suppose an algorithm $\ALG$ solves the problem above efficiently and returns a $(k, 1 - \sum_{i \in [k']} p_i - \gamma)$-colouring.
-    Let $r_1, \ldots, r_k$ be even integers bounded by $O_{M, \e, \gamma}(1)$\footnote{By \cref{lemma:model-colour-size} we have $\pi_i=\Theta(1)$ for all $i\in[k]$.} such that $\Norm{\hat{\pi} - \pi}_{\infty}\leq \min\Paren{\frac{\gamma}{2k}, \frac{\e}{2}\min_{i\in [k]}\pi_i}$ and $\argmax_{a \in S_i} \pi_a=\argmax_{a \in S_i} \hat{\pi}_a$ for all $i\in[k']$, where $\hat{\pi}_i:=\frac{r_i}{\sum_{i\in[k]} r_i}$.
+    Let $r_1, \ldots, r_k$ be even integers bounded by $O_{M, \e, \gamma}(1)\;$\footnote{By \cref{lemma:model-colour-size} we have $\pi_i=\Theta(1)$ for all $i\in[k]$.} such that $\Norm{\hat{\pi} - \pi}_{\infty}\leq \min\Paren{\frac{\gamma}{2k}, \frac{\e}{2}\min_{i\in [k]}\pi_i}$ and  \[\argmax_{a \in S_i} \pi_a=\argmax_{a \in S_i} \hat{\pi}_a \quad\text{for all } i\in[k']\;,\] where $\hat{\pi}_a:=\frac{r_a}{\sum_{j\in[k]} r_j}$.
     Let $\widehat{M}$ be the $k\times k$ matrix defined by $\widehat{M}_{ij}=\frac{\hat{\pi}_j}{\pi_j}M_{ij}$, satisfying $\hat{\pi}_i\widehat{M}_{ij}=\hat{\pi}_j\widehat{M}_{ji}$.
     Finally, let \( f : [k'] \to [k] \) be a choice function selecting an element from each set \( S_i \), i.e., \( f(i) \in S_i \) for all \( i \in [k'] \).
     
@@ -122,7 +130,7 @@ We now prove \cref{thm: finegrainedrowshard}.
 
     Suppose $G$ has two disjoint independent sets of size $(1-\e/2)n$ each. Then, by construction $G^*$ admits a $(k, \e)$-colouring $\chi$ such that $\Abs{\chi^{-1}(a)}=\hat{\pi}_a \Abs{V(G^*)}$ for all $a\in[k]$. Indeed, if for some $i\in[k']$ we have $r_{a_i^*} \leq \sum_{\substack{a \neq a_i^{*} \in S_i}} r_a$, then the corresponding colour classes can be mapped to independent sets in copies of $G$ such that the two independent sets within any copy of $G$ get a different colour. If $r_{a_i^*} > \sum_{\substack{a \neq a_i^{*} \in S_i}} r_a$, the same holds after mapping the isolated vertices to the colour class corresponding to $a_i^*$.
     
-    Let $\tilde{A}^*$ be the normalized adjacency matrix of $G^*$. Let us show that $\Norm{M(\tilde{A}^*, \allowbreak\chi)-M}_{\max}\leq \e$. Let $x\in S_i$ and $y\in S_j$ be arbitrary such that $f(i)=a$ and $f(j)=b$. By the expander mixing lemma,  we have $M(\tilde{A}^*, \chi)_{xy}=\widehat{M}_{ab}\pm o(1)$. On the other hand, using $\Norm{\hat{\pi} - \pi}_{\infty}\leq \frac{\e}{2} \min_{i\in [k]}\pi_i$ it follows that $\Abs{\widehat{M}_{ab}-M_{ab}}=\Abs{\frac{\hat{\pi}_b}{\pi_b}M_{ab} - M_{ab}}\leq \frac{\e}{2} M_{ab}\leq \e/2$. Combining the two by triangle inequality and using $M_{xy}=M_{ab}$ we get $\Abs{M(\tilde{A}^*, \chi)_{xy}-M_{xy}}\leq \e$ as desired.
+    Let $\tilde{A}^*$ be the normalised adjacency matrix of $G^*$. We are going to now show that $\Norm{M(\tilde{A}^*, \allowbreak\chi)-M}_{\max}\leq \e$. Let $x\in S_i$ and $y\in S_j$ be arbitrary such that $f(i)=a$ and $f(j)=b$. By the expander mixing lemma,  we have $M(\tilde{A}^*, \chi)_{xy}=\widehat{M}_{ab}\pm o(1)$. On the other hand, using $\Norm{\hat{\pi} - \pi}_{\infty}\leq \frac{\e}{2} \min_{i\in [k]}\pi_i$ it follows that $\Abs{\widehat{M}_{ab}-M_{ab}}=\Abs{\frac{\hat{\pi}_b}{\pi_b}M_{ab} - M_{ab}}\leq \frac{\e}{2} M_{ab}\leq \e/2$. Combining the two by triangle inequality and using $M_{xy}=M_{ab}$ we get $\Abs{M(\tilde{A}^*, \chi)_{xy}-M_{xy}}\leq \e$ as desired.
 
     Hence, in this case $G^*$ would admit an $(M, \e)$-colouring. Furthermore, as the maximum degree within each $G_{S_j}$ is $o(d)$ and the subgraphs between the $G_{S_j}$s are biregular Ramanujan, we can apply \cref{lem: blowupexpanding} to get $\lambda_2(G^*)=o(1)$. Overall we can conclude that the preconditions of $\ALG$ would be satisfied, and by assumption it would return a $(k, 1 - \sum_{i \in [k']} p_i - \gamma)$-colouring of $G^*$.
 
@@ -134,7 +142,8 @@ We now prove \cref{thm: finegrainedrowshard}.
     
     \begin{align*}
         &\frac1{k\frac{\Paren{\sum_{i\in[k]} r_i-\sum_{j\in[k']} q_j}}{2}}\Paren{\sum_{i\in[k]} r_i-\sum_{j\in[k']} q_j-\Paren{1-\sum_{j\in[k']} p_j-\gamma}\sum_{i\in[k]} r_i}n\\
-        &= \frac{2n\sum_{i\in[k]} r_i}{k\Paren{\sum_{i\in[k]} r_i-\sum_{j\in[k']} q_j}}\Paren{\gamma-\sum_{j\in[k']} \Paren{\max\Paren{0, \hat{\pi}_{a_j^*} - \sum_{\substack{a \neq a_j^{*} \in S_j}} \hat{\pi}_a}-\max\Paren{0, \pi_{a_j^{*}} - \sum_{\substack{a \neq a_j^{*} \in S_j}} \pi_a}}}\\
+        &= \frac{2n\sum_{i\in[k]} r_i}{k\Paren{\sum_{i\in[k]} r_i-\sum_{j\in[k']} q_j}}\\
+        &\quad\times\Paren{\gamma-\sum_{j\in[k']} \Paren{\max\Paren{0, \hat{\pi}_{a_j^*} - \sum_{\substack{a \neq a_j^{*} \in S_j}} \hat{\pi}_a}-\max\Paren{0, \pi_{a_j^{*}} - \sum_{\substack{a \neq a_j^{*} \in S_j}} \pi_a}}}\\
         &\geq  \frac{2n}{k}\Paren{\gamma-k\frac{\gamma}{2k}}\\
         &=\frac{\gamma}{2k} \Abs{V(G)}
     \end{align*}
@@ -190,7 +199,7 @@ We finish this section with the proof of \cref{thm: lowtopthresholdrankhard}.
     \footnotetext{Using \cref{lem: blowupexpanding} and $\Abs{S}\geq n/4$, such a graph exists based on the model matrix \(\left(\begin{smallmatrix}
 0 & \Abs{S} - (1/4-\e/2)n & (1/4-\e/2)n \\
 \Abs{S} - (1/4-\e/2)n & 0 & (1/4-\e/2)n \\
-å\Abs{S}/2 & \Abs{S}/2 & 0
+\Abs{S}/2 & \Abs{S}/2 & 0
 \end{smallmatrix}\right)\) with a non-positive second eigenvalue.}
 
     Let us first show that $G^*$ is $\Abs{S}$-regular. Note that the degrees of $x\in V(G)$ coming from $G$ are offset by the removal of $H'$, so they will exactly have degree $\Abs{S}$ coming from $H$. For a vertex $y\in S$, the degree coming from $H$ is $n$, and the degree removed by $H'$ is $\frac{nd_{\avg}}{\Abs{S}}$, so the degree of $y$ in $G^*$ is also

@@ -15,7 +15,7 @@ Then, for any $a, b \in [k]$ and $\bm{x}$ uniformly random in $\chi^{-1}(a)$,
 \end{lemma}
 \begin{proof}
     Fix some $a, b \in [k]$.
-    For simplicity, we denote $\sigma^2 = \E_{\bm{x} \sim \chi^{-1}(a)} \Paren{\D{\bm{x}}{b}-\E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b}}^2$.
+    For simplicity, we denote \[\sigma^2 := \E_{\bm{x} \sim \chi^{-1}(a)} \Paren{\D{\bm{x}}{b}-\E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b}}^2\;.\]
 
     If $a = b$, we have 
     \begin{align*}
@@ -42,7 +42,7 @@ Then, for any $a, b \in [k]$ and $\bm{x}$ uniformly random in $\chi^{-1}(a)$,
     \begin{align}
     \begin{split}
     \label{eq:3_col_num}
-    v^\top \tilde{A}v
+        &v^\top \tilde{A}v\\
         &= v_{(a)}^\top \tilde{A}_{(a)} v_{(a)} + v_{(b)}^\top \tilde{A}_{(b)} v_{(b)} + 2 \beta \frac{1}{|\chi^{-1}(a)|} \sum_{x \in \chi^{-1}(a)} \sum_{\substack{y \in \chi^{-1}(b)\\y \sim x}} \Paren{\D{x}{b}-\E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b}}\\
         &= v_{(a)}^\top \tilde{A}_{(a)} v_{(a)} + v_{(b)}^\top \tilde{A}_{(b)} v_{(b)} + 2 \beta \E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b} \Paren{\D{\bm{x}}{b}-\E_{\bm{x} \sim \chi^{-1}(a)} \D{\bm{x}}{b}}\,.
     \end{split}
@@ -65,7 +65,7 @@ Then, for any $a, b \in [k]$ and $\bm{x}$ uniformly random in $\chi^{-1}(a)$,
     v^\top \tilde{A}v
     \geq 2 \beta \sigma^2 - 4 \delta/c\,.
     \end{align*}
-    We also note that $\norm{v}^2 = \sigma^2 + \frac{|\chi^{-1}(b)|}{|\chi^{-1}(a)|} \beta^2 \leq \sigma^2 + \beta^2/c$ and $\langle v, \frac{\1}{\sqrt{n}}\rangle^2 = \frac{|\chi^{-1}(b)|^2}{|\chi^{-1}(a)| n}\beta^2 \leq \beta^2 / c$, so
+    We also note that \[\norm{v}^2 = \sigma^2 + \frac{|\chi^{-1}(b)|}{|\chi^{-1}(a)|} \beta^2 \leq \sigma^2 + \beta^2/c\quad\text{and}\quad \langle v, \frac{\1}{\sqrt{n}}\rangle^2 = \frac{|\chi^{-1}(b)|^2}{|\chi^{-1}(a)| n}\beta^2 \leq \beta^2 / c\;,\] so
     \[v^\top \tilde{A} v \leq \frac{1}{n} \langle v, \1\rangle^2 + \lambda_2 \Paren{\norm{v}^2 - \frac{1}{n} \langle v, \1\rangle^2} \leq \lambda_2 \sigma^2 + \beta^2/c\,.\]
     Putting everything together,
     \begin{align*}

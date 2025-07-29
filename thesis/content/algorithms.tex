@@ -1,11 +1,11 @@
 \chapter{Finding colourings and independent sets}
-\label{sec:algorithms}
+\label[chapter]{sec:algorithms}
 
 \section{Colourable models}
 
 Our most general result for $k$-colourings is the following:
 \begin{theorem}[Result for $k$-colouring]
-    \label{thm:kalg-partial}
+    \label[theorem]{thm:kalg-partial}
     Let $M \in \R^{k \times k}_{\geq 0}$ be a reversible row stochastic matrix with zero on the diagonal and non-positive second eigenvalue, and let $\pi$ be its stationary distribution.
     Let $S_1, \ldots, S_{k'}$ be a partition of $[k]$ such that, for all $a, b \in S_i$ the rows $M^{(a)}$ and $M^{(b)}$ of $M$ are equal, and for all $a \in S_i, b \in S_j$ with $i \neq j$ the rows $M^{(a)}$ and $M^{(b)}$ of $M$ are distinct.
     For all $i \in [k']$, let $a_i^* = \argmax_{a \in S_i} \pi(a)$, and let $p_i = \max\Paren{0, \pi(a_i^{*}) - \sum_{\substack{a \neq a_i^{*} \in S_i}} \pi(a)}$.
@@ -236,7 +236,7 @@ Assuming the UGC conjecture, \cite{MR2648426} showed that it is NP-hard to recov
 
 
 \begin{theorem}[Result for $2$-colouring]
-\label{thm:2alg}
+\label[theorem]{thm:2alg}
 Let $G$ be an $n$-vertex $d$-regular graph with adjacency matrix $A$ and let $\tilde{A} = \frac{1}{d}A$.
 Let $\lambda$ be the second largest eigenvalue of $\tilde{A}$.
 Let $\chi: [n] \to [2]$ be a $2$-colouring of its vertices, and suppose that $G$ has a vertex cover of all monochromatic edges of size at most $\delta n$.
@@ -298,7 +298,7 @@ Then the conclusion follows because $\Norm{M^{(a)} - M^{(b)}} \geq M_{ab} - M_{b
 Finally, we state and prove our result specialized to $3$-colourings.
 
 \begin{theorem}[Result for $3$-colouring]
-\label{thm:3alg}
+\label[theorem]{thm:3alg}
 Let $G$ be an $n$-vertex $d$-regular graph with adjacency matrix $A$, and let $\tilde{A} = \frac{1}{d}A$.
 Let $\lambda$ be the second largest eigenvalue of $\tilde{A}$.
 Let $\chi: [n] \to [3]$ be a $3$-partition of its vertices, and suppose that $G$ has a vertex cover of all edges with both endpoints in the same part of size at most $\delta n$ with respect to $\chi$.
@@ -331,13 +331,13 @@ By \cref{lemma: 3colouringrowseparation}, any two distinct rows of $M'$ have sep
 Then, by closeness of $M$ and $M'$, we also have that any two rows of $M$ have separation $\Omega(\gamma) - O(\delta/\gamma) \geq \Omega(\gamma)$.
 \end{proof}
 
-Note that we can assume that $\delta \ll \gamma^2$, as the guarantees of the theorem are vacuous otherwise, so we can apply \Cref{claim:3-row-sep}.
+Note that we can assume that $\delta \ll \gamma^2$, as the guarantees of the theorem are vacuous otherwise, so we can apply \cref{claim:3-row-sep}.
 For the rest of the proof, we will largely repeat the analysis in the proof of \cref{thm:kalg-partial}, but using that any two distinct rows of $M$ are separated and taking into account explicitly the parameter $\gamma$.
 Let $W = Z M B^{-1} Z^\top$, with the partition matrices $Z, B$ corresponding to the $3$-partition $\chi$.
 We have trivially that $B^{1/2} M B^{-1/2}$ is symmetric and that $\Norm{M} = 1$.
 We also have that $|\chi^{-1}(a)| \geq 2\gamma n$ for all $a \in [3]$.
 
-By \Cref{claim:3-row-sep} we have that any two distinct rows of $M$ have separation $\Omega(\gamma)$.
+By \cref{claim:3-row-sep} we have that any two distinct rows of $M$ have separation $\Omega(\gamma)$.
 For the closeness of $\tilde{A}$ and $W$, we have by \cref{lemma: expansionimpliesvariance} and \cref{lem:small-var-to-indic} that $\Norm{\tilde{A} \frac{Z_a}{\Norm{Z_a}} - W \frac{Z_a}{\Norm{Z_a}}}^2 \leq O\Paren{\lambda/\gamma^2 + \frac{\delta}{\gamma^2 \lambda}}$ for all $a \in [3]$.
 For the low rank of $\tilde{A}$, we have by applying \cref{cor:spectral_small_to_small} with $\sigma=\lambda$ that $\rank_{\leq -\sqrt{2\lambda}}(\tilde{A}) \leq 1/\lambda^2$, and also $\lambda \leq \sqrt{2 \lambda}$. 
 
@@ -354,14 +354,14 @@ However, we are after small \text{vertex} violation, not small edge violation: w
 
 
 
-\begin{theorem}[Vertex vs edge violation]\label{thm: vertexvsedgeviolation}
+\begin{theorem}[Vertex vs edge violation]\label[theorem]{thm: vertexvsedgeviolation}
     Let $0<\gamma, \delta<\frac{1}{6}$ be constants. Let $G$ be an $n$-vertex $d$-regular graph with $\lambda_2\leq \frac{\delta^6\gamma^9}{10^2}$ that admits a \tcl $\chi$ such that $\max_{a \in [3]} \frac{1}{n} |\chi^{-1}(a)| \leq 1/2 - \gamma$. Let $\chi'$ be an alternative (not necessarily proper) \tcl with $\text{agree}(\chi, \chi')\leq 1-\delta$. Then, $\chi'$ must have at least $\frac{1}{10^4}\delta^3\gamma^4 nd$ monochromatic edges. 
 \end{theorem}
 
 The proof is quite calculation heavy and the calculations are similar to those in \cref{lemma: expansionimpliesvariance} so we only provide a sketch highlighting the main ideas.
 
 
-\begin{proof}[Proof sketch of \cref{thm: vertexvsedgeviolation}]
+\begin{proof}[sketch of \cref{thm: vertexvsedgeviolation}]
     Let $\psi^{-1}(a, b) := \chi^{-1}(a) \cap \chi'^{-1}(b)$ be the intersection of the colour classes of $\chi$ and $\chi'$ -- without loss of generality, we can assume that the identity permutation maximises agreement. 
 
     The proof starts with a technical lemma showing that as $\chi$ and $\chi'$ have low agreement, there exist colours $a$ and $b$ such that $\Abs{\chi'^{-1}(b)}$, $\Abs{\psi^{-1}(a, b)}$, and $\Abs{\psi^{-1}(b, b)}$ are not too large and not too small either.
@@ -404,7 +404,7 @@ The following is our main recovery result.
 We note that in \cref{thm: random-planting-full}, for the case when the host graph is a one-sided expander, we give an algorithm that recovers a colouring on \emph{all} vertices of the graph.
 
 \begin{theorem}[Result for random planting, partial recovery]
-    \label{thm: random-planting-partial}
+    \label[theorem]{thm: random-planting-partial}
     Let $H$ be an $n$-vertex $d$-regular graph with adjacency matrix $A_H$.
     Suppose $\rank_{\geq \lambda}(\frac{1}{d}A_H) \leq t$ for some $0 < \lambda < 1$ and $t \in \mathbb{N}$.
     Let $G$ be the graph obtained by randomly planting a \kcl in $H$, and let $\chi: [n] \to [k]$ be the associated \kcl.
@@ -583,7 +583,7 @@ We are now ready to prove \cref{thm: random-planting-partial}.
 \end{proof}
 
 \subsection{Rounding to a full colouring}
-\label{sec:full-col}
+\label[subsection]{sec:full-col}
 
 Next, we show that if $H$ actually is a one-sided expander (instead of having just low top threshold rank), and if the degree $d$ is at least a large enough constant, then we can actually obtain a full \kcl by exploiting the full randomness of the model.
 
@@ -593,7 +593,7 @@ Then, we show how to convert this list of partial colourings to a full colouring
 Our main result is the following:
 
 \begin{theorem}[Result for random planting, full recovery]
-    \label{thm: random-planting-full}
+    \label[theorem]{thm: random-planting-full}
     Let $H$ be an $n$-vertex $d$-regular graph with adjacency matrix $A_H$.
     Let $\lambda$ be the second largest eigenvalue of $\frac{1}{d}A_H$.
     Let $G$ be the graph obtained by randomly planting a \kcl in $H$, and let $\chi: [n] \to [k]$ be the associated \kcl.
@@ -695,19 +695,19 @@ Furthermore, we can round a vector close to the indicator vector of the independ
     Noting that $\hat{I}$ is a superset of the independent set $\hat{I}\cap I$, by applying \cref{lemma: generalrounding} on $\hat{I}$, we get an independent set of size at least $\Abs{\hat{I}\cap I} - \Abs{\hat{I}\setminus \Paren{\hat{I}\cap I}}=\Abs{I} - \Abs{I\triangle \hat{I}}\geq \Abs{I} - \alpha n$.
 \end{proof}
 
-Given \cref{lemma:strongerprojectionargument} and \cref{lemma:independentsetrounding}, we prove~\Cref{thm:independentsetrecovery}.
+Given \cref{lemma:strongerprojectionargument} and \cref{lemma:independentsetrounding}, we prove~\cref{thm:independentsetrecovery}.
 
-\begin{proof}[Proof of~\Cref{thm:independentsetrecovery}]
-We iterate over a net of the subspace spanned by the bottom $t$ eigenvectors of $\bar{A}$ in order to find a vector close to $u$ as defined in~\Cref{lemma:independentsetrounding}, and then use \cref{lemma:independentsetrounding} to round it to an independent set.
+\begin{proof}[Proof of~\cref{thm:independentsetrecovery}]
+We iterate over a net of the subspace spanned by the bottom $t$ eigenvectors of $\bar{A}$ in order to find a vector close to $u$ as defined in~\cref{lemma:independentsetrounding}, and then use \cref{lemma:independentsetrounding} to round it to an independent set.
 
 By standard arguments, we can construct a $c \sqrt{\gamma/(1-\lambda)}$-cover of the unit ball in the subspace spanned by the bottom $t$ eigenvectors of $\tilde{A}$ in time $(\gamma/(1-\lambda))^{-O(t)}$, for any constant $c > 0$.
 The cover has size $O(\sqrt{\gamma/(1-\lambda)})^{-t}$.
 Then, we iterate over all $\hat{u}$ in this cover and for each of them we apply the rounding algorithm in \cref{lemma:independentsetrounding} to construct an independent set.
 We return the largest independent set thus obtained.
 
-For correctness, we note by~\Cref{lemma:strongerprojectionargument} that there exists some $\tilde{u}$ in the span of the bottom $t$ eigenvectors with $\norm{\tilde{u}} \leq \norm{u} \leq 1$ that is $2\sqrt{\gamma/(1-\lambda)}$-close to $u$.
+For correctness, we note by~\cref{lemma:strongerprojectionargument} that there exists some $\tilde{u}$ in the span of the bottom $t$ eigenvectors with $\norm{\tilde{u}} \leq \norm{u} \leq 1$ that is $2\sqrt{\gamma/(1-\lambda)}$-close to $u$.
 Then the $c \sqrt{\gamma/(1-\lambda)}$-net that we construct is guaranteed to find some $\hat{u}$ that is $c \sqrt{\gamma/(1-\lambda)}$-close to $\tilde{u}$ and thus $(2+c)\sqrt{\gamma/(1-\lambda)}$-close to $u$.
-Then, by~\Cref{lemma:independentsetrounding}, the returned independent set has size at least $\Paren{1/2-\gamma - (4+c')\gamma/(1-\lambda)}n$. The time complexity is polynomial in $n$ and $(\gamma/(1-\lambda))^{-O(t)}$.
+Then, by~\cref{lemma:independentsetrounding}, the returned independent set has size at least $\Paren{1/2-\gamma - (4+c')\gamma/(1-\lambda)}n$. The time complexity is polynomial in $n$ and $(\gamma/(1-\lambda))^{-O(t)}$.
 \end{proof}
 
 \section{Rounding tools}

@@ -1,12 +1,12 @@
 \chapter{Recovering partitions}
-\label{sec:k-partitioning}
+\label[chapter]{sec:k-partitioning}
 
 In this section we state and prove our meta-theorem for recovering partitions.
 The result in this section is written in a very general form, to make clear what properties we exploit in the proof.
-Then, in \Cref{sec:algorithms}, we apply this meta-theorem to our settings of interest and obtain our algorithmic results.
+Then, in \cref{sec:algorithms}, we apply this meta-theorem to our settings of interest and obtain our algorithmic results.
 
 \begin{theorem}[Result for recovering partitions]
-\label{thm:part-recovery}
+\label[theorem]{thm:part-recovery}
 Let $\chi: [n] \to [k]$ be a $k$-partition of $[n]$, and consider its partition matrices $Z \in \{0,1\}^{n \times k}$ and $B \in \R^{k \times k}$ as per \cref{def:partition_Z}.
 Suppose $|\chi^{-1}(a)| \geq c n$ for all $a \in [k]$.
 Let $M \in \R^{k \times k}$ be a matrix such that 
@@ -22,10 +22,10 @@ and suppose that $\rank_{\leq -\lambda}(A) + \rank_{\geq \lambda}(A) \leq t$ for
 Then, given $A$, there exists an algorithm that runs in time $n^{O(1)} \cdot \Paren{O_{\alpha, \delta, \zeta, c, k}(1)}^t$ and outputs a list of $\Paren{O_{\alpha, \delta, \zeta, c, k, t}(1)}^t$ $k$-partitions $\hat{\chi}: [n] \to [k]$ such that, for at least one of them, it holds up to a permutation of the colour classes that $\mathbb{E}_{\bm{x} \sim \operatorname{Unif}([n])} \1[\hat\chi(\bm{x}) \neq \chi(\bm{x})] \leq O\Paren{\frac{\delta \zeta^2 k^3}{\min\{\alpha^2 c, \zeta^2\} \alpha^2 c}}$.
 \end{theorem}
 
-In our applications, we will take $M$ to be a model of the colouring $\chi$, as per \Cref{def:model}.
+In our applications, we will take $M$ to be a model of the colouring $\chi$, as per \cref{def:model}.
 Our main results for graph colouring, in particular, take $M = M(\tilde{A}, \chi)$, where $\tilde{A}$ is the normalised adjacency matrix of the graph.
 Then $M_{ab}$ corresponds to the transition probability from colour class $a$ to colour class $b$.
-(An exception is our result for randomly planted graph colourings in \Cref{thm: random-planting-partial}, where for technical reasons we take $M = \frac{1}{d'} A$, where $A$ is the adjacency matrix of the graph and $d'$ is its \emph{expected} average degree.)
+(An exception is our result for randomly planted graph colourings in \cref{thm: random-planting-partial}, where for technical reasons we take $M = \frac{1}{d'} A$, where $A$ is the adjacency matrix of the graph and $d'$ is its \emph{expected} average degree.)
 We note that $W_{ij} = M_{\chi(i)\chi(j)} / |\chi^{-1}(\chi(j))|$ is simply the extension of $M$ to the entire matrix, according to the colour classes, up to the normalization factor $1/|\chi^{-1}(\chi(j))|$.
 
 The proof of \cref{thm:part-recovery} is a straightforward combination of the following three independent lemmas.
@@ -103,13 +103,13 @@ First, we state a generic result that proves that if two matrices are close in a
 \begin{proof}
 First, for the eigenvectors $v_1, \ldots, v_{k}$ of $X$ we have that 
 \begin{equation}
-\label{lemma:lin-alg-subspace-eq1}
+\label[lemma]{lemma:lin-alg-subspace-eq1}
 \Norm{(X-Y)v_i}^2 = \Norm{\lambda_i v_i - Y v_i}^2 = \Norm{(\lambda_i I_n - Y) v_i}^2 \geq \Norm{P(\lambda_i I_n - Y) v_i}^2\,.
 \end{equation}
 Let now $v_1', \ldots, v_{m}' \in \R^n$ be the eigenvectors of $Y$ in $P$ with corresponding eigenvalues $\lambda_1', \ldots, \lambda_{m}'$ smaller in absolute value than $\lambda - \eta$.
 Continuing \cref{lemma:lin-alg-subspace-eq1},
 \begin{equation}
-\label{lemma:lin-alg-subspace-eq2}
+\label[lemma]{lemma:lin-alg-subspace-eq2}
 \Norm{(X-Y)v_i}^2 \geq \sum_{j=1}^{m} (\lambda_i - \lambda_j')^2 \langle v_j', v_i \rangle^2 \geq \eta^2 \sum_{j=1}^{m} \langle v_j', v_i \rangle^2 = \eta^2 \Norm{Pv_i}^2\,.
 \end{equation}
 

@@ -1,32 +1,32 @@
-\section{Introduction}
+\chapter{Introduction}
 
-\subsection{Motivation and Related Work}
+\section{Motivation and Related Work}
 
-Graph colouring is a fundamental problem in computer science. We are given a graph and we would like to colour the vertices using as few colours overall as possible such that no two adjacent vertices get the same colour. Deciding if a graph can be coloured using $k=2$ colours is easy, as it is equivalent to deciding if the graph is bipartite. However, for \(k\ge 3\), it has been known for a long time that deciding whether \(k\) colours suffices is NP-hard \cite{MR4679190-Karp72}.
+Graph colouring is a fundamental problem in computer science. We are given a graph and we would like to colour the vertices using as few colours overall as possible such that no two adjacent vertices get the same colour. Deciding if a graph can be coloured using $k=2$ colours is easy, as it is equivalent to deciding if the graph is bipartite. However, for \(k\ge 3\), it has been known for a long time that deciding whether \(k\) colours suffice is NP-hard \cite{MR4679190-Karp72}.
 
-Contrasting this worst-case hardness result, there has been a lot of work on average-case settings, e.g. ~\cite{MR1344544-Blum95}. In these settings, the input contains randomness, a colouring is guaranteed to exist, and we aim to recover one with high probability. For the fully random case -- when the initial graph is \Erdos-\Renyi and a $k$-colouring is randomly \textit{planted} in it by assigning colours at random and removing edges in-between the colour classes -- ~\cite{MR1484153-Alon97} provided an efficient algorithm.
+Contrasting this worst-case hardness result, there has been a lot of work on average-case settings, see for example \cite{MR1344544-Blum95}. In these settings, the input contains randomness, a colouring is guaranteed to exist, and we aim to recover one with high probability. For the fully random case -- when the initial graph is \Erdos-\Renyi and a $k$-colouring is randomly \textit{planted} in it by assigning colours independently at random and removing edges in-between the colour classes -- \cite{MR1484153-Alon97} provided an efficient algorithm.
 
-The key question then is what happens between worst-case and average-case -- how much can the full-randomness assumptions of \cite{MR1484153-Alon97} be relaxed? Towards this goal, ~\cite{MR3536556-David16} looked at semi-random models where either the initial graph or the planted colouring is random. Under the crucial assumption that the initial graph is always a two-sided expander -- the second largest and smallest eigenvalues of its normalised adjacency matrix are bounded away from \(1\) in absolute value -- the authors provided a coarse-grained characterisation of when there is an efficient algorithm and when it is NP-hard. Then, ~\cite{kumar2018finding} derandomised this result, pinpointing deterministic pseudorandom conditions.
+The key question then is what happens between worst-case and average-case -- how much can the full-randomness assumptions of \cite{MR1484153-Alon97} be relaxed? Towards this goal, \cite{MR3536556-David16} looked at semi-random models where either the initial graph or the planted colouring is random. Under the crucial assumption that the initial graph is always a two-sided expander -- the second largest and smallest eigenvalues of its normalised adjacency matrix are bounded away from \(1\) in absolute value -- the authors provided a coarse-grained characterisation of when there is an efficient algorithm and when it is NP-hard. Then, \cite{kumar2018finding} derandomised this result, pinpointing deterministic pseudorandom conditions.
 
-The algorithms in all the aforementioned papers are based on the observation that there is an encoding of a colouring that is roughly a linear combination of eigenvectors with a very negative eigenvalue. Therefore, when the adjacency matrix has only a few very negative eigenvalues, an approximate colouring can be decoded after subspace enumeration \cite{kumar2018finding}.
+The algorithms in all the aforementioned papers are based on the observation that there is an encoding of the (planted) colouring that is roughly a linear combination of the eigenvectors of the adjacency matrix corresponding to a very negative eigenvalue. Therefore, when the adjacency matrix has only a few very negative eigenvalues, an approximate colouring can be decoded after subspace enumeration \cite{kumar2018finding}.
 
-The case of \textit{one}-sided expansion -- when only the second largest eigenvalue is guaranteed to be bounded away from \(1\) -- is therefore much more challenging, and it is also less studied. In a recent paper, \cite{bafna-hsieh-kothari} showed that for $k=3$ specifically, a small linear-sized independent set can be recovered -- very far away from a complete colouring. Their algorithm is based on showing within the sum-of-squares proof system \cite{barak-raghavendra-steurer} that under one-sided expansion -- unless the graph is almost-bipartite -- any two $3$-colourings must be sufficiently similar.
+The case of \textit{one}-sided expansion -- when only the second largest eigenvalue is guaranteed to be bounded away from \(1\) -- is therefore much more challenging as it \textit{seemingly} excludes the aforementioned idea, and it is also less studied. For this setting, \cite{bafna-hsieh-kothari} recently showed that for $k=3$ specifically, a small linear-sized independent set can be recovered -- very far away from a full colouring. Their algorithm is based on showing within the sum-of-squares proof system \cite{barak-raghavendra-steurer} that under one-sided expansion -- unless the graph is almost-bipartite -- any two $3$-colourings must be sufficiently similar.
 
-For completeness, note that graph colouring can be studied from other perspectives as well. For example, given a $3$-colourable graph, instead of finding assumptions under which a $3$-colouring can be recovered, \cite{MR4764817-24} provide a more general algorithm that uses $\tilde{O}(n^{0.19747})$ colours.
+For fullness, note that graph colouring can be studied from other perspectives as well. For example, given a $3$-colourable graph, instead of finding assumptions under which a $3$-colouring can be efficiently recovered, \cite{MR4764817-24} provide a more general algorithm that uses $\tilde{O}(n^{0.19747})$ colours.
 
-\subsection{Results}
+\section{Results}
 
-In this work, we provide an almost full characterisation of recovering $k$-colourings in \textit{one}-sided expanders.
+In this work, we provide an almost full characterisation of the recoverability of $k$-colourings in \textit{one}-sided expanders.
 
-Key to our results is the concept of the model matrix of a graph that contains the average degrees between the colour classes. In \cref{thm:kalg}, we provide an algorithm that given a one-sided expander graph whose model matrix has no repeated rows, outputs an almost complete colouring. The more general \cref{thm:kalg-partial} recovers a \textit{partial} colouring of size dependent on the relative sizes of the colour classes corresponding to repeated rows in the model matrix.
+Key to our results is the concept of the model matrix of a graph that contains the average degrees between the colour classes. In \cref{thm:kalg}, we provide an algorithm that given a one-sided expander graph whose model matrix has no repeated rows, outputs an almost full colouring. The more general \cref{thm:kalg-partial} recovers a \textit{partial} colouring of size dependent on the relative sizes of the colour classes corresponding to repeated rows in the model matrix.
 
-As corollaries, we show in \cref{thm:2alg} that the two sides of an \textit{almost} bipartite one-sided expander graph can be almost completely recovered. Then, for $k=3$ we prove in \cref{thm:3alg} that when the colour classes are not very unbalanced, an almost complete colouring can be recovered. Then, we show in \cref{thm: random-planting-full} that for any $k=O(1)$, when a random colouring is planted in a one-sided expander graph, a \textit{complete} colouring can be recovered.
+As corollaries, we show in \cref{thm:2alg} that the two sides of an \textit{almost} bipartite one-sided expander graph can be almost fullly recovered. Then, for $k=3$ we prove in \cref{thm:3alg} that when the colour classes are not very unbalanced, an almost full colouring can be recovered. Then, we show in \cref{thm: random-planting-full} that for any $k=O(1)$, when a random colouring is planted in a one-sided expander graph, a \textit{full} colouring can be recovered.
 
-As a side result, we show in \cref{cor:independentsetrecovery} that in a one-sided expander that contains an independent set with almost half of the vertices, an independent set in size close to that can be recovered -- this improves on the result of \cite{bafna-hsieh-kothari} that can only recover a small linear-sized independent set.
+As a side result, we show in \cref{cor:independentsetrecovery} that in a one-sided expander that contains an independent set with almost half of the vertices, an independent set in size close to that can be recovered. Both \cref{thm:3alg} and \cref{cor:independentsetrecovery} improve on the corresponding results of \cite{bafna-hsieh-kothari} that can only recover a small linear-sized independent set.
 
 Finally, in \cref{sec: hardness} we provide hardness results corresponding to most of our aforementioned results, showing that the assumptions on the model matrix, one-sided expansion, and balancedness are indeed necessary.
 
-\subsection{Techniques}
+\section{Techniques}
 
 Let $\lambda_1, \ldots, \lambda_k$ and $v_1, \ldots, v_k$ represent the $k$ eigenvalues and eigenvectors respectively of the model matrix $M$ associated with the colour classes of the $k$-colourable graph. Define $u_1, \ldots, u_k$ as the corresponding $n$-dimensional vectors, where vertices sharing the same colour correspond to identical entries in the respective $v$. Then, the core idea behind \cref{thm:kalg} -- which is the basis of most of our results -- is the following:
 
@@ -39,25 +39,25 @@ Let $\lambda_1, \ldots, \lambda_k$ and $v_1, \ldots, v_k$ represent the $k$ eige
 
 To deduce \cref{thm:3alg} from \cref{thm:kalg}, we observe in \cref{lemma: 3colouringfixedaveragedegree} that for $k=3$, given the colour class sizes, the model matrix is fixed due to regularity, and unless one colour class contains almost half of the vertices, it will have no repeated rows. 
 
-The proof for approximate recovery in the random planted setting (\cref{thm: random-planting-partial}) is similar to the proof of \cref{thm:kalg}, but note that while the original graph is a one-sided expander, the resulting graph after planting might no longer be expanding. Hence, to show low variance of the degrees between colour classes, instead of \cref{lemma: expansionimpliesvariance} we exploit full randomness using concentration bounds. Efficient subspace enumeration is guaranteed by \cref{lemma: threshold_rank_kept} that shows that low threshold rank is preserved after planting. To convert an approximate colouring into a complete colouring (\cref{thm: random-planting-full}) we adapt \cite{MR3536556-David16} by showing that the expander mixing lemma and small-set vertex expansion -- on which their algorithms rely -- essentially holds for one-sided expansion as well (\cref{lemma: emlonesided}, \cref{lemma: ssveonesided}).
+The proof for approximate recovery in the random planted setting (\cref{thm: random-planting-partial}) is similar to the proof of \cref{thm:kalg}, but note that while the original graph is a one-sided expander, the resulting graph after planting might no longer be expanding. Hence, to show low variance of the degrees between colour classes, instead of \cref{lemma: expansionimpliesvariance} we exploit full randomness using concentration bounds. Efficient subspace enumeration is guaranteed by \cref{lemma: threshold_rank_kept} that shows that low threshold rank is preserved after planting. To convert an approximate colouring into a full colouring (\cref{thm: random-planting-full}) we adapt \cite{MR3536556-David16} by showing that the expander mixing lemma and small-set vertex expansion -- on which their algorithms rely -- essentially holds for one-sided expansion as well (\cref{lemma: emlonesided}, \cref{lemma: ssveonesided}).
 
-The proof of \cref{cor:independentsetrecovery} relies on the observation that if an independent set is nearly half the size of the graph, regularity ensures most edges connect the independent set to the rest of the graph. Consequently, the $\pm 1$ vector representing this partition is approximately an eigenvector of the adjacency matrix with a very negative eigenvalue.
+The proof of \cref{cor:independentsetrecovery} relies on the observation that if an independent set is nearly half the size of the graph, regularity ensures most edges go between the independent and the rest of the graph. Consequently, the $\pm 1$ vector representing this partition is approximately an eigenvector of the adjacency matrix with a very negative eigenvalue.
 
-Finally, the hardness results in \cref{sec: hardness} build on \cref{thm:propA1} (from \cite{bafna-hsieh-kothari}) which shows that without any expansion assumption, it is NP-hard (under the Unique Games Conjecture) to recover even a linear-sized independent set in an almost-bipartite graph.
+Finally, the hardness results in \cref{sec: hardness} build on the known \cref{thm:propA1} which shows that without any expansion assumption, it is NP-hard (under the Unique Games Conjecture) to recover even a linear-sized independent set in an almost-bipartite graph.
 
-\subsection{An introductory example}
+\section{An introductory example}
 
 To familiarise the reader with the topic, we first provide a solution for a simple question that was ``left as an exercise to the reader'' in \cite{MR3536556-David16}:
 
 \begin{lemma}[Linear degree random planting full recovery]
     \label{lemma: lineardegree}
     Let $H$ be an $n$-vertex graph with minimum degree $\Omega(n)$. Let $G$ be the graph obtained by randomly planting a $3$-colouring in $H$.
-    Then, there exists a polynomial-time algorithm that \whp recovers a complete $3$-colouring of $G$.
+    Then, there exists a polynomial-time algorithm that \whp recovers a full $3$-colouring of $G$.
 \end{lemma}
 
 The intuition behind this result is that more edges provides more constraints, enabling the recovery of vertex colours through a process of elimination. Surprisingly, neither of our results in this work will require the degrees to be even $\omega(1)$ -- we will, however, require regularity and expansion.
 
-\begin{proof}[Proof of \cref{lemma: lineardegree}]
+\begin{proof}[of \cref{lemma: lineardegree}]
     
 First we provide the algorithm, then we show that it works with high probability.
 
@@ -83,7 +83,7 @@ Since the algorithm goes through all possible ways of assigning a colour to the 
 \begin{align*}
     \P\left[\exists x\;|\;N_G(x)\cap S=\emptyset\right]&\leq \sum_{x\in V(G)} \left(1-\frac{d_G(x)}{n}\right)^{\Abs{S}} \quad\text{by union bound}\\
     &\leq \sum_{x\in V(G)} e^{-\frac{\Abs{S} d_G(x)}{n}} \quad\text{using $1-x \leq e^{-x}$}\\
-    &\leq \sum_{x\in V(G)} e^{-2\log{n}} \quad\text{since $d_G(x) = \Omega(n)$ and $\Abs{S}\geq O(\log{n})$}\\
+    &\leq \sum_{x\in V(G)} e^{-2\log{n}} \quad\text{as $d_G(x) = \Omega(n)$ and $\Abs{S}\geq O(\log{n})$}\\
     &= n^{-1}\;.
 \end{align*}
 

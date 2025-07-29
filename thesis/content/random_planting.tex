@@ -1,4 +1,4 @@
-\section{Full colouring in the random planted model} \label{app: plantedcolouring}
+\chapter{Full colouring in the random planted model} \label{app: plantedcolouring}
 
 This part is dedicated to proving \cref{thm: random-planting-full}. We start with the key first step that guarantees the recovery of a \emph{list} of candidate $k$-colourings, such that at least one of them is close to the planted $k$-colouring.
 
@@ -17,7 +17,7 @@ This part is dedicated to proving \cref{thm: random-planting-full}. We start wit
 
 To convert a colouring returned by \cref{thm: random-planting-partial-list} into a full colouring, we will need several helper lemmata. We start with the proofs of the two lemmata showing properties of \textbf{one}-sided expansion.
 
-\begin{proof}[Proof of \cref{lemma: emlonesided}]
+\begin{proof}[of \cref{lemma: emlonesided}]
     Let $\1_S \in \{0,1\}^n$ be the indicator vector of $S$ and write $\1_S$ in the orthonormal eigenbasis $e_{[n]}$ of $A$:
     $$\1_S = \sum_{i=1}^n \alpha_i e_i\,.$$
 
@@ -39,7 +39,7 @@ To convert a colouring returned by \cref{thm: random-planting-partial-list} into
     Then, using $\sum_{i=2}^n \alpha_i^2\leq \sum_{i=1}^n \alpha_i^2=\Norm{\1_S}_2^2=|S|$ gives the desired bound.
 \end{proof}
 
-\begin{proof}[Proof of \cref{lemma: ssveonesided}]
+\begin{proof}[of \cref{lemma: ssveonesided}]
     Let $T:=N(S)\cup S$.
     Then, as all edges touching $S$ are in $E(H_{T})$, we have
     $$e(H_{T})\geq \frac{1}{2}|S|d\,.$$ 
@@ -66,7 +66,7 @@ Next, we need an algorithm that takes a colouring that agrees with most of the p
 Let us state now the corresponding algorithm and its guarantees.
 
 \begin{algorithm}[H]
-    As long as there is a vertex $x$ that has colour $c_1$, and a colour $c_2\neq c_1$ such that $x$ has less than $\frac{1}{6k}d$ neighbors with colour $c_2$, uncolour $x$.%\andor{why does \cite{MR3536556-David16} need another condition?}
+    As long as there is a vertex $x$ that has colour $c_1$, and a colour $c_2\neq c_1$ such that $x$ has less than $\frac{1}{6k}d$ neighbours with colour $c_2$, uncolour $x$.%\andor{why does \cite{MR3536556-David16} need another condition?}
     \protect\caption{\label{alg: uncolouring}Uncolouring Algorithm}
 \end{algorithm}
 
@@ -80,7 +80,7 @@ To prove \cref{lemma: approximatetopartial}, we will need a definition and two l
 
 
 \begin{definition}\label[definition]{def: statisticallybad}
-    Let $H$ be a $d$-regular graph. Let $G$ be the graph obtained from $H$ by randomly planting a \kcl $\chi$ in it. We call a vertex $x\in V(G)$ \textit{statistically bad}, if there is a colour $c\neq \chi(x)$ such that $x$ has less than $\frac{1}{2k}d$ neighbors $y$ with $\chi(y)=c$. We denote the set of statistically bad vertices by $SB(G)$, writing $SB$ when it is clear from context which graph we are referring to.
+    Let $H$ be a $d$-regular graph. Let $G$ be the graph obtained from $H$ by randomly planting a \kcl $\chi$ in it. We call a vertex $x\in V(G)$ \textit{statistically bad}, if there is a colour $c\neq \chi(x)$ such that $x$ has less than $\frac{1}{2k}d$ neighbours $y$ with $\chi(y)=c$. We denote the set of statistically bad vertices by $SB(G)$, writing $SB$ when it is clear from context which graph we are referring to.
 \end{definition}
 
 \begin{lemma}[Restatement of Lemma B.14 of \cite{MR3536556-David16}]\label[lemma]{lemma: sbupperbound}
@@ -92,7 +92,7 @@ To prove \cref{lemma: approximatetopartial}, we will need a definition and two l
 \end{lemma}
 
 \begin{proof}
-    Let $\e:=2\alpha + c$. Consider the following iterative procedure. Repeatedly remove a vertex $v_t$ from $V\setminus \Paren{S \cup \bigcup_{i=1}^{t-1} v_i}$ if $v_t$ has more than $\e d$ neighbors in $S_t := S \cup \bigcup_{i=1}^{t-1} v_i$. Assume towards a contradiction that this process stops after more than $t:=\Abs{S}$ steps. Then, by using the vertices in $S_t\setminus S$, we can lower bound the number of edges in $H_{S_t}$:
+    Let $\e:=2\alpha + c$. Consider the following iterative procedure. Repeatedly remove a vertex $v_t$ from $V\setminus \Paren{S \cup \bigcup_{i=1}^{t-1} v_i}$ if $v_t$ has more than $\e d$ neighbours in $S_t := S \cup \bigcup_{i=1}^{t-1} v_i$. Assume towards a contradiction that this process stops after more than $t:=\Abs{S}$ steps. Then, by using the vertices in $S_t\setminus S$, we can lower bound the number of edges in $H_{S_t}$:
 
     $$e(H_{S_t})\geq \Abs{S_t\setminus S} \e d= \frac{1}{2}\Abs{S_t}\e d\,.$$
 
@@ -111,10 +111,10 @@ To prove \cref{lemma: approximatetopartial}, we will need a definition and two l
 Now we are ready to prove \cref{lemma: approximatetopartial}.
 
 
-\begin{proof}[Proof of \cref{lemma: approximatetopartial}]
+\begin{proof}[of \cref{lemma: approximatetopartial}]
     Let $c:=\frac{1}{9k}$. When $d$ is at least a large enough constant, $2^{-\Omega(d)}\leq \alpha$ holds. Let $B:=\Set{x\in V\mid \chi(x)\neq \hat{\chi}(x)}$ denote the set of vertices wrongly coloured by $\hat{\chi}$. Note that $\Abs{B}\leq \alpha n$ by assumption, and $\Abs{SB(G)}\leq 2^{-\Omega(d)}\leq \alpha n$ by \cref{lemma: sbupperbound}. Hence, applying \cref{lemma: highmindegreesubgraph} on $H$ to $B\cup SB$ we get a set $R$ with $|R|=(1-4\alpha)n$ such that the minimum degree in $H_R$ is at least $\Paren{1-4\alpha-c}d$. Using $R\cap SB=\emptyset$, for any $x\in R$ and $c\neq \chi(x)$ we get that $x$ has degree at least $\Paren{\frac{1}{2k}-4\alpha-c}d\geq \frac{1}{6k}d$ into $\Set{y\in R\mid \chi(y)=c}$, i.e. into the vertices in $R$ coloured with $c$. It follows by induction that no vertices in $R$ will be uncoloured at any step of \cref{alg: uncolouring}. Hence, the colouring returned has size at least $|R|=(1-4\alpha)n$. It only remains to show that the colouring returned is proper. In fact, we will show that all vertices in $B$ will get uncoloured, from which the statement follows.
 
-    For the sake of contradiction, assume there exist vertices $B_2\subseteq B$ that remain coloured by the end of the process. Let $x\in B_2$ be any such vertex. As $x$ has never been uncoloured, at the end of the process it has at least $\frac{1}{6k}d$ neighbors $y$ with $\hat{\chi}(y)=c\neq \hat{\chi}(x)$. In particular, choosing $c=\chi(x)$, let $Q$ denote those neighbors $y$ of $x$ with $\hat{\chi}(y)=\chi(x)$. As $x$ and $y$ are neighbors in $G$, we have $\chi(x)\neq \chi(y)$, so $\hat{\chi}(y)\neq \chi(y)$, which implies $Q\subseteq B_2$. Summarizing, any vertex in $G_{B_2}$ has degree at least $\frac{1}{3k}d$. Therefore, $$e(G_{B_2})\geq \frac{\frac{1}{6k}d|B_2|}{2}= \frac{d|B_2|}{12k}\,.$$
+    For the sake of contradiction, assume there exist vertices $B_2\subseteq B$ that remain coloured by the end of the process. Let $x\in B_2$ be any such vertex. As $x$ has never been uncoloured, at the end of the process it has at least $\frac{1}{6k}d$ neighbours $y$ with $\hat{\chi}(y)=c\neq \hat{\chi}(x)$. In particular, choosing $c=\chi(x)$, let $Q$ denote those neighbours $y$ of $x$ with $\hat{\chi}(y)=\chi(x)$. As $x$ and $y$ are neighbours in $G$, we have $\chi(x)\neq \chi(y)$, so $\hat{\chi}(y)\neq \chi(y)$, which implies $Q\subseteq B_2$. Summarizing, any vertex in $G_{B_2}$ has degree at least $\frac{1}{3k}d$. Therefore, $$e(G_{B_2})\geq \frac{\frac{1}{6k}d|B_2|}{2}= \frac{d|B_2|}{12k}\,.$$
 
     On the other hand, by \cref{lemma: emlonesided}, $$e(G_{B_2})\leq e(H_{B_2})\leq \frac{d\Abs{B_2}}{2}\Paren{\frac{\Abs{B_2}}{n}+c}\,.$$
     
@@ -126,7 +126,7 @@ Now we are ready to prove \cref{lemma: approximatetopartial}.
 Next we need an algorithm that recolours some of the uncoloured vertices in a way that guarantees that the remaining uncoloured vertices split up into small components.
 
 \begin{algorithm}[H]
-    As long as there is an uncoloured vertex $x$ that has neighbors in every colour except for some colour $c$, colour $x$ using $c$. 
+    As long as there is an uncoloured vertex $x$ that has neighbours in every colour except for some colour $c$, colour $x$ using $c$. 
     \protect\caption{\label{alg: saferecolouring} Safe Recolouring Algorithm}
 \end{algorithm}
 
@@ -137,7 +137,7 @@ Next we need an algorithm that recolours some of the uncoloured vertices in a wa
 
 \begin{proof}
     The proof closely follows that of Lemma B.21 of \cite{MR3536556-David16}, so we only provide the parts that are changed. Let us first prove a helper lemma similar to Claim B.22 of \cite{MR3536556-David16}:
-    \begin{lemma}\label[lemma]{lemma: largecolouredneighborhoodprob}
+    \begin{lemma}\label[lemma]{lemma: largecolouredneighbourhoodprob}
         Let $C$ be any set of vertices of size $t_1$, let $D:=N_{H}\Paren{C}\setminus C$
         and let $t_2:=\Abs{D}$. If $t_2\ge 2k^2t_1$ then $C\subseteq U$ and $D\subseteq V\setminus U$ with probability at most $e^{-\frac{1}{2k}t_2}$.
     \end{lemma}
@@ -167,13 +167,13 @@ Next we need an algorithm that recolours some of the uncoloured vertices in a wa
     & \le n^{-1}\,.\label{eq:alpha4}
     \end{align}
 
-    Equality~\ref{eq:alpha1} follows by \cref{lemma: largecolouredneighborhoodprob} and that by \cref{lemma: ssveonesided}
-    if $\lambda_2(H)\le \frac{1}{16k^2}$ then for a set of size $t_1\le\Abs{U}\le\frac{1}{256k^4}n$ it holds that its neighborhood is of size $t_2\ge7k^2t_1$. Inequality~\ref{eq:alpha2} follows by Lemma B.23 of \cite{MR3536556-David16}. Inequality~\ref{eq:alpha3} follows by the binomial identity ${n \choose k}\le\Paren{e\frac{n}{k}}^{k}$. Inequality~\ref{eq:alpha4} follows by $\ln\Paren{7k^2+1}\leq \frac{7k}{2}-6$ which holds for $k\geq 3$. This completes the proof.
+    Equality~\ref{eq:alpha1} follows by \cref{lemma: largecolouredneighbourhoodprob} and that by \cref{lemma: ssveonesided}
+    if $\lambda_2(H)\le \frac{1}{16k^2}$ then for a set of size $t_1\le\Abs{U}\le\frac{1}{256k^4}n$ it holds that its neighbourhood is of size $t_2\ge7k^2t_1$. Inequality~\ref{eq:alpha2} follows by Lemma B.23 of \cite{MR3536556-David16}. Inequality~\ref{eq:alpha3} follows by the binomial identity ${n \choose k}\le\Paren{e\frac{n}{k}}^{k}$. Inequality~\ref{eq:alpha4} follows by $\ln\Paren{7k^2+1}\leq \frac{7k}{2}-6$ which holds for $k\geq 3$. This completes the proof.
 \end{proof}
 
 We are now finally ready to prove \cref{thm: random-planting-full}:
 
-\begin{proof}[Proof of \cref{thm: random-planting-full}]
+\begin{proof}[of \cref{thm: random-planting-full}]
     We can apply \cref{thm: random-planting-partial-list} to get a list of $O_{k}(1)$ $k$-colourings $\hat{\chi}: [n] \to [k]$ such that, for at least one of them, it holds up to a permutation of the colour classes that $\mathbb{E}_{\bm{x} \sim \operatorname{Unif}([n])} \1[\hat\chi(\bm{x}) \neq \chi(\bm{x})] \leq O_k\Paren{1/d^{\Omega(1)}}$.
 
     Then, for $d$ at least a large enough constant compared to $k$, running \cref{alg: uncolouring} on all colourings in $L$, by \cref{lemma: approximatetopartial} it turns the colouring $\hat{\chi}$ with $\mathbb{E}_{\bm{x} \sim \operatorname{Unif}([n])} \1[\hat\chi(\bm{x}) \neq \chi(\bm{x})] \leq O_k\Paren{1/d^{\Omega(1)}}$ into a $\Paren{k, O_k\Paren{1/d^{\Omega(1)}}}$-partial colouring and returns a list of colourings $L'$. %\andor{should we remark that we somehow managed to avoid doing iterative recolouring which works only for two-sided expansion?}  

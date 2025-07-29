@@ -1,4 +1,4 @@
-\section{Recovering partitions}
+\chapter{Recovering partitions}
 \label{sec:k-partitioning}
 
 In this section we state and prove our meta-theorem for recovering partitions.
@@ -67,7 +67,7 @@ The proof of \cref{thm:part-recovery} is a straightforward combination of the fo
 
 Let us now prove \cref{thm:part-recovery} given \cref{thm:partition_recovery_theorem2}, \cref{lem:eigenvalue_separation}, and \cref{lem:cluster-eigen}.
 
-\begin{proof}[Proof of \cref{thm:part-recovery}]
+\begin{proof}[of \cref{thm:part-recovery}]
 We will assume $\lambda = \min\{\alpha \sqrt{c} / 4, \zeta/4\}$, such that $2\lambda$ satisfies the upper bound required to apply \cref{lem:eigenvalue_separation}.
 
 First, let $S:=\Set{u \in \R^n\; \mid\; W u = \tau u, \Norm{u}=1, \Abs{\tau}> 2\lambda}$ be the set of eigenvectors of $W$ with corresponding eigenvalues larger than $2\lambda$ in absolute value.
@@ -87,7 +87,7 @@ The guarantee then follows from \cref{lem:cluster-eigen}, giving probability of 
 
 The next three subsection prove \cref{thm:partition_recovery_theorem2}, \cref{lem:eigenvalue_separation}, and \cref{lem:cluster-eigen}.
 
-\subsection{Eigenspace approximation}
+\section{Eigenspace approximation}
 
 In this section we prove \cref{thm:partition_recovery_theorem2}.
 First, we state a generic result that proves that if two matrices are close in a subspace that for one of the matrices is an eigenspace with eigenvalues of large absolute value, then the small eigenvalues of the other matrix are far from this subspace.
@@ -134,7 +134,7 @@ We state now the well-known bounds of subspace enumeration.
 
 Finally, we prove \cref{thm:partition_recovery_theorem2}.
 
-\begin{proof}[Proof of \cref{thm:partition_recovery_theorem2}]
+\begin{proof}[of \cref{thm:partition_recovery_theorem2}]
     We have $\Norm{A \frac{Z_a}{\Norm{Z_a}} - W \frac{Z_a}{\Norm{Z_a}}}^2 \leq \delta$ for all $a \in [k]$, so $\sum_{a=1}^k \Norm{\Paren{A - W}\frac{Z_a}{\Norm{Z_a}}}^2 \leq \delta k$.
     Because $\frac{Z_a}{\Norm{Z_a}}$ are orthonormal, for any orthonormal $u_1, \ldots, u_k$ that span the same subspace we also have \[\sum_{i=1}^k \Norm{\Paren{A -W}u_i}^2
     \leq \delta k\;.\]
@@ -148,7 +148,7 @@ Finally, we prove \cref{thm:partition_recovery_theorem2}.
     The overall time complexity is then bounded by $n^{O(1)} \cdot (\delta k/\eta^2)^{O(t)}$.
 \end{proof}
 
-\subsection{Eigenvector coordinate separation}
+\section{Eigenvector coordinate separation}
 
 In this section we prove \cref{lem:eigenvalue_separation}.
 First, we state a technical lemma.
@@ -204,7 +204,7 @@ First, we state a technical lemma.
 
 Next, we prove \cref{lem:eigenvalue_separation}.
 
-\begin{proof}[Proof of \cref{lem:eigenvalue_separation}]
+\begin{proof}[of \cref{lem:eigenvalue_separation}]
 Observe that if $Mv = \tau v$, then we also have that $B^{1/2}v$ is an eigenvector of $\widetilde{M} = B^{1/2} M B^{-1/2}$ of value $\tau$.
 Note that $\widetilde{M}$ is symmetric and continues to satisfy $\Norm{\widetilde{M}}\leq \zeta$.
 Then, we apply \cref{lem: eigenvectorsdistinguish} with the matrix $\widetilde{M}$ and with the eigenvectors $B^{1/2} v$ of $\widetilde{M}$ with eigenvalue at least $\lambda$ in absolute value (normalised to be unit vectors).
@@ -220,12 +220,12 @@ We also have $\sqrt{c n} \norm{v} \leq \norm{Zv} \leq \sqrt{n} \norm{v}$, so $\s
 Then, if we consider for each such $v$ some $v' \propto v$ such that $\norm{Zv'} = 1$, we have that $\Abs{v'_a - v'_b} \geq \Omega\Paren{\frac{\alpha\sqrt{c}}{\zeta\sqrt{k n}}}$
 \end{proof}
 
-\subsection{Clustering with separated rows}
+\section{Clustering with separated rows}
 
 In this section we prove \cref{lem:cluster-eigen}.
 First, we state the guarantees of a clustering algorithm used in the proof.
 
-\begin{lemma}[Partitioning by distinguishing eigenvectors (c.f. Lemma E.7 in \cite{MR3536556-David16})]\label[lemma]{lem:clusteringalmosteigenvectors}
+\begin{lemma}[Partitioning using the eigenvectors (cf. Lemma E.7 in \cite{MR3536556-David16})]\label[lemma]{lem:clusteringalmosteigenvectors}
     Let $\chi: [n] \to [k]$ be a $k$-partition of $[n]$.
     Suppose $|\chi^{-1}(a)| \geq c n$ for all $a \in [k]$.
     For $\ell \leq k$, let $\set{v_{i}}_{i \in [\ell]}$ be $k$-dimensional vectors that satisfy
@@ -235,7 +235,7 @@ First, we state the guarantees of a clustering algorithm used in the proof.
 \end{lemma}
 
 \begin{algorithm}[H]
-    \caption{Spectral partitioning algorithm (based on Algorithm 10 in \cite{MR3536556-David16})}
+    \caption{Spectral partitioning algorithm (cf. Algorithm 10 in \cite{MR3536556-David16})}
     \label{alg: spectralclustering}
     \DontPrintSemicolon
     Guess $k$-dimensional vectors $\{v_i^*\}_{i \in [\ell]}$ with entries in $[-1/\sqrt{cn}, 1/\sqrt{cn}]$ up to entrywise resolution $\alpha / \sqrt{12 k n}$.\;
@@ -284,7 +284,7 @@ First, we state the guarantees of a clustering algorithm used in the proof.
 
 Finally, we prove \cref{lem:cluster-eigen}.
 
-\begin{proof}[Proof of \cref{lem:cluster-eigen}]
+\begin{proof}[of \cref{lem:cluster-eigen}]
     % For the eigenvectors $S = \{v_1, \ldots, v_r\} \in \R^k$ of $M$ with eigenvalue at least $\lambda$ in absolute value, we have $\hat{u}_1, \ldots, \hat{u}_r \in \R^n$ such that $\Norm{\hat{u}_i - Z v_i}^2 \leq \delta$ for all $i \in [r]$.
 
     For each $v_i$, let $v'_i \propto v_i$ such that $\Norm{Z v'_i} = 1$.

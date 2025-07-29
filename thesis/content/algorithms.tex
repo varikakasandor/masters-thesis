@@ -1,7 +1,7 @@
-\section{Finding colourings and independent sets}
+\chapter{Finding colourings and independent sets}
 \label{sec:algorithms}
 
-\subsection{colourable models}
+\section{Colourable models}
 
 Our most general result for $k$-colourings is the following:
 \begin{theorem}[Result for $k$-colouring]
@@ -86,7 +86,7 @@ so using that $cn \leq \Norm{Z_a}^2 \leq n$ we get that $\Norm{\tilde{A} \frac{Z
 
 Let us now prove \cref{thm:kalg-partial}.
 
-\begin{proof}[Proof of \cref{thm:kalg-partial}]
+\begin{proof}[of \cref{thm:kalg-partial}]
     We note by \cref{lemma:model-colour-size} that $\pi$ is unique and satisfies $\min_{a \in [k]} \pi_a \geq \Omega_M(1)$.
 
     Denote by $\chi: [n] \to [k]$ the $k$-partition with respect to which $G$ is $(M, \delta)$-colourable.
@@ -229,7 +229,7 @@ Let us now prove \cref{thm:kalg-partial}.
 
 
 
-\subsection{$2$-colourable models}
+\section{$2$-colourable models}
 
 
 Assuming the UGC conjecture, \cite{MR2648426} showed that it is NP-hard to recover even a small linear-sized independent set from a graph that is almost bipartite. As a $k=2$ corollary of \cref{thm:kalg}, we show that assuming expansion additionally, it is possible to recover almost the full bipartition.
@@ -261,7 +261,7 @@ As in the proof of \cref{thm:kalg-partial}, for each candidate bipartition we ap
 The rest of the analysis is identical to that in the proof of \cref{thm:kalg-partial}.
 \end{proof}
 
-\subsection{$3$-colourable models}
+\section{$3$-colourable models}
 
 For the case $k=3$, it turns out that the model has non-positive eigenvalue and distinct rows whenever its stationary distribution is strictly bounded pointwise by $1/2$. 
 
@@ -382,7 +382,7 @@ The proof is quite calculation heavy and the calculations are similar to those i
     This is a contradiction, so $\chi'$ must have many monochromatic edges.
 \end{proof}
 
-\subsection{Random planting}
+\section{Random planting}
 
 Instead of a regular $k$-colourable one-sided expander graph, in this section we consider randomly planting a \kcl in a regular one-sided expander graph.
 To aid presentation, let us first define the model and some of the notation that we will use throughout this section.
@@ -544,7 +544,7 @@ The last ingredient to prove \cref{thm: random-planting-partial} is a lemma that
         
 We are now ready to prove \cref{thm: random-planting-partial}.
 
-\begin{proof}[Proof of \cref{thm: random-planting-partial}]
+\begin{proof}[of \cref{thm: random-planting-partial}]
     Let $A \in \R^{n \times n}$ be the adjacency matrix of $G$, and let $\tilde{A} = \frac{k}{(k-1)d} A$.
     Also let $d' = \frac{(k-1)d}{k}$.
     Let $M = M(\tilde{A}, \chi)$ be defined as in \cref{def:model}.
@@ -582,7 +582,7 @@ We are now ready to prove \cref{thm: random-planting-partial}.
     The rest of the analysis is identical to that in the proof of \cref{thm:kalg-partial}.
 \end{proof}
 
-\subsubsection{Rounding to a full colouring}
+\subsection{Rounding to a full colouring}
 \label{sec:full-col}
 
 Next, we show that if $H$ actually is a one-sided expander (instead of having just low top threshold rank), and if the degree $d$ is at least a large enough constant, then we can actually obtain a full \kcl by exploiting the full randomness of the model.
@@ -631,7 +631,7 @@ For the latter use of two-sided expansion, we can show under one-sided expansion
 
 The proofs of \cref{lemma: emlonesided} and \cref{lemma: ssveonesided} are also in \cref{app: plantedcolouring}.
 
-\subsection{Independent sets}
+\section{Independent sets}
 
 We state now our result for independent sets.
 
@@ -710,7 +710,7 @@ Then the $c \sqrt{\gamma/(1-\lambda)}$-net that we construct is guaranteed to fi
 Then, by~\Cref{lemma:independentsetrounding}, the returned independent set has size at least $\Paren{1/2-\gamma - (4+c')\gamma/(1-\lambda)}n$. The time complexity is polynomial in $n$ and $(\gamma/(1-\lambda))^{-O(t)}$.
 \end{proof}
 
-\subsection{Rounding tools}
+\section{Rounding tools}
 
 First we state a general rounding algorithm that extracts an independent set from an approximate independent set.
 

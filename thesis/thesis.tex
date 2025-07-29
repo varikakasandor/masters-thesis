@@ -63,6 +63,24 @@
 %% declaration of originality.
 \usepackage{pdfpages}
 
+%% Make document internal hyperlinks wherever possible. (TOC, references)
+\usepackage[linkcolor=black,colorlinks=true,citecolor=black,filecolor=black]{hyperref}
+
+% Load cleveref after hyperref
+\usepackage{cleveref}
+
+
+%% [REC] This is for restating theorems.
+%\usepackage{thmtools}
+%\usepackage{thm-restate}      
+
+
+%% [REC] packages for pseudocode
+% \usepackage{algorithm}        % A float wrapper for algorithms
+% \usepackage{algorithmicx}
+% \usepackage{algpseudocode}
+\usepackage[linesnumbered, ruled, vlined]{algorithm2e}
+
 %% Some more packages that you may want to use.  Have a look at the
 %% file, and consult the package docs for each.
 \input{extrapackages}
@@ -77,69 +95,51 @@
 %% Helpful macros.
 \input{macrosetup}
 
-%% Make document internal hyperlinks wherever possible. (TOC, references)
-\usepackage[linkcolor=black,colorlinks=true,citecolor=black,filecolor=black]{hyperref}
-
-% Load cleveref after hyperref
-\usepackage{cleveref}
-
 % We now name most things that are to be referred to.
 % You can add similar commands for your own defined environments
 % THEOREM
-\crefname{theorem}{theorem}{theorems}
-\Crefname{theorem}{Theorem}{Theorems}
+\crefname{theorem}{Theorem}{Theorems}
+%\Crefname{theorem}{Theorem}{Theorems}
 
 % LEMMA
-\crefname{lemma}{lemma}{lemmas}
-\Crefname{lemma}{Lemma}{Lemmas}
+\crefname{lemma}{Lemma}{Lemmas}
+%\Crefname{lemma}{Lemma}{Lemmas}
 
 % COROLLARY
-\crefname{corollary}{corollary}{corollaries}
-\Crefname{corollary}{Corollary}{Corollaries}
+\crefname{corollary}{Corollary}{Corollaries}
+%\Crefname{corollary}{Corollary}{Corollaries}
 
 % PROPOSITION
-\crefname{proposition}{proposition}{propositions}
-\Crefname{proposition}{Proposition}{Propositions}
+\crefname{proposition}{Proposition}{Propositions}
+%\Crefname{proposition}{Proposition}{Propositions}
 
 % CLAIM
-\crefname{claim}{claim}{claims}
-\Crefname{claim}{Claim}{Claims}
+\crefname{claim}{Claim}{Claims}
+%\Crefname{claim}{Claim}{Claims}
 
 % DEFINITION
-\crefname{definition}{definition}{definitions}
-\Crefname{definition}{Definition}{Definitions}
+\crefname{definition}{Definition}{Definitions}
+%\Crefname{definition}{Definition}{Definitions}
 
 % EXAMPLE
-\crefname{example}{example}{examples}
-\Crefname{example}{Example}{Examples}
+\crefname{example}{Example}{Examples}
+%\Crefname{example}{Example}{Examples}
 
 % REMARK
-\crefname{remark}{remark}{remarks}
-\Crefname{remark}{Remark}{Remarks}
+\crefname{remark}{Remark}{Remarks}
+%\Crefname{remark}{Remark}{Remarks}
 
 % RULE - This one is special
-\crefname{Rule}{rule}{rules}
-\Crefname{Rule}{Rule}{Rules}
+\crefname{rule}{Rule}{Rules}
+%\Crefname{Rule}{Rule}{Rules}
 
 % FACT
-\crefname{fact}{fact}{facts}
-\Crefname{fact}{Fact}{Facts}
+\crefname{fact}{Fact}{Facts}
+%\Crefname{fact}{Fact}{Facts}
 
 %Algo
 \crefname{algocf}{Algorithm}{Algorithms}
-\Crefname{algocf}{Algorithm}{Algorithms}
-
-
-%% [REC] This is for restating theorems.
-\usepackage{thmtools}
-\usepackage{thm-restate}      
-
-
-%% [REC] packages for pseudocode
-% \usepackage{algorithm}        % A float wrapper for algorithms
-% \usepackage{algorithmicx}
-% \usepackage{algpseudocode}
-\usepackage[linesnumbered, ruled, vlined]{algorithm2e}
+%\Crefname{algocf}{Algorithm}{Algorithms}
 
 
 
@@ -192,16 +192,16 @@
 \input{content/algorithms}
 \input{content/hardness}
 
-
-\backmatter
-
-\bibliographystyle{plain}
-\bibliography{refs}
-
 \appendix
 \input{content/threshold_rank}
 \input{content/random_planting}
 
-\includepdf[pages={-}]{declaration-flat.pdf}
+\backmatter
+
+\bibliographystyle{alpha}
+\bibliography{refs}
+
+
+%\includepdf[pages={-}]{declaration-flat.pdf}
 
 \end{document}

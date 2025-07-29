@@ -1,4 +1,4 @@
-\section{Hardness results}\label{sec: hardness}
+\chapter{Hardness results}\label{sec: hardness}
 
 In this section, we give various hardness results against algorithms that are given as input \emph{almost-colourable} graphs.
 As in~\cite{bafna-hsieh-kothari}, our hardness reductions proceed from the following hardness result for approximating independent sets by Bansal and Khot~\cite{MR2648426-Bansal09}:
@@ -106,7 +106,7 @@ We now turn to the proofs of our hardness results. To prove \cref{thm: finegrain
 
 We now prove \cref{thm: finegrainedrowshard}.
 
-\begin{proof}[Proof of \cref{thm: finegrainedrowshard}]
+\begin{proof}[of \cref{thm: finegrainedrowshard}]
     For the sake of contradiction, suppose an algorithm $\ALG$ solves the problem above efficiently and returns a $(k, 1 - \sum_{i \in [k']} p_i - \gamma)$-colouring.
     Let $r_1, \ldots, r_k$ be even integers bounded by $O_{M, \e, \gamma}(1)\;$\footnote{By \cref{lemma:model-colour-size} we have $\pi_i=\Theta(1)$ for all $i\in[k]$.} such that $\Norm{\hat{\pi} - \pi}_{\infty}\leq \min\Paren{\frac{\gamma}{2k}, \frac{\e}{2}\min_{i\in [k]}\pi_i}$ and  \[\argmax_{a \in S_i} \pi_a=\argmax_{a \in S_i} \hat{\pi}_a \quad\text{for all } i\in[k']\;,\] where $\hat{\pi}_a:=\frac{r_a}{\sum_{j\in[k]} r_j}$.
     Let $\widehat{M}$ be the $k\times k$ matrix defined by $\widehat{M}_{ij}=\frac{\hat{\pi}_j}{\pi_j}M_{ij}$, satisfying $\hat{\pi}_i\widehat{M}_{ij}=\hat{\pi}_j\widehat{M}_{ji}$.
@@ -152,13 +152,13 @@ We now prove \cref{thm: finegrainedrowshard}.
 
 We now provide proofs for the two corollaries of \cref{thm: finegrainedrowshard}.
 
-\begin{proof}[Proof of \cref{thm: unbalancedhard}]
+\begin{proof}[of \cref{thm: unbalancedhard}]
     Using \cref{lemma: 3colouringfixedaveragedegree}, consider the unique model $M$ corresponding to a stationary distribution with $\pi_1 = 1/2$, $\pi_2 = 1/4$, and $\pi_3=1/4$. The spectrum of $M$ is $\Set{1, 0, -1}$, so it has non-positive second eigenvalue. Noting that $\pi_2=\pi_3$ and that the rows of $M$ corresponding to $\pi_2$ and $\pi_3$ are identical.
 
     Therefore, it follows from \cref{thm: finegrainedrowshard} that it is NP-hard under the UGC to find a $(3, 1/2-\gamma)$-colouring of $\lambda$-one-sided expander graphs that admit an $(M, \epsilon)$-colouring.
 \end{proof}
 
-\begin{proof}[Proof of \cref{thm: kgeq4hard}]
+\begin{proof}[of \cref{thm: kgeq4hard}]
     As $k$ is composite, it can be written as $k=k'\cdot q$ for some integers $k', q\geq 2$. Let $S_1, \ldots, S_{k'}$ be a partition of $[k]$ into groups of size $q$ each.
     Let $f: [k] \to [k']$ map each $i \in [k]$ to $x \in [k']$ such that $i \in S_x$.
     Let us define the model matrix $M \in \R^{k \times k}$ with zero on the diagonal and with entries
@@ -180,7 +180,7 @@ We now provide proofs for the two corollaries of \cref{thm: finegrainedrowshard}
 
 We finish this section with the proof of \cref{thm: lowtopthresholdrankhard}.
 
-\begin{proof}[Proof of \cref{thm: lowtopthresholdrankhard}]
+\begin{proof}[of \cref{thm: lowtopthresholdrankhard}]
     For the sake of contradiction, suppose an algorithm $\ALG$ solves the problem above efficiently.
     Then, we show that the following derived algorithm solves the problem in \cref{thm:propA1}:
 

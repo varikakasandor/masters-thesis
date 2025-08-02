@@ -613,7 +613,7 @@ For the former, we note that Lemmas B.19 and B.20 of \cite{MR3536556-David16} us
 
 \begin{lemma}[Edge density upper bound]
     \label[lemma]{lemma: emlonesided}
-    Let $G$ be an $n$-vertex $d$-regular graph with adjacency matrix $A$ satisfying $\lambda_2(\frac{1}{d}A)\leq c$.
+    Let $G$ be an $n$-vertex $d$-regular graph with adjacency matrix $A$ satisfying $\lambda_2(\frac{1}{d}A)\leq c$ for some $0<c<1$.
     Then, for any set $S \subseteq [n]$,
     $$\Abs{E(G_S)}\leq\frac{d|S|}{2}\Paren{\frac{|S|}{n}+c}\,,$$
     where $E(G_S)$ is the number of edges in the graph induced by $S$.
@@ -623,7 +623,7 @@ For the latter use of two-sided expansion, we can show under one-sided expansion
 
 \begin{lemma}[Vertex expansion lower bound]
     \label[lemma]{lemma: ssveonesided}
-    Let $G$ be an $n$-vertex $d$-regular graph with adjacency matrix $A$ satisfying $\lambda_2(\frac{1}{d}A)\leq c$.
+    Let $G$ be an $n$-vertex $d$-regular graph with adjacency matrix $A$ satisfying $\lambda_2(\frac{1}{d}A)\leq c$ for some $0<c<1$.
     Then, for any set $S \subseteq [n]$ with $|S|\leq \alpha n$,
     $$\Abs{N(S)\setminus S}\geq \Paren{\frac{1}{c+\sqrt{\alpha}}-1}|S|\,,$$
     where $N(S)$ is the number of vertices outside $S$ adjacent to at least one vertex in $S$.

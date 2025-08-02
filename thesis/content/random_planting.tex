@@ -96,7 +96,7 @@ To prove \cref{lemma: approximatetopartial}, we will need a definition and two l
 
     $$e(H_{S_t})\geq \Abs{S_t\setminus S} \e d= \frac{1}{2}\Abs{S_t}\e d\,.$$
 
-    On the other hand, be \cref{lemma: emlonesided},
+    On the other hand, by \cref{lemma: emlonesided},
 
     $$e(H_{S_t})\leq \frac{\Abs{S_t}d}{2}\Paren{\frac{\Abs{S_t}}{n} + c}\,.$$
 
@@ -104,7 +104,7 @@ To prove \cref{lemma: approximatetopartial}, we will need a definition and two l
 
     $$\Abs{S}\geq\frac{1}{2}\Paren{\e-c}n=\alpha n$$
 
-    which contradicts upper bound assumption on $\Abs{S}$. Hence, letting $R:=V\setminus S_t$ it must hold that $\Abs{R}\geq n-2\Abs{S}\geq \Paren{1-2\alpha}n$ and the minimum degree in $H_R$ is at least $(1-\e)d=(1-2\alpha-c)d$ by construction.
+    which contradicts the upper bound assumption on $\Abs{S}$. Hence, letting $R:=V\setminus S_t$ it must hold that $\Abs{R}\geq n-2\Abs{S}\geq \Paren{1-2\alpha}n$ and the minimum degree in $H_R$ is at least $(1-\e)d=(1-2\alpha-c)d$ by construction.
 \end{proof}
 
 
@@ -112,7 +112,7 @@ Now we are ready to prove \cref{lemma: approximatetopartial}.
 
 
 \begin{proof}[of \cref{lemma: approximatetopartial}]
-    Let $c:=\frac{1}{9k}$. When $d$ is at least a large enough constant, $2^{-\Omega(d)}\leq \alpha$ holds. Let $B:=\Set{x\in V\mid \chi(x)\neq \hat{\chi}(x)}$ denote the set of vertices wrongly coloured by $\hat{\chi}$. Note that $\Abs{B}\leq \alpha n$ by assumption, and $\Abs{SB(G)}\leq 2^{-\Omega(d)}\leq \alpha n$ by \cref{lemma: sbupperbound}. Hence, applying \cref{lemma: highmindegreesubgraph} on $H$ to $B\cup SB$ we get a set $R$ with $|R|=(1-4\alpha)n$ such that the minimum degree in $H_R$ is at least $\Paren{1-4\alpha-c}d$. Using $R\cap SB=\emptyset$, for any $x\in R$ and $c\neq \chi(x)$ we get that $x$ has degree at least $\Paren{\frac{1}{2k}-4\alpha-c}d\geq \frac{1}{6k}d$ into $\Set{y\in R\mid \chi(y)=c}$, i.e. into the vertices in $R$ coloured with $c$. It follows by induction that no vertices in $R$ will be uncoloured at any step of \cref{alg: uncolouring}. Hence, the colouring returned has size at least $|R|=(1-4\alpha)n$. It only remains to show that the colouring returned is proper. In fact, we will show that all vertices in $B$ will get uncoloured, from which the statement follows.
+    Let $c:=\frac{1}{9k}$. When $d$ is at least a large enough constant, $2^{-\Omega(d)}\leq \alpha$ holds. Let $B:=\Set{x\in V\mid \chi(x)\neq \hat{\chi}(x)}$ denote the set of vertices wrongly coloured by $\hat{\chi}$. Note that $\Abs{B}\leq \alpha n$ by assumption, and $\Abs{SB(G)}\leq 2^{-\Omega(d)}\leq \alpha n$ by \cref{lemma: sbupperbound}. Hence, applying \cref{lemma: highmindegreesubgraph} on $H$ to $B\cup SB$ we get a set $R$ with $|R|=(1-4\alpha)n$ such that the minimum degree in $H_R$ is at least $\Paren{1-4\alpha-c}d$. Using $R\cap SB=\emptyset$, for any $x\in R$ and $c\neq \chi(x)$ we get that $x$ has degree at least $\Paren{\frac{1}{2k}-4\alpha-c}d\geq \frac{1}{6k}d$ into $\Set{y\in R\mid \chi(y)=c}$, that is, into the vertices in $R$ coloured with $c$. It follows by induction that no vertices in $R$ will be uncoloured at any step of \cref{alg: uncolouring}. Hence, the colouring returned has size at least $|R|=(1-4\alpha)n$. It only remains to show that the colouring returned is proper. In fact, we will show that all vertices in $B$ will get uncoloured, from which the statement follows.
 
     For the sake of contradiction, assume there exist vertices $B_2\subseteq B$ that remain coloured by the end of the process. Let $x\in B_2$ be any such vertex. As $x$ has never been uncoloured, at the end of the process it has at least $\frac{1}{6k}d$ neighbours $y$ with $\hat{\chi}(y)=c\neq \hat{\chi}(x)$. In particular, choosing $c=\chi(x)$, let $Q$ denote those neighbours $y$ of $x$ with $\hat{\chi}(y)=\chi(x)$. As $x$ and $y$ are neighbours in $G$, we have $\chi(x)\neq \chi(y)$, so $\hat{\chi}(y)\neq \chi(y)$, which implies $Q\subseteq B_2$. Summarizing, any vertex in $G_{B_2}$ has degree at least $\frac{1}{3k}d$. Therefore, $$e(G_{B_2})\geq \frac{\frac{1}{6k}d|B_2|}{2}= \frac{d|B_2|}{12k}\,.$$
 
@@ -142,7 +142,7 @@ Next we need an algorithm that recolours some of the uncoloured vertices in a wa
         and let $t_2:=\Abs{D}$. If $t_2\ge 2k^2t_1$ then $C\subseteq U$ and $D\subseteq V\setminus U$ with probability at most $e^{-\frac{1}{2k}t_2}$.
     \end{lemma}
     \begin{proof}
-        Partition the vertices of $D$ to disjoint subsets $\Set{D_{v}}$, where $v\in C$ and $D_{v}\subseteq N_{H}\Paren{v}$. Consider some $D_{v}$ and assume that $v$ is coloured by $1$. If both $v\in U$ and $D_{v}\subseteq V\setminus U$ then the set of colours that vertices in $D_{v}$ are using must be contained in exactly one
+        Partition the vertices of $D$ into disjoint subsets $\Set{D_{v}}$, where $v\in C$ and $D_{v}\subseteq N_{H}\Paren{v}$. Consider some $D_{v}$ and assume that $v$ is coloured by $1$. If both $v\in U$ and $D_{v}\subseteq V\setminus U$ then the set of colours that vertices in $D_{v}$ are using must be contained in exactly one
         of the sets $[k]\setminus {c}$ for some $c\neq 1$ (otherwise \cref{alg: saferecolouring} would colour $v$).
         Therefore the probability that both $v\in U$ and $D_{v}\subseteq V\setminus U$
         is at most $(k-1)\Paren{\frac{k-1}{k}}^{\Abs{D_{v}}}$. Hence, the probability that both $C$ is in $U$ and $D\subseteq V\setminus U$ is at most
@@ -168,17 +168,18 @@ Next we need an algorithm that recolours some of the uncoloured vertices in a wa
     \end{align}
 
     Equality~\ref{eq:alpha1} follows by \cref{lemma: largecolouredneighbourhoodprob} and that by \cref{lemma: ssveonesided}
-    if $\lambda_2(H)\le \frac{1}{16k^2}$ then for a set of size $t_1\le\Abs{U}\le\frac{1}{256k^4}n$ it holds that its neighbourhood is of size $t_2\ge7k^2t_1$. Inequality~\ref{eq:alpha2} follows by Lemma B.23 of \cite{MR3536556-David16}. Inequality~\ref{eq:alpha3} follows by the binomial identity ${n \choose k}\le\Paren{e\frac{n}{k}}^{k}$. Inequality~\ref{eq:alpha4} follows by $\ln\Paren{7k^2+1}\leq \frac{7k}{2}-6$ which holds for $k\geq 3$. This completes the proof.
+    if $\lambda_2(H)\le \frac{1}{16k^2}$ then for a set of size $t_1\le\Abs{U}\le\frac{1}{256k^4}n$ it holds that its neighbourhood is of size $t_2\ge7k^2t_1$. Inequality~\ref{eq:alpha2} follows by Lemma B.23 of \cite{MR3536556-David16}. Inequality~\ref{eq:alpha3} follows by the binomial inequality ${n \choose k}\le\Paren{e\frac{n}{k}}^{k}$. Inequality~\ref{eq:alpha4} follows by $\ln\Paren{7k^2+1}\leq \frac{7k}{2}-6$ which holds for $k\geq 3$. This completes the proof.
 \end{proof}
 
 We are now finally ready to prove \cref{thm: random-planting-full}:
 
 \begin{proof}[of \cref{thm: random-planting-full}]
-    We can apply \cref{thm: random-planting-partial-list} to get a list of $O_{k}(1)$ $k$-colourings $\hat{\chi}: [n] \to [k]$ such that, for at least one of them, it holds up to a permutation of the colour classes that $\mathbb{E}_{\bm{x} \sim \operatorname{Unif}([n])} \1[\hat\chi(\bm{x}) \neq \chi(\bm{x})] \leq O_k\Paren{1/d^{\Omega(1)}}$.
+    We can apply \cref{thm: random-planting-partial-list} to get a list $L$ of $O_{k}(1)$ $k$-colourings $\hat{\chi}: [n] \to [k]$ such that, for at least one of them, it holds up to a permutation of the colour classes that $\mathbb{E}_{\bm{x} \sim \operatorname{Unif}([n])} \1[\hat\chi(\bm{x}) \neq \chi(\bm{x})] \leq O_k\Paren{1/d^{\Omega(1)}}$.
 
-    Then, for $d$ at least a large enough constant compared to $k$, running \cref{alg: uncolouring} on all colourings in $L$, by \cref{lemma: approximatetopartial} it turns the colouring $\hat{\chi}$ with $\mathbb{E}_{\bm{x} \sim \operatorname{Unif}([n])} \1[\hat\chi(\bm{x}) \neq \chi(\bm{x})] \leq O_k\Paren{1/d^{\Omega(1)}}$ into a $\Paren{k, O_k\Paren{1/d^{\Omega(1)}}}$-partial colouring and returns a list of colourings $L'$. %\andor{should we remark that we somehow managed to avoid doing iterative recolouring which works only for two-sided expansion?}  
 
-    Then, for $d$ at least a large enough constant compared to $k$, running \cref{alg: saferecolouring} on all colourings in $L'$, \cref{lemma: partialtologncomps} guarantees that, for the $\Paren{k, O_k\Paren{1/d^{\Omega(1)}}}$-partial colouring, all the remaining still uncoloured vertices are in connected components of size $O(\ln{n})$ and returns a list of colourings $L''$:
+    Then, running \cref{alg: uncolouring} on all colourings in $L$ returns a list of colourings $L'$. For $d$ at least a large enough constant compared to $k$, \cref{lemma: approximatetopartial} guarantees that the colouring $\hat{\chi}$ in $L$ with $\mathbb{E}_{\bm{x} \sim \operatorname{Unif}([n])} \1[\hat\chi(\bm{x}) \neq \chi(\bm{x})] \leq O_k\Paren{1/d^{\Omega(1)}}$ turns into a $\Paren{k, O_k\Paren{1/d^{\Omega(1)}}}$-partial colouring in $L'$.
 
-    Hence, we can try a brute force search on each component of those colourings in $L''$ that have component sizes $O(\ln{n})$. By the above, we are guaranteed to find a full colouring on at least one of them. This finishes the proof.
+    Then, running \cref{alg: saferecolouring} on all colourings in $L'$ returns a list of colourings $L''$. For $d$ at least a large enough constant compared to $k$, \cref{lemma: partialtologncomps} guarantees that the $\Paren{k, O_k\Paren{1/d^{\Omega(1)}}}$-partial colouring in $L'$ turns into a colouring in $L''$ such that all the remaining still uncoloured vertices are in connected components of size $O(\ln{n})$.
+
+    Hence, we can try a brute force search on each component of those colourings in $L''$ that have component sizes $O(\ln{n})$. By the above, we are guaranteed to find a full colouring for at least one of them. This finishes the proof.
 \end{proof}

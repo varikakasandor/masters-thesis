@@ -103,13 +103,13 @@ First, we state a generic result that proves that if two matrices are close in a
 \begin{proof}
 First, for the eigenvectors $v_1, \ldots, v_{k}$ of $X$ we have that 
 \begin{equation}
-\label[lemma]{lemma:lin-alg-subspace-eq1}
+\label{eq:lin-alg-subspace-eq1}
 \Norm{(X-Y)v_i}^2 = \Norm{\lambda_i v_i - Y v_i}^2 = \Norm{(\lambda_i I_n - Y) v_i}^2 \geq \Norm{P(\lambda_i I_n - Y) v_i}^2\,.
 \end{equation}
 Let now $v_1', \ldots, v_{m}' \in \R^n$ be the eigenvectors of $Y$ in $P$ with corresponding eigenvalues $\lambda_1', \ldots, \lambda_{m}'$ smaller in absolute value than $\lambda - \eta$.
-Continuing \cref{lemma:lin-alg-subspace-eq1},
+Continuing \cref{eq:lin-alg-subspace-eq1},
 \begin{equation}
-\label[lemma]{lemma:lin-alg-subspace-eq2}
+\label{eq:lin-alg-subspace-eq2}
 \Norm{(X-Y)v_i}^2 \geq \sum_{j=1}^{m} (\lambda_i - \lambda_j')^2 \langle v_j', v_i \rangle^2 \geq \eta^2 \sum_{j=1}^{m} \langle v_j', v_i \rangle^2 = \eta^2 \Norm{Pv_i}^2\,.
 \end{equation}
 
@@ -117,7 +117,7 @@ Second, we claim that \[\sum_{i=1}^k \Norm{(X-Y)v_i}^2 = \sum_{i=1}^{k} \Norm{(X
 The proof is simply that, for any matrix $M \in \R^{n \times n}$ and any two orthonormal bases of the same subspace $\{x_i\}$ and $\{y_i\}$,
 \[\sum_{i} \Norm{Mx_i}^2 = \sum_{i} \Tr(M^\top M x_i x_i^\top) = \Tr\Paren{M^\top M \sum_{i} x_i x_i^\top} = \Tr\Paren{M^\top M \sum_{i} y_i y_i^\top}\,,\]
 and by the same sequence of transformations we get back that \[\Tr\Paren{M^\top M \sum_{i} y_i y_i^\top} = \sum_{i} \Norm{My_i}^2\;.\] 
-Using this fact for the orthonormal bases $\{v_i\}$ and $\{u_i\}$, we prove the desired fact, and combining it with \cref{lemma:lin-alg-subspace-eq2} we complete the proof.
+Using this fact for the orthonormal bases $\{v_i\}$ and $\{u_i\}$, we prove the desired fact, and combining it with \cref{eq:lin-alg-subspace-eq2} we complete the proof.
 \end{proof}
 
 We state now the well-known bounds of subspace enumeration.

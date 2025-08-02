@@ -203,7 +203,7 @@ Let us now prove \cref{thm:kalg-partial}.
     \paragraph{Rounding.}
     Then, by \cref{thm:part-recovery} applied with matrices $M(\tilde{A}, \chi')$ and $\tilde{A}$, we can recover in time $n^{O(1)} \cdot O_{\delta,\lambda,M}(1)$ a list of $O_{\delta,\lambda,M}(1)$ $k'$-partitions $\hat{\chi'}: [n] \to [k']$ such that, for at least one of them, it holds up to a permutation of the colour classes that $\mathbb{E}_{\bm{x} \sim \operatorname{Unif}([n])} \1[\hat\chi'(x) \neq \chi'(x)] \leq O_M(\lambda+\delta/\lambda)$.
     Let $\e = O_M(\lambda + \delta/\lambda)$ be equal to this upper bound.
-    At this point, for each candidate $k'$-partition, we apply the rounding algorithm in \cref{lemma: generalrounding} on each of its colour classes to obtain $k'$ independent sets, and return the set of $k'$ independent sets that cover most vertices of $G$.
+    At this point, for each candidate $k'$-partition, we apply the rounding algorithm in \cref{lemma: generalrounding} on each of its colour classes to obtain $k'$ independent sets, and return the set of $k'$ independent sets that cover the most vertices of $G$.
 
     Let us analyze the approximation guarantee.
     For the best $k'$-partition, the rounding algorithm in \cref{lemma: generalrounding} will remove at most $2\e n$ vertices due to misclassifications and at most $2\delta n$ vertices due to edges with both endpoints in the same part with respect to the $k$-partition $\chi$.
@@ -232,7 +232,7 @@ Let us now prove \cref{thm:kalg-partial}.
 \section{$2$-colourable models}
 
 
-Assuming the UGC conjecture, \cite{MR2648426} showed that it is NP-hard to recover even a small linear-sized independent set from a graph that is almost bipartite. As a $k=2$ corollary of \cref{thm:kalg}, we show that assuming expansion additionally, it is possible to recover almost the full bipartition.
+Assuming the UGC conjecture, \cite{MR2648426} showed that it is NP-hard to recover even a small linear-sized independent set from a graph that is almost bipartite. As a $k=2$ corollary of \cref{thm:kalg}, we show that assuming one-sided expansion additionally, it is possible to recover almost the full bipartition.
 
 
 \begin{theorem}[Result for $2$-colouring]
@@ -257,7 +257,7 @@ For the low rank of $\tilde{A}$, we have by applying \cref{cor:spectral_small_to
 
 Then we apply \cref{thm:part-recovery} with matrices $M$ and $\tilde{A}$ and eigenvalue threshold\linebreak $\lambda' = \sqrt{2 \lambda}$, such that it satisfies the condition of the theorem, and such that we can take $t = O(1/(\lambda')^2) = O(1)$.
 Then, we can recover in time $n^{O(1)} \cdot O_{\delta,\lambda}(1)$ a list of $O_{\delta,\lambda}(1)$ bipartitions $\hat{\chi}: [n] \to [2]$ such that, for at least one of them, it holds up to a permutation of the colour classes that $\mathbb{E}_{\bm{x} \sim \operatorname{Unif}([n])} \1[\hat\chi(x) \neq \chi(x)] \leq O(\lambda+\delta/\lambda)$.
-As in the proof of \cref{thm:kalg-partial}, for each candidate bipartition we apply the rounding algorithm in \cref{lemma: generalrounding} on each of its colour classes to obtain $2$ independent sets, and return the set of $2$ independent sets that cover most vertices of $G$.
+As in the proof of \cref{thm:kalg-partial}, for each candidate bipartition we apply the rounding algorithm in \cref{lemma: generalrounding} on each of its colour classes to obtain $2$ independent sets, and return the set of $2$ independent sets that cover the most vertices of $G$.
 The rest of the analysis is identical to that in the proof of \cref{thm:kalg-partial}.
 \end{proof}
 
@@ -343,7 +343,7 @@ For the low rank of $\tilde{A}$, we have by applying \cref{cor:spectral_small_to
 
 Then we apply \cref{thm:part-recovery} with matrices $M$ and $\tilde{A}$ and eigenvalue threshold\linebreak $\lambda' = \max\{\sqrt{2 \lambda}, \Omega(\gamma^{3/2})\}$, such that it satisfies the condition of the theorem, and such that we can take $t = O(1/(\lambda')^2) = O(1/\gamma^3) = O_{\gamma}(1)$.
 Then, we can recover in time $n^{O(1)} \cdot O_{\delta,\gamma,\lambda}(1)$ a list of $O_{\delta,\gamma,\lambda}(1)$ $3$-partitions $\hat{\chi}: [n] \to [3]$ such that, for at least one of them, it holds up to a permutation of the colour classes that $\mathbb{E}_{\bm{x} \sim \operatorname{Unif}([n])} \1[\hat\chi(x) \neq \chi(x)] \leq O(\lambda/\gamma^8+\delta/(\lambda\gamma^8))$.
-As in the proof of \cref{thm:kalg-partial}, for each candidate $3$-partition we apply the rounding algorithm in \cref{lemma: generalrounding} on each of its colour classes to obtain $3$ independent sets, and return the set of $3$ independent sets that cover most vertices of $G$.
+As in the proof of \cref{thm:kalg-partial}, for each candidate $3$-partition we apply the rounding algorithm in \cref{lemma: generalrounding} on each of its colour classes to obtain $3$ independent sets, and return the set of $3$ independent sets that cover the most vertices of $G$.
 The rest of the analysis is identical to that in the proof of \cref{thm:kalg-partial}.
 \end{proof}
 
@@ -358,7 +358,7 @@ However, we are after small \text{vertex} violation, not small edge violation: w
     Let $0<\gamma, \delta<\frac{1}{6}$ be constants. Let $G$ be an $n$-vertex $d$-regular graph with $\lambda_2\leq \frac{\delta^6\gamma^9}{10^2}$ that admits a \tcl $\chi$ such that $\max_{a \in [3]} \frac{1}{n} |\chi^{-1}(a)| \leq 1/2 - \gamma$. Let $\chi'$ be an alternative (not necessarily proper) \tcl with $\text{agree}(\chi, \chi')\leq 1-\delta$. Then, $\chi'$ must have at least $\frac{1}{10^4}\delta^3\gamma^4 nd$ monochromatic edges. 
 \end{theorem}
 
-The proof is quite calculation heavy and the calculations are similar to those in \cref{lemma: expansionimpliesvariance} so we only provide a sketch highlighting the main ideas.
+The proof is quite calculation-heavy and the calculations are similar to those in \cref{lemma: expansionimpliesvariance} so we only provide a sketch highlighting the main ideas.
 
 
 \begin{proof}[sketch of \cref{thm: vertexvsedgeviolation}]
@@ -366,11 +366,11 @@ The proof is quite calculation heavy and the calculations are similar to those i
 
     The proof starts with a technical lemma showing that as $\chi$ and $\chi'$ have low agreement, there exist colours $a$ and $b$ such that $\Abs{\chi'^{-1}(b)}$, $\Abs{\psi^{-1}(a, b)}$, and $\Abs{\psi^{-1}(b, b)}$ are not too large and not too small either.
 
-    By \cref{lemma: expansionimpliesvariance}, we have that variance of the degrees between $\chi^{-1}(a)$ and $\chi^{-1}(b)$ is small. On the other hand, note that if the average degree between $\psi^{-1}(a, b)$ and $\chi'^{-1}(b)$ was much less than the average degree between $\chi^{-1}(a)$ and $\chi^{-1}(b)$, it would imply that the variance of the degrees between $\chi^{-1}(a)$ and $\chi^{-1}(b)$ is large.
+    By \cref{lemma: expansionimpliesvariance}, we have that the variance of the degrees between $\chi^{-1}(a)$ and $\chi^{-1}(b)$ is small. On the other hand, note that if the average degree between $\psi^{-1}(a, b)$ and $\chi'^{-1}(b)$ was much less than the average degree between $\chi^{-1}(a)$ and $\chi^{-1}(b)$, it would imply that the variance of the degrees between $\chi^{-1}(a)$ and $\chi^{-1}(b)$ is large.
     
-    However, if $\chi'$ had only few monochromatic edges, then the average degree between $\psi^{-1}(a, b)$ and $\psi^{-1}(b, b)$ must be small, so the only way the average degree between $\psi^{-1}(a, b)$ and $\chi'^{-1}(b)$ can be large enough is if much more edges from $\psi^{-1}(a, b)$ go to $\chi'^{-1}(b) \setminus \psi^{-1}(b, b)$ than to $\psi^{-1}(b, b)$.
+    However, if $\chi'$ had only a few monochromatic edges, then the average degree between $\psi^{-1}(a, b)$ and $\psi^{-1}(b, b)$ must be small, so the only way the average degree between $\psi^{-1}(a, b)$ and $\chi'^{-1}(b)$ can be large enough is if much more edges from $\psi^{-1}(a, b)$ go to $\chi'^{-1}(b) \setminus \psi^{-1}(b, b)$ than to $\psi^{-1}(b, b)$.
 
-    In this case, however, for suitably chosen $\alpha$ and $\beta$, we can construct a test vector $v$ (orthogonal to $\1$) showcasing that expansion must be poor by lower bounding $\frac{v^\top A_G v}{v^\top v}$ and using the Courant-Fischer Theorem:
+    In this case, however, for suitably chosen $\alpha$ and $\beta$, we can construct a test vector $v$ (orthogonal to $\1$) demonstrating that expansion must be poor by lower bounding $\frac{v^\top A_G v}{v^\top v}$ and using the Courant-Fischer Theorem:
 
     \begin{itemize}
         \item for $x \in \psi^{-1}(a, b)$, let $v_x := 1$
@@ -578,7 +578,7 @@ We are now ready to prove \cref{thm: random-planting-partial}.
     % Using the assumed upper bound $\lambda\leq \frac1{101k^3}$, we have $5\sqrt{\lambda}\leq (2/k)\sqrt{1/k-o(1)}/4$.
     Then, by the above, with high probability we satisfy the conditions necessary to apply \cref{thm:part-recovery} with $1/k-o(1)$, $1+o(1)$, $2/k$, $O_k(1/d^{\Omega(1)})$, $O(t)$ and $O(\lambda')$ in the roles of $c$, $\zeta$, $\alpha$, $\delta$, $t$ and $\lambda$, respectively.
     Then, we can recover in time $n^{O(1)} \cdot \Paren{O_{k}(1)}^{t}$ a list of $\Paren{O_{k}(1)}^{t}$ $k$-partitions $\hat{\chi}: [n] \to [k]$ such that, for at least one of them, it holds up to a permutation of the colour classes that $\mathbb{E}_{\bm{x} \sim \operatorname{Unif}([n])} \1[\hat\chi(x) \neq \chi(x)] \leq O_k(1/d^{\Omega(1)})$.
-    Finally, as in the proof of \cref{thm:kalg-partial}, for each candidate $k$-partition we apply the rounding algorithm in \cref{lemma: generalrounding} on each of its colour classes to obtain $k$ independent sets, and return the set of $k$ independent sets that cover most vertices of $G$.
+    Finally, as in the proof of \cref{thm:kalg-partial}, for each candidate $k$-partition we apply the rounding algorithm in \cref{lemma: generalrounding} on each of its colour classes to obtain $k$ independent sets, and return the set of $k$ independent sets that cover the most vertices of $G$.
     The rest of the analysis is identical to that in the proof of \cref{thm:kalg-partial}.
 \end{proof}
 

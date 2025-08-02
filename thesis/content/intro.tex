@@ -47,7 +47,7 @@ Finally, the hardness results in \cref{sec: hardness} build on the known \cref{t
 
 \section{An introductory example}
 
-To familiarise the reader with the topic, we first provide a solution for a simple question that was ``left as an exercise to the reader'' in \cite{MR3536556-David16}:
+To familiarise the reader with the topic, before diving into our results we first provide a solution to a simpler question that was ``left as an exercise to the reader'' in \cite{MR3536556-David16}:
 
 \begin{lemma}[Linear degree random planting full recovery]
     \label[lemma]{lemma: lineardegree}
@@ -55,14 +55,14 @@ To familiarise the reader with the topic, we first provide a solution for a simp
     Then, there exists a polynomial-time algorithm that \whp recovers a full $3$-colouring of $G$.
 \end{lemma}
 
-The intuition behind this result is that more edges provide more constraints, enabling the recovery of vertex colours through a process of elimination. Surprisingly, neither of our results in this work will require the degrees to be even $\omega(1)$ -- we will, however, require regularity and expansion.
+The intuition behind \cref{lemma: lineardegree} is that more edges provide more constraints, enabling the recovery of vertex colours through a process of elimination. The linear minimum degree assumption, however, is very strong. Our random planting full recovery result in \cref{thm: random-planting-full} only requires the degrees to be at least a large enough constant, but it assumes $H$ to be a one-sided expander. \cref{thm: random-planting-full} uses the vertex expansion lower bound \cref{lemma: ssveonesided} to ensure that moderately sized vertex sets have a large enough neighbourhood, resembling linear minimum degree.
 
 \begin{proof}[of \cref{lemma: lineardegree}]
     
 First we provide the algorithm, then we show that it works with high probability.
 
 \begin{algorithm}[H]
-    \caption{Linear Minimum Degree Algorithm}
+    \caption{Linear Minimum Degree Recovery}
     \label{alg:linear_min_deg}
     \DontPrintSemicolon
     Select $S \subseteq V$ uniformly at random such that $|S| = \Theta(\log{n})$.\;
